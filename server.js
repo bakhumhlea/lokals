@@ -1,17 +1,34 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+
+const port = process.env.PORT || 5000;
 
 const app = express();
 
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 const dbKey = require('./config/keys_dev').mongoURI;
 
+const users = require('./routes/api/end_user_api/users');
+const profile = require('./routes/api/end_user_api/profile');
+ 
 mongoose
   .connect(dbKey, { useNewUrlParser: true})
-  .then(() => console.log("mongoDB Atlas connected"))
+  .then(() => console.log("MongoDB Atlas connected"))
   .catch(err => console.log(err));
 
+// Use middleware: Passport and perform configuration
+app.use(passport.initialize());
+require('./config/passport')(passport);
+  
 app.get('/', (req,res) => res.send('Welcome to Lokals'));
 
-const port = process.env.PORT || 5000;
+//Use End user Routes
+app.use('/api/users', users);
+app.use('/api/profile', profile);
+app.get('/api/collections', (req, res) => res.send('Collection route'));
 
 app.listen(port, () => console.log(`Running on PORT:${port}`));
