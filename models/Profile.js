@@ -13,13 +13,10 @@ const ProfileSchema = new Schema({
   },
   preferences: [
     {
-      business_type: {
-        type: String,
-        default: 'restaurant'
+      category: {
+        type: Schema.Types.ObjectId,
+        ref: 'categories'
       },
-      keyword: {
-        type: String
-      }
     }
   ],
   collections: [

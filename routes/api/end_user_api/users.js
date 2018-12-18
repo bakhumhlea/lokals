@@ -72,7 +72,7 @@ router.post('/signin', (req, res) => {
 
   User.findOne({email: req.body.email})
     .then(user => {
-      console.log(user);
+      // console.log(user);
       if (!user) {
         errors.email = APP.ERRORS.EMAIL.NOT_REGISTERED(email);
         return res.status(400).json(errors);

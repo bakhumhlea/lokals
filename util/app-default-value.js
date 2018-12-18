@@ -6,6 +6,13 @@ const DEFAULT_VALUE = {
     BEARER: "Bearer",
     EXPIRES_IN: "1d",
   },
+  REQUEST: {
+    GOOGLEMAPS: {
+      PLACE: {
+        FIELDS: ['formatted_address', 'geometry', 'name', 'type', 'opening_hours']
+      }
+    }
+  },
   ERRORS: {
     EMAIL: {
       EXISTED: "Email already existed",

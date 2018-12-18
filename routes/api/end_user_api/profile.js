@@ -6,6 +6,7 @@ const passport = require('passport');
 
 const User = require('../../../models/User');
 const Profile = require('../../../models/Profile');
+const Category = require('../../../models/Category');
 
 const isEmpty = require('../../../validation/is-empty');
 
@@ -44,10 +45,10 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
     });
 });
 
-// @route GET api/profile/:profile_id
+// @route GET api/profile/user-id/:profile_id
 // @desc Get Profile by Profile ID
 // @access Public
-router.get('/:profile_id', (req, res) => {
+router.get('/uid/:profile_id', (req, res) => {
   const errors = {};
   const id = req.params.profile_id;
 
@@ -62,29 +63,66 @@ router.get('/:profile_id', (req, res) => {
     });
 });
 
-// @route POST api/profile/preferences/categories
-// @desc Add preferience categories
+// @route GET api/profile/preferences/categories
+// @desc Get user preferences categories
 // @access Private
-router.post('/preferences/categories', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const input = req.body.categories.split(' ');
-  const profile = {preferences: []};
-  input.forEach(element => {
-    const category = {
-      keyword: element
-    };
-    profile.preferences.push(category);
-  });
-  console.log(profile);
-  Profile.findOneAndUpdate(
-    { user: req.user.id },
-    { $set: profile },
-    { new: true }
-    ).then(profile => {
-      res.json(profile);
+
+router.get('/preferences/keywords', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+  
+  Profile.findOne({ user: req.user.id })
+    .then(profile => {
+      const currentUserPreferences = profile.preferences.map(category => category.keyword);
+      res.json(currentUserPreferences);
     })
     .catch(err => {
       res.status(400).json(err);
-    });
-})
+    })
+});
+
+// @route POST api/profile/preferences/
+// @desc Add preference by category id
+// @access Private
+router.post('/preferences', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+  const ofCategoryID = req.body.category_id.split(',');
+
+  Profile.findOne({ user: req.user.id })
+    .then(profile => {
+      if (!profile) {
+        errors.profile = "Profile not found";
+        return res.json(errors);
+      }
+      var currentUserPreferences = profile.preferences.map(preference => preference.category.toString());
+      ofCategoryID.forEach(id => {
+        if (!currentUserPreferences.includes(id.trim())) {
+          profile.preferences.push({ category: id.trim() });
+        }
+      });
+      profile.save()
+        .then(profile => res.json(profile))
+        .catch(err => res.status(400).json(err));
+    })
+    .catch(err => res.status(400).json(err));
+
+});
+
+// @route GET api/profile/preferences/
+// @desc Get user preferences categories
+// @access Private
+router.get('/preferences', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+
+  Profile.findOne({ user: req.user.id })
+    .populate('preferences.category', ['keyword'])
+    .then(profile => {
+      if (!profile) {
+        errors.profile = "Oops! Something wrong while fetching your profile";
+        return res.json(errors);
+      }
+      res.json(profile.preferences);
+    })
+    .catch(err => res.status(400).json(err));
+});
 
 module.exports = router;
