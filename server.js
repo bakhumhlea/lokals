@@ -12,11 +12,11 @@ app.use(bodyParser.json());
 
 const dbKey = require('./config/keys_dev').mongoURI;
 
-const users = require('./routes/api/end_user_api/users');
-const profile = require('./routes/api/end_user_api/profile');
+const users = require('./routes/api/users');
+const profile = require('./routes/api/profile');
 
-const businessProfile = require('./routes/api/business_user_api/business-profile');
-const categories = require('./routes/api/admin/categories');
+const businessProfile = require('./routes/api/business-profile');
+const categories = require('./routes/api/categories');
 
 mongoose.set('useFindAndModify', false);
 mongoose
@@ -35,7 +35,7 @@ app.use('/api/users', users);
 app.use('/api/profile', profile);
 app.get('/api/collections', (req, res) => res.send('Collection route'));
 
-app.use('/api/business/profile', businessProfile);
+app.use('/api/business/', businessProfile);
 //Admin API
 app.use('/api/admin/categories', categories);
 

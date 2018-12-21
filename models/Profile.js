@@ -55,7 +55,8 @@ const ProfileSchema = new Schema({
       default: false,
     },
     business_id: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'businesses'
     },
     upgraded: {
       type: Boolean,

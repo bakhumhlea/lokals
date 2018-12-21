@@ -2,19 +2,17 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const BusinessSchema = new Schema({
-  admins: {
-    user:{
-      type: Schema.Types.ObjectId,
-      ref: 'users'
-    }
+  admin: {
+    type: Schema.Types.ObjectId,
+    ref: 'users'
   },
-  name: {
+  business_name: {
     type: String,
     required: true
   },
   business_type: {
     type: String,
-    default: 'restaurant'
+    required: true
   },
   formatted_address: {
     type: String,
@@ -37,7 +35,7 @@ const BusinessSchema = new Schema({
           type: Number
         },
         time: {
-          type: Number
+          type: String
         }
       },
       open: {
@@ -45,7 +43,7 @@ const BusinessSchema = new Schema({
           type: Number
         },
         time: {
-          type: Number
+          type: String
         }
       }
     }
@@ -96,6 +94,15 @@ const BusinessSchema = new Schema({
       }
     }
   ],
+  approved: {
+    status: {
+      type: Boolean,
+      default: false
+    }
+  },
+  google_place_id: {
+    type: String,
+  },
   create_at: {
     type: Date,
     default: Date.now

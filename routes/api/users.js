@@ -2,15 +2,18 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const keys = require('../../../config/keys');
-const APP = require('../../../util/app-default-value');
+const keys = require('../../config/keys');
 const passport = require('passport');
  
 // Model
-const User = require('../../../models/User');
-const Profile = require('../../../models/Profile');
+const User = require('../../models/User');
+const Profile = require('../../models/Profile');
 // Validators
-const validateSignUpInput = require('../../../validation/signup-validator');
+const validateSignUpInput = require('../../validation/signup-validator');
+const validateSignInInput = require('../../validation/signin-validator');
+
+// Utilities
+const APP = require('../../util/app-default-value');
 
 // @rotue POST api/users/signup
 // @desc Sign Up User
@@ -62,11 +65,10 @@ router.post('/signup', (req, res) => {
 // @desc Sign Up User
 // @access Public
 router.post('/signin', (req, res) => {
-  // const { errors, isValid } = validateSignInInput(req.body);
-  const errors = {};
-  // if (!isValid) {
-  //   return res.status(400).json(errors);
-  // }
+  const { errors, isValid } = validateSignInInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
   
   const { email, password } = req.body;
 
@@ -74,7 +76,7 @@ router.post('/signin', (req, res) => {
     .then(user => {
       // console.log(user);
       if (!user) {
-        errors.email = APP.ERRORS.EMAIL.NOT_REGISTERED(email);
+        errors.login = APP.ERRORS.LOGIN.INVALID_CREDENTIAL;
         return res.status(400).json(errors);
       }
 
@@ -100,6 +102,8 @@ router.post('/signin', (req, res) => {
         });
     });
 });
+
+router.post
 
 // @rotue GET api/users/current
 // @desc Get Current User

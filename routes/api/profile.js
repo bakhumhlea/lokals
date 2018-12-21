@@ -1,14 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
-const APP = require('../../../util/app-default-value');
+const APP = require('../../util/app-default-value');
 const passport = require('passport');
 
-const User = require('../../../models/User');
-const Profile = require('../../../models/Profile');
-const Category = require('../../../models/Category');
+const User = require('../../models/User');
+const Profile = require('../../models/Profile');
+const Category = require('../../models/Category');
 
-const isEmpty = require('../../../validation/is-empty');
+const isEmpty = require('../../validation/is-empty');
 
 // @route POST api/profile
 // @desc Create and Edit Profile

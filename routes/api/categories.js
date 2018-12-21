@@ -2,9 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 
-const isEmpty = require('../../../validation/is-empty');
+const isEmpty = require('../../validation/is-empty');
+const { byKeyword } = require('../../util/helpers');
 
-const Category = require('../../../models/Category');
+const Category = require('../../models/Category');
 
 // @route GET api/admin/categories/all
 // @desc Get all categories
@@ -60,9 +61,6 @@ router.post('/:keyword', (req, res) => {
       const newCategory = new Category({
         keyword: inputKeyword
       });
-      if (req.body.business_type) {
-        newCategory.business_type = req.body.business_type;
-      }
       newCategory.save()
         .then(newCat => {
           res.json(newCat);
@@ -74,18 +72,46 @@ router.post('/:keyword', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
+
+
+router.get('/keyword/:keyword', (req, res) => {
+  const errors = {};
+  const keyword = req.params.keyword.split('-').join(' ').toLowerCase();
+  const keywordLength = keyword.length;
+
+  Category.find()
+    .then(categories => {
+      if (keywordLength > 1) {
+        var results = [];
+        for (var n = keywordLength; n > 1; n--) {
+          var mappedCategories = categories.map(category => category.keyword.substring(0, n));
+          if (mappedCategories.includes(keyword.substring(0, n))) {
+            mappedCategories.forEach((el, index) => {
+              if (el === keyword.substring(0, n)){
+                results.push(categories[index]);
+              }
+            });
+            break
+          }
+        }
+        results.sort(byKeyword);
+        return res.json(results);
+      }
+      errors.nomatch = `No result for '${keyword}'`;
+      res.status(400).json(errors)
+    })
+    .catch(err => {
+      res.status(400).json(err);
+    });
+});
+
 // @route POST api/admin/categories/add
 // @desc Add new categories
 // @access Admin
 router.post('/add', (req, res) => {
   const errors = {};
   const keyword = req.body.keyword.trim().toLowerCase();
-  
   const newInputCategory = { keyword: keyword };
-  
-  if (req.body.business_type) {
-    newInputCategory.business_type = req.body.business_type;
-  }
 
   Category.findOne({ keyword: keyword })
     .then(category => {

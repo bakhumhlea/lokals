@@ -9,14 +9,19 @@ const DEFAULT_VALUE = {
   REQUEST: {
     GOOGLEMAPS: {
       PLACE: {
-        FIELDS: ['formatted_address', 'geometry', 'name', 'type', 'opening_hours']
+        FIELDS: ['formatted_address', 'geometry', 'name', 'type', 'opening_hours', 'place_id']
       }
     }
   },
   ERRORS: {
     EMAIL: {
       EXISTED: "Email already existed",
-      NOT_REGISTERED: (email) => `${email} has never been registered`,
+      NOT_FOUND: (email) => `${email} has never been registered`,
+      INVALID: "Email is invalid"
+    },
+    LOGIN: {
+      INVALID_CREDENTIAL: "Incorrect email or password",
+      REQUIRED: (credential) => `${credential} is required`
     },
     PASSWORD: {
       INCORRECT: "Incorrect password",
