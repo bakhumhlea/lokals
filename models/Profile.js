@@ -32,8 +32,9 @@ const ProfileSchema = new Schema({
   ],
   saved_events: [
     {
-      event_id: {
-        type: String,
+      event: {
+        type: Schema.Types.ObjectId,
+        ref: 'events'
       },
       saved_at: {
         type: Date,

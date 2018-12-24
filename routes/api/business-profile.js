@@ -99,12 +99,12 @@ router.post('/findbusiness', (req, res) => {
 });
 
 /**
- * @route GET api/business/findbusiness/byid/:id
+ * @route GET api/business/findbusiness/google-place-id/:id
  * @desc Get business detail for business profile fields 
  * @access Private, Logged in user only
  * @TODO_NEXT Add passport.authenticate()
  */
-router.get('/findbusiness/byid/:id', (req, res) => {
+router.get('/findbusiness/google-place-id/:id', (req, res) => {
   const errors = {};
   const businessFields = {};
   const request = { 
@@ -256,4 +256,44 @@ router.post('/profile/edit', passport.authenticate('jwt', { session: false }), (
     })
     .catch(err => res.status(400).json(err));
 });
+
+/**
+ * @route POST api/business/id/:business_id/recommend
+ * @desc Recommend business and remove id
+ * @access Private, Logged in user only
+ * @TODO_NEXT Add validation input
+ */
+router.post('/id/:business_id/recommend', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+
+  Business.findById({ _id: req.params.business_id })
+    .then(business => {
+      if (!business) {
+        errors.notfound = "Business not found";
+        return res.status(400).json(errors);
+      }
+      const recommendedBy = business.recommended;
+
+      if (recommendedBy.map(recommended => recommended.user.toString()).includes(req.user.id)) {
+        const removeIndex = recommendedBy.map(recommended => recommended.user.toString()).indexOf(req.user.id);
+        recommendedBy.splice(removeIndex, 1);
+        Business.findByIdAndUpdate(
+          { _id: business._id},
+          { $set: { recommended: recommendedBy }},
+          { new: true })
+          .then(b => res.json(b))
+          .catch(err => res.status(400).json(err));
+      } else {
+        recommendedBy.unshift({ user: req.user.id });
+        Business.findByIdAndUpdate(
+          { _id: business._id},
+          { $set: { recommended: recommendedBy }},
+          { new: true })
+          .then(b => res.json(b))
+          .catch(err => res.status(400).json(err));
+      }
+    })
+    .catch(err => res.status(400).json(err));
+});
+
 module.exports = router;

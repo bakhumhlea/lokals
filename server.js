@@ -15,7 +15,8 @@ const dbKey = require('./config/keys_dev').mongoURI;
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 
-const businessProfile = require('./routes/api/business-profile');
+const business = require('./routes/api/business-profile');
+const events = require('./routes/api/events');
 const categories = require('./routes/api/categories');
 
 mongoose.set('useFindAndModify', false);
@@ -35,7 +36,8 @@ app.use('/api/users', users);
 app.use('/api/profile', profile);
 app.get('/api/collections', (req, res) => res.send('Collection route'));
 
-app.use('/api/business/', businessProfile);
+app.use('/api/business/', business);
+app.use('/api/events', events);
 //Admin API
 app.use('/api/admin/categories', categories);
 
