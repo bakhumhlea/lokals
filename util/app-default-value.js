@@ -13,6 +13,9 @@ const DEFAULT_VALUE = {
       }
     }
   },
+  VALUE: {
+    DAYS_IN_MS: 86400000,
+  },
   ERRORS: {
     EMAIL: {
       EXISTED: "Email already existed",

@@ -9,6 +9,7 @@ const Profile = require('../../models/Profile');
 const Category = require('../../models/Category');
 
 const isEmpty = require('../../validation/is-empty');
+const { capitalize, strToOfObj, getOpeningHours, byKeyword } = require('../../util/helpers');
 
 // @route POST api/profile
 // @desc Create and Edit Profile
@@ -33,6 +34,8 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
   // const id = req.params.profile_id;
   Profile.findOne({ user: req.user.id })
     .populate('user', ['name','email'])
+    .populate('preferences.category', ['keyword'])
+    .populate('saved_events.event', ['title','description','event_date'])
     .then(profile => {
       if (!profile) {
         errors.noprofile = APP.ERRORS.PROFILE.NOT_FOUND;
@@ -45,10 +48,10 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
     });
 });
 
-// @route GET api/profile/user-id/:profile_id
+// @route GET api/profile/id/:profile_id
 // @desc Get Profile by Profile ID
 // @access Public
-router.get('/uid/:profile_id', (req, res) => {
+router.get('/id/:profile_id', (req, res) => {
   const errors = {};
   const id = req.params.profile_id;
 
@@ -81,46 +84,110 @@ router.get('/preferences/keywords', passport.authenticate('jwt', { session: fals
 });
 
 // @route POST api/profile/preferences/
-// @desc Add preference by category id
+// @desc Add preference by category id (Get category IDs from categories search API)
 // @access Private
 router.post('/preferences', passport.authenticate('jwt', { session: false }), (req, res) => {
   const errors = {};
-  const ofCategoryID = req.body.category_id.split(',');
-
-  Profile.findOne({ user: req.user.id })
-    .then(profile => {
-      if (!profile) {
-        errors.profile = "Profile not found";
-        return res.json(errors);
-      }
-      var currentUserPreferences = profile.preferences.map(preference => preference.category.toString());
-      ofCategoryID.forEach(id => {
-        if (!currentUserPreferences.includes(id.trim())) {
-          profile.preferences.push({ category: id.trim() });
-        }
-      });
-      profile.save()
-        .then(profile => res.json(profile))
-        .catch(err => res.status(400).json(err));
-    })
-    .catch(err => res.status(400).json(err));
+  
+  const preferences = strToOfObj(req.body.keywords, ',', 'keyword');
+  Profile.findOneAndUpdate(
+    { user: req.user.id },
+    { $set: { preferences: preferences } },
+    { new: true }
+  )
+  .then(profile => res.json(profile))
+  .catch(err => res.status(400).json(err));
 
 });
 
-// @route GET api/profile/preferences/
-// @desc Get user preferences categories
+/**
+ * @route POST api/profile/collections
+ * @desc Save or unsave business in user's collection
+ * @access Private, Logged in user only
+ * @TODO_NEXT Add validation input
+ */
+router.post('/collections', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+  const businessID = req.body.business_id;
+  
+  Profile.findOne({ user: req.user.id })
+    .then(profile => {
+      Business.findById({ _id: businessID })
+        .then(business => {
+          if (!business) {
+            errors.notfound = "Business not found";
+            return res.status(400).json(errors);
+          }
+          const userCollections = profile.collections;
+
+          if (userCollections.map(collection => collection.business_id.toString()).includes(businessID)) {
+            const removeIndex = userCollections.map(collection => collection.business_id.toString()).indexOf(businessID);
+            userCollections.splice(removeIndex, 1);
+            profile.collections = userCollections;
+            profile.save().then(p => res.json(p));
+            // Profile.findOneAndUpdate(
+            //   { _id: req.user.id },
+            //   { $set: { collections: userCollections }},
+            //   { new: true })
+            //   .then(p => res.json(p))
+            //   .catch(err => res.status(400).json(err));
+          } else {
+            userCollections.unshift({ business_id: businessID });
+            profile.collections = userCollections;
+            profile.save().then(p => res.json(p));
+            // Profile.findOneAndUpdate(
+            //   { _id: req.user.id },
+            //   { $set: { collections: userCollections }},
+            //   { new: true })
+            //   .then(p => res.json(p))
+            //   .catch(err => res.status(400).json(err));
+          }
+        })
+        .catch(err => res.status(400).json(err));
+    })
+  
+});
+
+/**
+ * @mark UNUSED
+ * @route GET api/profile/preferences/
+ * @desc Get user preferences categories
+ * @access Private
+*/
+// router.get('/preferences', passport.authenticate('jwt', { session: false }), (req, res) => {
+//   const errors = {};
+
+//   Profile.findOne({ user: req.user.id })
+//     .populate('preferences.category', ['keyword'])
+//     .then(profile => {
+//       if (!profile) {
+//         errors.profile = "Oops! Something wrong while fetching your profile";
+//         return res.json(errors);
+//       }
+//       res.json(profile.preferences);
+//     })
+//     .catch(err => res.status(400).json(err));
+// });
+
+// @route DELETE api/profile/uid/:user_id
+// @desc Delete user and its profile by user id
 // @access Private
-router.get('/preferences', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.delete('/uid/:user_id', passport.authenticate('jwt', { session: false }), (req, res) => {
   const errors = {};
 
-  Profile.findOne({ user: req.user.id })
-    .populate('preferences.category', ['keyword'])
+  Profile.findOneAndDelete({ user: req.user.id })
     .then(profile => {
-      if (!profile) {
-        errors.profile = "Oops! Something wrong while fetching your profile";
-        return res.json(errors);
-      }
-      res.json(profile.preferences);
+      User.findOneAndDelete({ _id: profile.user })
+        .then(user => {
+          const success = {
+            status: "SUCCESS",
+            user_email: user.email,
+            user_id: user._id,
+            profile_id: profile._id,
+            status: "This account has been deleted successfully"
+          };
+          return res.json(success);
+        })
     })
     .catch(err => res.status(400).json(err));
 });

@@ -13,16 +13,21 @@ const ProfileSchema = new Schema({
   },
   preferences: [
     {
-      category: {
-        type: Schema.Types.ObjectId,
-        ref: 'categories'
-      },
+      // category: {
+      //   type: Schema.Types.ObjectId,
+      //   ref: 'categories'
+      // },
+      keyword: {
+        type: String,
+        lowercase: true
+      }
     }
   ],
   collections: [
     {
       business_id: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'businesses'
       },
       collected_at: {
         type: Date,

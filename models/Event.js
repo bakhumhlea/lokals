@@ -23,10 +23,12 @@ const EventSchema = new Schema({
   },
   event_date: {
     start: {
-      type: Date
+      type: Date,
+      required: true
     },
     end: {
-      type: Date
+      type: Date,
+      required: true
     }
   },
   ticket: {
@@ -76,7 +78,7 @@ const EventSchema = new Schema({
       }
     }
   ],
-  expired_at: {
+  expires_at: {
     type: Date,
     required: true
   },
@@ -85,5 +87,6 @@ const EventSchema = new Schema({
     default: Date.now
   }
 });
+// EventSchema.indexes({ "expires_at": 1 },{ expireAfterSeconds: 0 })
 
 module.exports = Event = mongoose.model('events', EventSchema);
