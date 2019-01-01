@@ -1,0 +1,89 @@
+.App-header {
+  /* background-color: rgb(235, 235, 235); */
+  max-width: 75vw;
+  margin: auto;
+  min-height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: calc(10px + 2vmin);
+  border-bottom: 1px solid rgba(218, 215, 215, 0.1);
+  /* color: rgb(20, 20, 20); */
+}
+h1.app-name {
+  /* font-family: 'Roboto', sans-serif; */
+  /* font-family: 'PT Sans', sans-serif; */
+  font-family: 'Nato Sans', sans-serif;
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 1px;
+  width: 20vw;
+  margin: 0 20px;
+  text-align: center;
+}
+h1.app-name svg {
+  margin: 0 2px 1px 1px;
+  font-size: 0.85em;
+}
+ul.nav-link, ul.auth-link {
+  width: 20vw;
+  padding: 0;
+  margin: 0;
+  transform: translateY(-3px);
+  white-space: nowrap;
+}
+ul.nav-link {
+  text-align: left;
+}
+ul.auth-link {
+  text-align: right;
+}
+ul.nav-link li, ul.auth-link li  {
+  display: inline-block;
+}
+ul.auth-link li  {
+  margin: auto 8px;
+}
+ul.nav-link li a, ul.auth-link li a  {
+  padding: 6px 12px;
+  font-family: 'Nato Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.6em;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: rgb(185, 185, 185);
+}
+ul.auth-link li a {
+  font-size: 0.55em;
+}
+ul.nav-link li a:hover {
+  color: white;
+}
+ul.auth-link li a {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid rgb(158, 158, 158);
+  border-radius: 100px;
+}
+ul.auth-link li a.sign-up {
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgb(4, 169, 72);
+  background-color:  rgb(4, 169, 72);
+  /* for web */
+  transition: 0.1s 0s all ease-in;
+}
+ul.auth-link li a:hover {
+  color: white;
+  border: 1px solid rgb(0, 216, 90);
+  background-color:  rgb(0, 216, 90);
+  /* for web */
+  transform: translateY(-2px)
+}
+
+
+.circle-btn:hover {
+ background-color: white;
+ border: 1px solid white;
+ color: rgb(40, 44, 52);
+}

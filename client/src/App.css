@@ -1,0 +1,73 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  /* font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Merriweather', serif;
+  font-family: 'Roboto', sans-serif; */
+  font-family: 'PT Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  font-family: 'Nato Sans', sans-serif;
+}
+.App {
+  color: white;
+  background-color: rgb(40, 44, 52);
+}
+.container {
+  padding: 0 10px;
+  min-height: calc(100vh - 60px);
+  max-width: 75vw;
+}
+.icon {
+  width: 20px;
+  margin: 1vmin;
+}
+.blinking {
+  height: 8vmin;
+  animation: blinking 1.8s infinite cubic-bezier(0.2, 0.46, 0.9, 1);
+}
+.floating {
+  /* font-size: calc(10px + 4vmin); */
+  animation: floating 1.8s infinite linear;
+}
+.spinner {
+  animation: spinner infinite 10s linear;
+  height: 20vmin;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes blinking {
+  from {
+    color: rgb(255, 255, 255);
+  }
+  to {
+    color: rgb(40, 44, 52);
+  }
+}
+@keyframes floating {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1vmin);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+

@@ -17,12 +17,37 @@ const UserSchema = new Schema({
   email: {
     type: String,
     required: true,
-    lowercase: true
+    lowercase: true,
+    trim: true,
+    unique: true,
+    match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   },
-  password: {
-    type: String,
-    required: true,
-    minlength: 8
+  emailAuth: {
+    in_used: {
+      type: Boolean,
+      default: false
+    },
+    password_required: {
+      type: Boolean,
+      default: true
+    },
+    password: {
+      type: String,
+      minlength: 8
+    },
+    email_verified: {
+      type: Boolean,
+      default: false
+    }
+  },
+  googleAuth: {
+    in_used: {
+      type: Boolean,
+      default: false
+    },
+    id: {
+      type: String
+    },
   },
   created_at: {
     type: Date,

@@ -85,6 +85,19 @@ router.get('/search/category/:keyword', (req, res) => {
  */
 router.post('/findbusiness', (req, res) => {
   const errors = {};
+  var inValid = false;
+
+  if (isEmpty(req.body.business_name)) {
+    errors.business_name = 'Please provide a business name';
+    if (isEmpty(req.body.business_address) && isEmpty(req.body.business_zipcode)) {
+      errors.business_address = 'Please provide street address or zipcode';
+    }
+    inValid = true;
+  }
+  if (inValid) {
+    return res.status(400).json(errors);
+  }
+
   const request = {
     input: `${req.body.business_name}, ${req.body.business_address}, ${req.body.business_zipcode}`,
     inputtype: 'textquery',
@@ -94,7 +107,7 @@ router.post('/findbusiness', (req, res) => {
     if (response.json.status === "OK") {
       return res.json(response.json.candidates[0])
     }
-    res.status(400).json(err);
+    return res.status(400).json(err);
   });
 });
 

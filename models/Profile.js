@@ -7,16 +7,15 @@ const ProfileSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'users'
   },
+  imageUrl: {
+    type: String,
+  },
   account_type: {
     type: String,
     default: APP.ACCOUNT_TYPE.STANDARD,
   },
   preferences: [
     {
-      // category: {
-      //   type: Schema.Types.ObjectId,
-      //   ref: 'categories'
-      // },
       keyword: {
         type: String,
         lowercase: true
