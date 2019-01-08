@@ -1,0 +1,108 @@
+.register-page {
+  display: flex;
+  flex-direction: row;
+  padding: 20px 12.5vw;
+}
+.register-motto {
+  font-family: 'PT Sans', sans-serif;
+  padding: 60px 0 10px 0;
+  font-weight: 500;
+  font-size: 2.8em;
+}
+.login-header {
+  z-index: 10;
+  font-family: 'PT Sans', sans-serif;
+  padding: 15px 0 0px 0;
+  margin: 15px 0 0 0;
+  text-align: center;
+  background-color: rgb(38, 44, 53);
+}
+.email-signup-header {
+  font-family: 'PT Sans', sans-serif;
+  text-align: center;
+  margin-bottom: 0;
+  background-color: rgb(38, 44, 53);
+}
+.login-header-hr {
+  position: relative;
+  transform: translate(0, -1.6em);
+}
+.social-btn {
+  margin: 20px 0 5px 0;
+}
+/* .gg-btn:hover {
+  color: rgb(38, 44, 53);
+  background-color: rgb(253, 255, 232);
+  border: 1px solid rgb(253, 255, 232);
+}
+.fb-btn:hover {
+  color: rgb(38, 44, 53);
+  background-color: rgb(239, 237, 255);
+  border: 1px solid rgb(239, 237, 255);
+} */
+.or-text {
+  font-family: 'PT Sans', sans-serif;
+  position: relative;
+  display: block;
+  padding: 4px;
+  margin: auto;
+  color: rgb(158, 158, 158);
+  text-align: center;
+  width: max-content;
+  transform: translate(0, 1em);
+  background-color: rgb(38, 44, 53);
+}
+.input-icon {
+  position: relative;
+  color: rgb(185, 185, 185);
+  text-align: center;
+  margin: auto;
+  transform: translate(10px, 1.9em) scale(0.8);
+}
+.fa-envelope {
+  left: -1px;
+}
+.form-group-inline.gap-btwn {
+  justify-content: space-between;
+}
+
+.login-input.name-input {
+  padding: 6px 12px;
+}
+.login-input.name-input.first {
+  padding: 6px 0 6px 2.3em;
+  width: 95%;
+}
+.login-input {
+  padding: 6px 12px 6px 2.3em;
+  border: 1px solid rgb(158, 158, 158);
+  border-radius: 4px;
+  font-family: 'Nato Sans', sans-serif;
+  font-size: 0.9em;
+  color: rgb(185, 185, 185);
+  background-color: transparent;
+}
+.login-input:focus {
+  border: 1px solid rgba(182, 255, 191, 1);
+  font-family: 'Nato Sans', sans-serif;
+  color: rgba(182, 255, 191, 1);
+  background-color: transparent;
+}
+.forgot-password-link {
+  float: right;
+  margin: 5px 0 20px 0;
+  color: rgb(158, 158, 158);
+  text-align: right;
+  font-size: 0.7em;
+}
+.forgot-password-link:hover {
+  color: white;
+}
+.login-submit-btn {
+  margin: 20px 0;
+}
+hr {
+  width: 90%;
+  margin: auto;
+  border-top: 1px solid rgb(158, 158, 158);
+}

@@ -1,23 +1,18 @@
 import TYPES from "./types";
 import Axios from "axios";
 import setAuthToken from '../util/setAuthToken';
-import jwt_decode from 'jwt-decode'
+import jwt_decode from 'jwt-decode';
+import isEmpty from '../util/is-empty';
 
-export const test = (data) => {
-  return {
-    type: "TEST",
-    payloaf: data
-  }
-}
-export const emailSignIn = (credential) => dispatch => {
-  Axios.post(`api/users/signin`, credential)
+export const emailSignUp = (userdata) => dispatch => {
+  Axios.post(`api/users/signup`, userdata)
     .then(res => {
-      const { token } = res.data;
-      dispatch(setCurrentUser(token));
-      return {
-        type: TYPES.EMAIL_SIGN_IN,
-        payload: res.data
-      }
+      const { email } = res.data.user;
+      const cred = {
+        email: email,
+        password: userdata.password
+      };
+      return dispatch(emailLogin(cred));
     })
     .catch(err => {
       return {
@@ -26,11 +21,31 @@ export const emailSignIn = (credential) => dispatch => {
       }
     })
 }
-export const googleSignIn = (tokenId) => dispatch => {
-  Axios.post(`api/users/signup/google/${tokenId}`)
+export const emailLogin = (credential) => dispatch => {
+  Axios.post(`api/users/signin`, credential)
     .then(res => {
       const { token } = res.data;
-      return dispatch(setCurrentUser(token));
+      console.log(token);
+      const decoded = jwt_decode(token);
+      setToken(token);
+      return dispatch(setCurrentUser(decoded));
+    })
+    .catch(err => {
+      return {
+        type: TYPES.GET_ERRORS,
+        payload: err.response.data
+      }
+    })
+}
+export const googleAuth = (tokenId) => dispatch => {
+  Axios.post(`api/users/auth/google/${tokenId}`)
+    .then(res => {
+      
+      const { token } = res.data;
+      console.log(token);
+      const decoded = jwt_decode(token);
+      setToken(token);
+      return dispatch(setCurrentUser(decoded));
     })
     .catch(err => {
       return {
@@ -40,21 +55,48 @@ export const googleSignIn = (tokenId) => dispatch => {
     });
 };
 
-export const setCurrentUser = (token) => {
-  if (token) {
-    const decoded = jwt_decode(token);
-    setAuthToken(token);
-    localStorage.setItem('lokals_token', token);
+export const facebookAuth = (userdata) => dispatch => {
+  Axios.post(`api/users/auth/facebook/`, userdata)
+    .then(res => {
+      const { token } = res.data;
+      const decoded = jwt_decode(token);
+      setToken(token);
+      return dispatch(setCurrentUser(decoded));
+    })
+    .catch(err => {
+      return {
+        type: TYPES.GET_ERRORS,
+        payload: err.response.data
+      }
+    });
+};
+
+export const setCurrentUser = (userdata) => {
+  if (!isEmpty(userdata)) {
     return {
       type: TYPES.SET_CURRENT_USER,
-      payload: decoded
+      payload: userdata
     };
   } else {
-    setAuthToken(null);
-    localStorage.removeItem('lokals_token');
     return {
-      type: TYPES.LOG_OUT,
+      type: TYPES.SET_CURRENT_USER,
       payload: {}
-    }
+    };
+  }
+}
+export const logoutUser = () => {
+  setToken();
+  return {
+    type: TYPES.LOG_OUT,
+    payload: {}
+  };
+}
+const setToken = (token) => {
+  if (token) {
+    localStorage.setItem('jwtToken', token);
+    setAuthToken(token);
+  } else {
+    localStorage.removeItem('jwtToken');
+    setAuthToken();
   }
 }

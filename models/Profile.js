@@ -24,7 +24,7 @@ const ProfileSchema = new Schema({
   ],
   collections: [
     {
-      business_id: {
+      business: {
         type: Schema.Types.ObjectId,
         ref: 'businesses'
       },

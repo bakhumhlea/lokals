@@ -1,4 +1,5 @@
-import TYPES from "../actions/types";
+import TYPES from '../actions/types';
+import isEmpty from '../util/is-empty'
 
 const INITIAL_STATE = {
   isAuth: false,
@@ -18,12 +19,23 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         user: action.payload
       };
+    case TYPES.FACEBOOK_SIGN_IN:
+      return {
+        ...state,
+        user: action.payload
+      }
     case TYPES.SET_CURRENT_USER:
       return {
         ...state,
-        isAuth: true,
+        isAuth: !isEmpty(action.payload),
         user: action.payload
       };
+    case TYPES.LOG_OUT:
+      return {
+        ...state,
+        isAuth: !isEmpty(action.payload),
+        user: action.payload
+      }
     case TYPES.GET_ERRORS:
       return {
         ...state,

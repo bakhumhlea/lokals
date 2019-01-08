@@ -1,3 +1,16 @@
+.business-search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0;
+}
+.business-search-form {
+  width: 75vw;
+  padding: 0 10px 40px 10px;
+  margin: auto;
+}
 .header-1 {
   font-size: 2.6rem;
   text-transform: uppercase;
@@ -16,7 +29,84 @@
   font-family: 'PT Sans', sans-serif;
 }
 .form-group-inline {
-  padding: 20px 0;
   display: flex;
   flex-direction: row;
+}
+
+.business-search-results {
+  color: black;
+  width: 100%;
+  height: max-content;
+  padding: 40px;
+  background: linear-gradient(rgb(98, 18, 202), rgb(170, 30, 95));
+}
+.result-section-title {
+  font-family: 'PT Sans', sans-serif;
+  color: white;
+  font-weight: 700;
+  text-align: center;
+}
+.result-object {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  /* border: 3px solid rgb(98, 18, 202); */
+  border-radius: 100px;
+  min-width: 600px;
+  width: max-content;
+  height: 200px;
+  padding: 20px;
+  margin: 30px auto 0 auto;
+  background: white;
+  box-shadow: 0 4px 20px 0 rgba(0,0,0,0.2);
+  overflow: hidden;
+  transition: 0.4s 0s all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.result-object:hover {
+  /* border: 3px solid rgb(5, 180, 113); */
+  transform: scale(1.05);
+}
+.result-object:hover .result-img img {
+  opacity: 1;
+}
+.result-img {
+  border-radius: 100px;
+  position: relative;
+  height: 160px;
+  width: 160px;
+  overflow: hidden;
+  border: 2px solid rgb(132, 255, 249);
+  background: rgb(0, 0, 0);
+}
+.result-img img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.6;
+  transition: 0.4s 0s all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.result-detail {
+  padding: 20px;
+  font-family: 'PT Sans', sans-serif;
+}
+.result-name {
+  font-size: 1.4em;
+  font-weight: 700;
+}
+.result-address {
+  font-size: 0.8em;
+}
+.claim-btns button {
+  width: 40%;
+  font-size: 0.8rem;
+  padding: 2px;
+  margin-top: 10px;
+  margin-right: 20px;
+  transition: 0.4s 0s all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.claim-btns button:hover {
+  border-radius: 100px;
 }

@@ -49,6 +49,15 @@ const UserSchema = new Schema({
       type: String
     },
   },
+  facebookAuth: {
+    in_used: {
+      type: Boolean,
+      default: false
+    },
+    id: {
+      type: String
+    },
+  },
   created_at: {
     type: Date,
     default: Date.now

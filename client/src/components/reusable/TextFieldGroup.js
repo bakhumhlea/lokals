@@ -17,8 +17,9 @@ const TextFieldGroup = ({
   onChange,
   disabled
 }) => {
+  const divClass = divclass ? `form-group ${divclass}` : "form-group";
   return (
-    <div className={`form-group ${divclass}`}>
+    <div className={divClass}>
       {label && <label className={labelclassname}>{label}</label>}
       <input 
         type={type} 

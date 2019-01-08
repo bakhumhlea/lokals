@@ -101,11 +101,12 @@ router.post('/findbusiness', (req, res) => {
   const request = {
     input: `${req.body.business_name}, ${req.body.business_address}, ${req.body.business_zipcode}`,
     inputtype: 'textquery',
-    fields: ['name', 'formatted_address', 'place_id'],
+    fields: ['name', 'formatted_address', 'place_id', 'photos', 'types'],
   };
   googleMapsClient.findPlace(request, (err, response) => {
     if (response.json.status === "OK") {
-      return res.json(response.json.candidates[0])
+      var result = response.json.candidates[0];
+      return res.json(result);
     }
     return res.status(400).json(err);
   });
@@ -163,10 +164,17 @@ router.post('/profile', passport.authenticate('jwt', { session: false }),(req, r
   // }
   // console.log(req.body.google_place_id);
   
-  var businessFields = {};
+  const businessFields = {};
+  const address = {};
   businessFields.admin = req.user.id;
   if (req.body.business_name) businessFields.business_name = req.body.business_name.trim();
-  if (req.body.address) businessFields.formatted_address = req.body.address;
+  if (req.body.street) address.street = req.body.street;
+  if (req.body.city) address.city = req.body.city;
+  if (req.body.country) address.country = req.body.country;
+  if (req.body.state) address.state = req.body.state;
+  if (req.body.zipcode) address.zipcode = req.body.zipcode;
+  if (req.body.formatted_address) address.formatted_address = req.body.formatted_address;
+  businessFields.address = address
   if (req.body.categories) businessFields.categories = strToOfObj(req.body.categories, ",", "keyword");
   if (req.body.opening_hours) businessFields.opening_hours = req.body.opening_hours.split(',').map(el => getOpeningHours(el.trim()));
   businessFields.business_type = req.body.business_type? req.body.business_type : "restaurant";
@@ -186,7 +194,6 @@ router.post('/profile', passport.authenticate('jwt', { session: false }),(req, r
       .then(response => {
         if (response.json.status === "OK") {
           const data = response.json.result;
-          businessFields.formatted_address = data.formatted_address;
           businessFields.google_place_id = data.place_id;
           businessFields.location = { 
             lat: data.geometry.location.lat, 
@@ -324,6 +331,36 @@ router.post('/id/:business_id/recommend', passport.authenticate('jwt', { session
           .then(b => res.json(b))
           .catch(err => res.status(400).json(err));
       }
+    })
+    .catch(err => res.status(400).json(err));
+});
+
+router.post('/id/:business_id/save', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+
+  Business.findById({ _id: req.params.business_id })
+    .then(business => {
+      if (!business) {
+        errors.notfound = "Business not found";
+        return res.status(400).json(errors);
+      }
+      Profile.findOne({ user: req.user.id })
+        .then(profile => {
+          var collections = profile.collections;
+          console.log(profile.collections);
+          var businessIds = collections.map(collection => collection.business.toString());
+          if (businessIds.includes(req.params.business_id)) {
+            var removeIndex = businessIds.indexOf(req.params.business_id);
+            collections.splice(removeIndex, 1);
+            profile.collections = collections;
+          } else {
+            collections.unshift({ business_id: req.params.business_id });
+            profile.collections = collections;
+          }
+          profile.save()
+            .then(p => res.json({ collections: p.collections }))
+            .catch(err => res.status(400).json(err));
+        })
     })
     .catch(err => res.status(400).json(err));
 });

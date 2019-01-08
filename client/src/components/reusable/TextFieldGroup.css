@@ -23,6 +23,12 @@
 .w-25 {
   width: 25%;
 }
+.w-40 {
+  width: 40%;
+}
+.w-60 {
+  width: 60%;
+}
 .btn-d {
   cursor: pointer;
   padding: 6px 12px;

@@ -1,0 +1,35 @@
+.input-control {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 1rem;
+  padding: 20px;
+  border-radius: 2px;
+}
+.input-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-left: 14px;
+}
+.input-field {
+  display: block;
+  padding: 6px 14px;
+  border: 2px solid white;
+  border-radius: 100px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.2);
+}
+.input-field:hover {
+  border: 2px solid rgb(247, 27, 75);
+}
+.input-field:focus {
+  outline: none;
+  border: 2px solid rgb(247, 27, 75);
+}
+.input-field.w-100 {
+  width: 100%;
+}
+.info-text {
+  opacity: 0.5;
+  font-size: 0.7em;
+  font-style: oblique;
+  margin-left: 14px;
+}

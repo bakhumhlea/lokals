@@ -1,43 +1,57 @@
 .App-header {
   /* background-color: rgb(235, 235, 235); */
-  max-width: 75vw;
+  max-width: 100%;
   margin: auto;
-  min-height: 60px;
+  min-height: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  font-size: calc(10px + 2vmin);
+  padding: 0 12.5vw;
+  /* font-size: calc(10px + 2vmin); */
+  font-size: 1.4em;
+  background-color: rgb(40, 44, 52);
   border-bottom: 1px solid rgba(218, 215, 215, 0.1);
   /* color: rgb(20, 20, 20); */
 }
 h1.app-name {
+  display: inline-block;
   /* font-family: 'Roboto', sans-serif; */
   /* font-family: 'PT Sans', sans-serif; */
   font-family: 'Nato Sans', sans-serif;
   font-size: 0.8em;
   font-weight: 700;
   letter-spacing: 1px;
-  width: 20vw;
-  margin: 0 20px;
+  /* width: 20vw; */
+  margin: 0 20px 0 8px;
   text-align: center;
 }
 h1.app-name svg {
   margin: 0 2px 1px 1px;
   font-size: 0.85em;
 }
+ul.nav-link {
+  display: inline-block;
+}
 ul.nav-link, ul.auth-link {
   width: 20vw;
   padding: 0;
   margin: 0;
-  transform: translateY(-3px);
   white-space: nowrap;
 }
 ul.nav-link {
   text-align: left;
+  transform: translateY(-2px);
 }
 ul.auth-link {
   text-align: right;
+  transform: translateY(-3px);
+}
+ul.auth-link.logged {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  transform: translateY(-2px);
 }
 ul.nav-link li, ul.auth-link li  {
   display: inline-block;
@@ -45,45 +59,167 @@ ul.nav-link li, ul.auth-link li  {
 ul.auth-link li  {
   margin: auto 8px;
 }
-ul.nav-link li a, ul.auth-link li a  {
+ul.nav-link li a, a.signup-btn, .login-btn, button.logout-btn  {
   padding: 6px 12px;
   font-family: 'Nato Sans', sans-serif;
   font-weight: 500;
-  font-size: 0.6em;
+  font-size: 0.55em;
   letter-spacing: 1px;
   text-decoration: none;
   color: rgb(185, 185, 185);
 }
-ul.auth-link li a {
-  font-size: 0.55em;
+.login-btn  {
+  background-color: initial;
 }
 ul.nav-link li a:hover {
   color: white;
 }
-ul.auth-link li a {
+a.signup-btn, .login-btn, button.logout-btn {
+  cursor: pointer;
   display: inline-block;
+  font-size: 0.55em;
   padding: 4px 12px;
   border: 1px solid rgb(158, 158, 158);
   border-radius: 100px;
 }
-ul.auth-link li a.sign-up {
-  color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgb(4, 169, 72);
-  background-color:  rgb(4, 169, 72);
+button.logout-btn {
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgb(236, 114, 42);
+  background-color: rgb(236, 114, 42);
   /* for web */
   transition: 0.1s 0s all ease-in;
 }
-ul.auth-link li a:hover {
+a.signup-btn {
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgb(2, 187, 79);
+  background-color: rgb(2, 187, 79);
+  /* for web */
+  /* transition: 0.1s 0s all ease-in; */
+}
+a.signup-btn:hover {
   color: white;
   border: 1px solid rgb(0, 216, 90);
-  background-color:  rgb(0, 216, 90);
+  background-color: rgb(0, 216, 90);
   /* for web */
-  transform: translateY(-2px)
+  /* transform: translateY(-2px) */
+}
+.login-btn:hover {
+  color: white;
+  border: 1px solid rgb(255, 255, 255);
+  background-color: transparent;
+  /* for web */
+  /* transform: translateY(-2px) */
+}
+button.logout-btn:hover {
+  color: white;
+  border: 1px solid rgb(247, 132, 64);
+  background-color: rgb(247, 132, 64);
+  /* for web */
+  /* transform: translateY(-2px) */
+}
+li.welcome-user {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.55em;
+  transform: translateY(4px);
+}
+li.welcome-user a.preference-link {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: underline;
+  padding: 4px 2px 4px 2px;
+  border: none;
+  border-radius: 100px;
+}
+li.welcome-user a.preference-link:hover {
+  color: white;
+  border: none;
+  background-color: initial;
+}
+button:focus {
+  outline: none;
+}
+.form-control:focus {
+  outline: none;
+}
+.login-bar {
+  position: absolute;
+  clear: both;
+  right: 12.5vw;
+  margin: 0 auto 4px auto;
+  width: 75vw;
+  height: 0;
+  display: flex;
+  border-radius: 0 0 6px 6px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  background-color: rgb(31, 189, 80);
+  /* background-color: white; */
+  box-shadow: 0 0 2px 4px rgba(38, 44, 53, 0.2);
+  transition: 0.1s 0s all ease-out;
+}
+.login-bar .input-icon {
+  position: relative;
+  color: rgb(31, 189, 80);
+  text-align: center;
+  margin: auto;
+  transform: translate(1.8em, 0) scale(0.6);
+}
+.login-bar .gg-btn, .login-bar .fb-btn {
+  margin: 6px;
+}
+input.email-login {
+  cursor: text;
+  display: inline-block;
+  height: 2.2em;
+  padding: 4px 4px 4px 1.5rem;
+  border-color: white;
+  color: rgb(41, 41, 41);
+  background-color: white;
+  box-shadow: 0 2px 4px 0 rgba(41, 41, 41, 0.2);
+}
+input.email-login:hover {
+  border-color: white;
+  color: rgb(41, 41, 41);
+}
+.btn-d.social-login {
+  font-weight: 700;
+  height: 2.2em;
+  padding: 4px;
+  border-color: white;
+  color: rgb(41, 41, 41);
+  background-color: white;
+  box-shadow: 0 2px 4px 0 rgba(41, 41, 41, 0.2);
 }
 
-
-.circle-btn:hover {
- background-color: white;
- border: 1px solid white;
- color: rgb(40, 44, 52);
+.development-bar {
+  z-index: 100;
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  left: 50%;
+  bottom: 0px;
+  width: 40%;
+  height: 1.8rem;
+  font-family: 'PT Sans', sans-serif;
+  font-size: 0.7em;
+  font-weight: 500;
+  border-radius: 4px 4px 0 0;
+  transform: translate(-50%, 0);
+  background-color: rgb(31, 189, 80);
+  box-shadow: 0 2px 4px 0 rgba(41, 41, 41, 0.2);
+}
+.development-bar p {
+  margin: 10px 0;
+}
+.development-bar a {
+  font-weight: 700;
+}
+.development-bar a:hover {
+  z-index: 100;
+  color: white;
+  text-decoration: underline;
 }

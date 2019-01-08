@@ -120,11 +120,10 @@ router.post('/collections', passport.authenticate('jwt', { session: false }), (r
           }
           const userCollections = profile.collections;
 
-          if (userCollections.map(collection => collection.business_id.toString()).includes(businessID)) {
-            const removeIndex = userCollections.map(collection => collection.business_id.toString()).indexOf(businessID);
+          if (userCollections.map(collection => collection.business.toString()).includes(businessID)) {
+            const removeIndex = userCollections.map(collection => collection.business.toString()).indexOf(businessID);
             userCollections.splice(removeIndex, 1);
             profile.collections = userCollections;
-            profile.save().then(p => res.json(p));
             // Profile.findOneAndUpdate(
             //   { _id: req.user.id },
             //   { $set: { collections: userCollections }},
@@ -132,9 +131,8 @@ router.post('/collections', passport.authenticate('jwt', { session: false }), (r
             //   .then(p => res.json(p))
             //   .catch(err => res.status(400).json(err));
           } else {
-            userCollections.unshift({ business_id: businessID });
+            userCollections.unshift({ business: businessID });
             profile.collections = userCollections;
-            profile.save().then(p => res.json(p));
             // Profile.findOneAndUpdate(
             //   { _id: req.user.id },
             //   { $set: { collections: userCollections }},
@@ -142,6 +140,7 @@ router.post('/collections', passport.authenticate('jwt', { session: false }), (r
             //   .then(p => res.json(p))
             //   .catch(err => res.status(400).json(err));
           }
+          profile.save().then(p => res.json(p.collections));
         })
         .catch(err => res.status(400).json(err));
     })
