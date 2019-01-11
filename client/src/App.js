@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import setAuthToken from './util/setAuthToken';
@@ -11,6 +11,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faSpinner, faCloudRain, faBolt, faFireAlt, faGrinHearts, faGrinStars } from '@fortawesome/free-solid-svg-icons'
 
+import PrivateRoute from './components/reusable/PrivateRoute';
 import Navbar from './components/Navbar';
 // import Landing from './components/Landing';
 import BusinessSearch from './components/BusinessSearch';
@@ -51,7 +52,9 @@ class App extends Component {
               <Route exact path="/signup" component={Register}/>
               <Route exact path="/login" component={Login}/>
               <Route exact path="/lokalsforbusiness" component={BusinessSearch} />
-              <Route exact path="/claimyourbusiness/edit-profile" component={ClaimBusiness} />
+              <Switch>
+                <PrivateRoute exact path="/claimyourbusiness/edit-profile" component={ClaimBusiness}/>
+              </Switch>
             </div>
           </div>
         </Router>

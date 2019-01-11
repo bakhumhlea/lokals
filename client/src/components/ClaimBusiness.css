@@ -1,37 +1,38 @@
 .claim-business-page {
-  color: rgb(252, 252, 252);
-  background: linear-gradient(rgb(70, 160, 245), rgb(235, 34, 84));
+  color: rgb(24, 24, 24);
+  /* background: linear-gradient(rgb(67, 163, 252), rgb(239, 255, 196), rgb(255, 195, 210)); */
+  background: rgb(231, 252, 246);
   font-family: 'PT Sans', sans-serif;
-  padding: 20px 0;
+  padding: 20px 15vw;
 }
 .page-title {
   font-size: 2rem;
   font-weight: 700;
-  padding: 0 10vw;
 }
 .page-text.common {
   font-weight: 300;
-  padding: 0 10vw;
 }
 .input-form.business {
-  width: 100vw;
-  padding: 0 10vw;
+  width: 100%;
 }
 .inline-input-control {
+  padding: 10px;
   margin: 20px auto;
-  border: 1px solid rgba(221, 221, 221, 0.979);
+  border: 1px solid rgba(110, 230, 220, 0.979);
   border-radius: 6px;
+  box-shadow: 0 0 8px 0 rgba(33, 43, 44, 0.116);
 }
 .inline-input-control.flex {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 }
 .input-options {
   position: relative;
   display: block;
   font-size: 1rem;
   padding: 6px 8px;
+  min-width: 60px;
   width: 100%;
   margin-right: 20px;
   border: 2px solid white;
@@ -64,7 +65,6 @@
   font-size: 1rem;
   font-weight: 700;
   padding: 6px 14px;
-  border: 2px solid rgb(241, 241, 241);
   border-radius: 100px;
   margin: auto;
   background: linear-gradient(rgb(247, 8, 108), rgb(247, 8, 108));
@@ -76,5 +76,11 @@
   box-shadow: 0 7px 12px 0 rgba(0,0,0,0.2);
 }
 .input-submit:disabled {
-  opacity: 0.5;
+  color: rgb(218, 218, 218); 
+  background: white;
+  opacity: 1;
+}
+.input-submit:disabled:hover {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.2);
 }

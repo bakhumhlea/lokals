@@ -9,6 +9,7 @@ import { googleAuth, facebookAuth, emailLogin } from '../actions/authActions';
 // import TextFieldGroup from './reusable/TextFieldGroup';
 // import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../config/keys';
 
+import isEmpty from '../util/is-empty';
 import { logoutUser } from '../actions/authActions';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -95,75 +96,10 @@ class Navbar extends Component {
     );
     const loggedLinks = (
       <ul className="auth-link logged">
-        <li className="welcome-user">Welcome, <Link to="/preference" className="preference-link"><strong>{user.name && user.name.first}</strong></Link></li>
+        <li className="welcome-user">Welcome, <Link to="/preference" className="preference-link"><strong>{!isEmpty(user.name) && user.name.first}</strong></Link></li>
         <li><button type="button" onClick={this.onLogout} className="logout-btn">Log out</button></li>
       </ul>
     );
-    // const loginbar = (
-    //   <div className="login-bar" id="lokals-login">
-    //       <form onSubmit={this.onSubmit}>
-    //         <div className="form-group-inline gap-btwn">
-    //           <FontAwesomeIcon className="input-icon m-auto" icon="envelope"/>
-    //           <TextFieldGroup
-    //             type="email"
-    //             divclass="gg-btn w-75"
-    //             classname="form-control w-100 btn-d email-login"
-    //             placeholder="Email" 
-    //             name="email"
-    //             value={this.state.email}
-    //             error={errors.email}
-    //             onChange={(e) => this.onChange(e)}
-    //           />
-    //           <FontAwesomeIcon className="input-icon m-auto" icon="lock"/>
-    //           <TextFieldGroup
-    //             type="password"
-    //             divclass="gg-btn w-75"
-    //             classname="form-control w-100 btn-d email-login"
-    //             placeholder="Password" 
-    //             name="password"
-    //             value={this.state.password}
-    //             error={errors.password}
-    //             onChange={(e) => this.onChange(e)}
-    //           />
-    //         {/* <Link className="forgot-password-link" to="/reset-password">Forgot your password?</Link> */}
-    //         <div className="form-group social-btn gg-btn mr-2">
-    //           <input
-    //             type="submit"
-    //             className="form-control btn-d mr-3 social-login"
-    //             name="login"
-    //             value="Login"
-    //           />
-    //         </div>
-    //       </div>
-    //       </form>
-    //     <div className="form-group-inline gap-btwn mr-3">
-    //     <div className="form-group social-btn gg-btn mr-2">
-    //       <GoogleLogin
-    //         clientId={GOOGLE_CLIENT_ID}
-    //         buttonText="Login with Google"
-    //         onSuccess={this.googleResponse}
-    //         onFailure={this.errorResponse}
-    //         uxMode={'popup'}
-    //         render={renderProps => (
-    //           <button className="form-control w-100 btn-d mr-3 social-login" onClick={renderProps.onClick}><FontAwesomeIcon className="mr-2" icon={['fab','google']}/>Log in</button>
-    //         )}
-    //       />
-    //     </div>
-    //     <div className="form-group social-btn fb-btn mr-2">
-    //       <FacebookLogin
-    //         appId={FACEBOOK_APP_ID}
-    //         autoLoad={false}
-    //         fields="name,email,picture"
-    //         authType={'reauthenticate'}
-    //         callback={this.facebookResponse}
-    //         render={renderProps => (
-    //           <button className="form-control w-100 btn-d mr-4 social-login" onClick={renderProps.onClick}><FontAwesomeIcon className="mr-2" icon={['fab','facebook-f']}/>Log in</button>
-    //         )}
-    //       />
-    //     </div>
-    //   </div>
-    //   </div>
-    // )
     return (
       <div>
         <header className="App-header">

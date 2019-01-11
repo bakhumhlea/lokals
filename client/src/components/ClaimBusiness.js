@@ -128,7 +128,7 @@ class ClaimBusiness extends Component {
     return (
       <div className="claim-business-page">
         <h1 className="page-title">Please provide your business details</h1>
-        <p className="page-text common">We need your business infomation to create an account for you.</p>
+        <p className="page-text common">We need your infomation to create an account.</p>
         <div className="input-form business">
           <form onSubmit={(e) => this.onSubmit(e)}>
             <div className="inline-input-control w-100">

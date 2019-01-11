@@ -56,7 +56,7 @@ router.post('/auth/google/:token_id', (req,res) => {
                   };
                   jwt.sign(payload, keys.secretOrKey, { expiresIn: APP.TOKEN.EXPIRES_IN }, (err, token) => {
                     return res.json({
-                      success: true,
+                      profile: profile,
                       token: `${APP.TOKEN.BEARER} ${token}`
                     });
                   });
@@ -75,7 +75,7 @@ router.post('/auth/google/:token_id', (req,res) => {
                 }
                 jwt.sign(payload, keys.secretOrKey, { expiresIn: APP.TOKEN.EXPIRES_IN }, (err, token) => {
                   return res.json({
-                    success: true,
+                    profile: profile,
                     token: `${APP.TOKEN.BEARER} ${token}`
                   });
                 });
@@ -124,7 +124,7 @@ router.post('/auth/facebook', (req, res) => {
               };
               jwt.sign(payload, keys.secretOrKey, { expiresIn: APP.TOKEN.EXPIRES_IN }, (err, token) => {
                 return res.json({
-                  success: true,
+                  profile: profile,
                   token: `${APP.TOKEN.BEARER} ${token}`
                 });
               });
@@ -142,7 +142,7 @@ router.post('/auth/facebook', (req, res) => {
             }
             jwt.sign(payload, keys.secretOrKey, { expiresIn: APP.TOKEN.EXPIRES_IN }, (err, token) => {
               return res.json({
-                success: true,
+                profile: profile,
                 token: `${APP.TOKEN.BEARER} ${token}`
               });
             });
@@ -171,7 +171,7 @@ router.post('/login/facebook', (req, res) => {
             }
             jwt.sign(payload, keys.secretOrKey, { expiresIn: APP.TOKEN.EXPIRES_IN }, (err, token) => {
               return res.json({
-                success: true,
+                profile: profile,
                 token: `${APP.TOKEN.BEARER} ${token}`
               });
             });
@@ -266,7 +266,7 @@ router.post('/signin', (req, res) => {
             };
             jwt.sign(payload, keys.secretOrKey, { expiresIn: APP.TOKEN.EXPIRES_IN }, (err, token) => {
               res.json({
-                success: true,
+                profile: profile,
                 token: `${APP.TOKEN.BEARER} ${token}`
               });
             });

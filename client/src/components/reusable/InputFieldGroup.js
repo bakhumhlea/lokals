@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './inputFieldGroup.css'
+import './InputFieldGroup.css'
 
 const InputFieldGroup = ({
   name,

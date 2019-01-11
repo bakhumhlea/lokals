@@ -6,14 +6,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faLocationArrow, faInfoCircle, faMapMarkerAlt ,faTimes, faSearch, faGrinHearts, faGrinStars, faWineGlass, faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons'
 import TextFieldGroup from './reusable/TextFieldGroup';
-import { setSearchResults } from '../actions/searchActions';
+import { setSearchResults, setMapCenter, setZoom } from '../actions/searchActions';
 
 import './SearchBar.css';
 
 library.add(faLocationArrow, faInfoCircle, faMapMarkerAlt, faTimes, faSearch, faGrinHearts, faGrinStars, faWineGlass, faBookmark, faHeart, fab);
 
+const SF = {lat: 37.7749, lng: -122.4194};
+
 const INITIAL_STATE = {
-  keywords: '',
+  keywords: 'restaurant',
   results: [],
 }
 
@@ -24,7 +26,9 @@ class SearchBar extends Component {
       ...INITIAL_STATE
     }
   }
-
+  componentDidMount() {
+    this.props.setSearchResults(this.state.keywords, 12);
+  }
   onChange(e) {
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value })
@@ -32,12 +36,12 @@ class SearchBar extends Component {
   onSubmit(e) {
     e.preventDefault();
     const keywords = this.state.keywords;
-    this.props.setSearchResults(keywords);
+    this.props.setSearchResults(keywords, 13);
   }
 
   render() {
     return (
-      <div className="searching-bar">
+      <div className={this.props.classname}>
         <h2 className="happening-title">What is going on near <span className="current-location">San Francisco</span><FontAwesomeIcon icon="location-arrow"></FontAwesomeIcon></h2>
         <form onSubmit={(e) => this.onSubmit(e)}>
         <div className="form-group-inline search-group">
@@ -63,4 +67,4 @@ class SearchBar extends Component {
   }
 }
 
-export default connect( null, { setSearchResults })(SearchBar);
+export default connect( null, { setSearchResults, setMapCenter, setZoom })(SearchBar);

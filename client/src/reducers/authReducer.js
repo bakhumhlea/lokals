@@ -28,13 +28,13 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         isAuth: !isEmpty(action.payload),
-        user: action.payload
+        user: action.payload.user
       };
     case TYPES.LOG_OUT:
       return {
         ...state,
         isAuth: !isEmpty(action.payload),
-        user: action.payload
+        user: action.payload,
       }
     case TYPES.GET_ERRORS:
       return {

@@ -2,14 +2,13 @@ import TYPES from "./types";
 import Axios from "axios";
 // import isEmpty from '../util/is-empty';
 
-export const setSearchResults = (keywords) => dispatch => {
+export const setSearchResults = (keywords, zoomindex) => dispatch => {
   Axios
     .get(`/api/business/search/category/${keywords}`)
     .then(res => {
       dispatch(setMapCenter(res.data[0].location));
-      dispatch(setZoom(13));
+      dispatch(setZoom(zoomindex));
       dispatch(setResults(res.data));
-      return
     })
     .catch(err => console.log(err));
 };

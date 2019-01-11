@@ -7,11 +7,12 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12.5vw;
+  padding: 0 4vw;
   /* font-size: calc(10px + 2vmin); */
   font-size: 1.4em;
   background-color: rgb(40, 44, 52);
-  border-bottom: 1px solid rgba(218, 215, 215, 0.1);
+  background: linear-gradient(rgb(15, 94, 167), rgb(15, 132, 167));
+  /* border-bottom: 1px solid rgba(218, 215, 215, 0.1); */
   /* color: rgb(20, 20, 20); */
 }
 h1.app-name {
@@ -66,7 +67,7 @@ ul.nav-link li a, a.signup-btn, .login-btn, button.logout-btn  {
   font-size: 0.55em;
   letter-spacing: 1px;
   text-decoration: none;
-  color: rgb(185, 185, 185);
+  color: rgb(255, 255, 255);
 }
 .login-btn  {
   background-color: initial;

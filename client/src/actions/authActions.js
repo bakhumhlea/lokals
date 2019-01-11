@@ -3,6 +3,7 @@ import Axios from "axios";
 import setAuthToken from '../util/setAuthToken';
 import jwt_decode from 'jwt-decode';
 import isEmpty from '../util/is-empty';
+import { clearProfile } from "./profileActions";
 
 export const emailSignUp = (userdata) => dispatch => {
   Axios.post(`api/users/signup`, userdata)
@@ -75,7 +76,9 @@ export const setCurrentUser = (userdata) => {
   if (!isEmpty(userdata)) {
     return {
       type: TYPES.SET_CURRENT_USER,
-      payload: userdata
+      payload: { 
+        user: userdata
+      }
     };
   } else {
     return {
@@ -84,12 +87,13 @@ export const setCurrentUser = (userdata) => {
     };
   }
 }
-export const logoutUser = () => {
+export const logoutUser = () => dispatch => {
   setToken();
-  return {
+  dispatch(clearProfile())
+  dispatch({
     type: TYPES.LOG_OUT,
     payload: {}
-  };
+  });
 }
 const setToken = (token) => {
   if (token) {

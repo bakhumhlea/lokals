@@ -4,6 +4,8 @@ import {  withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-ma
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faFireAlt } from '@fortawesome/free-solid-svg-icons'
+import { getOpeningStatus } from '../util/getOpeningStatus';
+import OpenTime from './OpenTime';
 // import markerIcon from '../images/svg/Artboard 1.svg'
 const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 
@@ -93,65 +95,86 @@ var mapStyle = [
 ];
 const SF = {lat: 37.7749, lng: -122.4194};
 
-// var show = false;
-// var position = {lat: 37.7749, lng: -122.4194};
+// const infowindow = (
+// <InfoWindow 
+//   onCloseClick={() => infoShow(SF)}
+//   position={position}
+//   visible={show}
+// >
+//   {props.icon}
+// </InfoWindow>);
 
-const Map = withScriptjs(withGoogleMap(props => {
-    // function infoShow(latlng) {
-    //   show = !show;
-    //   position = latlng;
-    // }
-    const markersLocation = props.markers.map((marker, index) => (<Marker
+class Map extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+  }
+  componentDidMount() {
+    
+  }
+  onClickMarker(location, id, name, hours) {
+    this.props.onclickmarker(null, location, id);
+  }
+  locateCenter = (map, center) => {
+    map.panTo(center);
+  };
+  render() {
+    const centerLocation = this.props.center;
+    const markersLocation = this.props.markers.map((marker, index) => (
+    <Marker
       // defaultLabel={marker.business_name}
       defaultAnimation={true}
       clickable={true}
-      onClick={() => console.log(marker._id)}
+      onClick={() => this.onClickMarker(marker.location, marker._id, marker.business_name, marker.opening_hours)}
       position={marker.location}
       key={index}
       title={marker.business_name}
     >
-      {props.isOpen && <InfoBox
+      { this.props.isOpen && <InfoBox
         // onCloseClick={() => console.log("Close Info box")}
         options={{
           pane: "overlayLayer",
-          pixelOffset: new window.google.maps.Size(-40, -44),
+          pixelOffset: new window.google.maps.Size(-60, -44),
           alignBottom: true,
           boxStyle: {
             boxShadow: `0px 1px 5px rgba(0,0,0,0.6)`,
-            
           },
           closeBoxURL : ""
       }}
       >
-        <div key={marker._id} style={{ backgroundColor: `white`, borderRadius: `4px`, padding: `4px`, width: `80px` }}>
-          <div style={{ fontSize: `0.7rem`, fontColor: `#08233B`, fontFamily: `'PT Sans', sans-serif`, textAlign: 'center' }}>
-            {marker.business_name}
+        <div key={marker._id} style={{display: `${this.props.isOpen === marker._id? "block": "none"}`, backgroundColor: `white`, borderRadius: `4px`, padding: `4px 6px`, width: `120px` }}>
+          <div style={{ fontSize: `0.7rem`, fontColor: `#08233B`, fontFamily: `'PT Sans', sans-serif`, textAlign: 'left' , display: 'flex', flexDirection: 'row', alignItems: `center`, width: `100%`}}>
+            <div className="col-left" style={{width: `25px`, height: `25px`, padding: `4px 0 0 0`, margin: `0 auto`, background: `rgb(241, 241, 241)`, borderRadius: `100px`,textAlign: 'center', color: 'white',fontSize: `0.8rem`, fontWeight: 700 }}>
+              { marker.business_name.split(' ').map(w=> w.charAt(0)).join('').length > 2 ?
+              marker.business_name.split(' ').map(w=> w.charAt(0)).join('').toUpperCase().substr(0, 2):
+              marker.business_name.split(' ').map(w=> w.charAt(0)).join('').toUpperCase()}
+            </div>
+            <div className="col-right" style={{width: `70%`, whiteSpace: `wrap`, margin: 0}}>
+              <h6 className="name" style={{fontSize: `0.6rem`, fontWeight: 700, margin: 0}}>{marker.business_name}</h6>
+              {/* <p className="" style={{fontSize: `0.5rem`, margin: `0`, color: `${!getOpeningStatus(marker.opening_hours).status?"red":"green"}`}}>{getOpeningStatus(marker.opening_hours).text}</p> */}
+              <OpenTime
+                styled={{fontSize: `0.5rem`, margin: `0`}}
+                icon={false}
+                hours={marker.opening_hours}
+              />
+            </div>
+            
           </div>
         </div>
       </InfoBox>}
-
     </Marker>));
-
-    // const infowindow = (
-    // <InfoWindow 
-    //   onCloseClick={() => infoShow(SF)}
-    //   position={position}
-    //   visible={show}
-    // >
-    //   {props.icon}
-    // </InfoWindow>);
-    const locateCenter = (map, center) => {
-      map.panTo(props.center);
-    };
-    return (
+    const isStyled = this.props.isStyled ? mapStyle : {};
+  return (
     <GoogleMap
-      ref={(map) => map && props.center && locateCenter(map, props.center)}
-      defaultZoom={12}
-      defaultCenter={props.center ? props.center : SF}
-      zoom={props.zoom}
-      center={props.center? props.center : SF}
+      ref={(map) => map && this.props.center && this.locateCenter(map, centerLocation)}
+      defaultZoom={11}
+      defaultCenter={SF}
+      zoom={this.props.zoom}
+      center={centerLocation}
       options={{
-        styles: mapStyle,
+        styles: isStyled ,
         mapTypeControl: false,
         scaleControl: false,
         streetViewControl: false,
@@ -163,6 +186,6 @@ const Map = withScriptjs(withGoogleMap(props => {
       { markersLocation }
     </GoogleMap>)
   }
-));
+};
 
-export default Map;
+export default withScriptjs(withGoogleMap(Map));

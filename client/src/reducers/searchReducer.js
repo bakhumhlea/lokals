@@ -1,11 +1,11 @@
 import TYPES from '../actions/types';
 // import isEmpty from '../util/is-empty'
-
+const SF = {lat: 37.7749, lng: -122.4194};
 const INITIAL_STATE = {
   businessResults: [],
   eventResults: [],
-  mapCenter: {},
-  zoom: 12
+  mapCenter: SF,
+  zoom: 13
 };
 
 export default function(state = INITIAL_STATE, action) {

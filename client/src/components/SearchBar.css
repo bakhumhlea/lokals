@@ -14,6 +14,16 @@
   left: 50%;
   transform: translateX(-50%);
 }
+.searching-bar.left {
+  left: 0;
+  transform: translateX(25%);
+}
+.searching-bar.left .happening-title {
+  display: none;
+}
+.searching-bar.left .input-search, .searching-bar.left .submit-search {
+  border-radius: 0 0 0 0;
+}
 .search-group {
   justify-content: flex-end;
   width: 40vw;

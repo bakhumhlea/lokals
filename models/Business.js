@@ -14,6 +14,17 @@ const BusinessSchema = new Schema({
     type: String,
     required: true
   },
+  images: [
+    {
+      url: {
+        type: String,
+      },
+      uploaded: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
   address: {
     street: {
       type: String,

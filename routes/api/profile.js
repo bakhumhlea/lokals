@@ -140,7 +140,7 @@ router.post('/collections', passport.authenticate('jwt', { session: false }), (r
             //   .then(p => res.json(p))
             //   .catch(err => res.status(400).json(err));
           }
-          profile.save().then(p => res.json(p.collections));
+          profile.save().then(p => res.json(p));
         })
         .catch(err => res.status(400).json(err));
     })
