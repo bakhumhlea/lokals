@@ -3,7 +3,10 @@
   /* background: linear-gradient(rgb(67, 163, 252), rgb(239, 255, 196), rgb(255, 195, 210)); */
   background: rgb(231, 252, 246);
   font-family: 'PT Sans', sans-serif;
-  padding: 20px 15vw;
+  padding: 0;
+}
+.form-fields {
+  padding: 20px 20vw;
 }
 .page-title {
   font-size: 2rem;

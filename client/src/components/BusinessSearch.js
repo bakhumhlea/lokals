@@ -6,6 +6,7 @@ import { GOOGLE_MAP_API } from '../config/keys';
 import Axios from 'axios';
 import { connect } from 'react-redux';
 import { goToEditBusinessProfile } from '../actions/businessAction';
+import Navbar from './Navbar';
 
 class BusinessSearch extends Component {
   constructor(props) {
@@ -59,6 +60,7 @@ class BusinessSearch extends Component {
     var { errors, result } = this.state;
     return (
       <div className="business-search">
+        <Navbar/>
         <div className="business-search-form">
         <h2 className="header-1"><Logo /> for Business</h2>
         <h5 className="header-sub-1">Reach out to your customers <br/>using a smart advertising platform.</h5>

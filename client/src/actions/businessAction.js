@@ -1,6 +1,6 @@
 import TYPES from "./types";
-import Axios from "axios";
-import isEmpty from '../util/is-empty';
+// import Axios from "axios";
+// import isEmpty from '../util/is-empty';
 
 export const goToEditBusinessProfile = (businessdata, history) => {
   history.push('/claimyourbusiness/edit-profile');

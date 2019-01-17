@@ -4,8 +4,9 @@ import {  withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-ma
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faFireAlt } from '@fortawesome/free-solid-svg-icons'
-import { getOpeningStatus } from '../util/getOpeningStatus';
+// import { getOpeningStatus } from '../util/getOpeningStatus';
 import OpenTime from './OpenTime';
+import { connect } from 'react-redux';
 // import markerIcon from '../images/svg/Artboard 1.svg'
 const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 
@@ -114,6 +115,7 @@ class Map extends Component {
   componentDidMount() {
     
   }
+  
   onClickMarker(location, id, name, hours) {
     this.props.onclickmarker(null, location, id);
   }
@@ -151,7 +153,7 @@ class Map extends Component {
               marker.business_name.split(' ').map(w=> w.charAt(0)).join('').toUpperCase().substr(0, 2):
               marker.business_name.split(' ').map(w=> w.charAt(0)).join('').toUpperCase()}
             </div>
-            <div className="col-right" style={{width: `70%`, whiteSpace: `wrap`, margin: 0}}>
+            <div className="col-right" style={{width: `70%`, whiteSpace: `wrap`, margin: 0, color: 'black'}}>
               <h6 className="name" style={{fontSize: `0.6rem`, fontWeight: 700, margin: 0}}>{marker.business_name}</h6>
               {/* <p className="" style={{fontSize: `0.5rem`, margin: `0`, color: `${!getOpeningStatus(marker.opening_hours).status?"red":"green"}`}}>{getOpeningStatus(marker.opening_hours).text}</p> */}
               <OpenTime
@@ -188,4 +190,7 @@ class Map extends Component {
   }
 };
 
-export default withScriptjs(withGoogleMap(Map));
+const mapStateToProps = state => ({
+  search: state.search
+});
+export default connect(mapStateToProps, {} )(withScriptjs(withGoogleMap(Map)));

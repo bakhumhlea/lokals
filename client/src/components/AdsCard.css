@@ -1,0 +1,98 @@
+.ads-card {
+  position: relative;
+  overflow: hidden;
+  transition: 0.5s 0s all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.ads-card.verti {
+  position: relative;
+  width: 16vw;
+  height: 24vw;
+  overflow: hidden;
+}
+.ads-card.square {
+  position: relative;
+  width: 24vw;
+  height: 24vw;
+}
+.ads-card.horiz {
+  position: relative;
+  width: 32vw;
+  height: 24vw;
+}
+img.ads-img {
+  position: relative;
+  transition: 0.5s 0s all cubic-bezier(0.075, 0.82, 0.165, 1)
+}
+img.ads-img.fit-height {
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+img.ads-img.fit-width {
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%) scale(1.01);
+}
+.ads-card:hover img.ads-img.fit-height {
+  transform: translateX(-50%) scale(1.1);
+}
+.ads-card:hover img.ads-img.fit-width {
+  transform: translateY(-50%) scale(1.1);
+}
+.ads-title, .ads-sub, .ads-link {
+  position: absolute;
+  top: 0;
+  padding: 5%;
+  width: 100%;
+}
+.ads-title {
+  font-size: 1.2rem;
+}
+.ads-sub {
+  font-size: 1rem;
+}
+.ads-link {
+  font-size: 0.8rem;
+}
+.light {
+  font-weight: 300;
+}
+.bold {
+  font-weight: 700;
+}
+.upper {
+  text-transform: uppercase;
+}
+.lower {
+  text-transform: lowercase;
+}
+.cap {
+  text-transform: capitalize;
+}
+.wh {
+  color: white;
+}
+.bl {
+  color: black;
+}
+.font-1 {
+  font-family: 'Merriweather', serif;
+}
+.font-2 {
+  font-family: 'Roboto', sans-serif;
+}
+.font-3 {
+  font-family: 'Montserrat', sans-serif;
+}
+.font-4 {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+.font-5 {
+  font-family: 'Nato Sans', sans-serif;
+}
+.font-6 {
+  font-family: 'PT Sans', sans-serif;
+}
+.font-7 {
+  font-family: 'Futura', sans-serif;
+}

@@ -124,6 +124,7 @@ class Explore extends Component {
             {this.props.search.businessResults && this.props.search.businessResults.map(marker => (
               <ResultCard
                 key={marker._id}
+                classname="search-result"
                 result={marker}
                 selected={this.state.selected}
                 centermap={(e, location, id) => this.centerMap(e, location, id)}

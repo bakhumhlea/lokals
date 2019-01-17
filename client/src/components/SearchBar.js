@@ -12,7 +12,7 @@ import './SearchBar.css';
 
 library.add(faLocationArrow, faInfoCircle, faMapMarkerAlt, faTimes, faSearch, faGrinHearts, faGrinStars, faWineGlass, faBookmark, faHeart, fab);
 
-const SF = {lat: 37.7749, lng: -122.4194};
+// const SF = {lat: 37.7749, lng: -122.4194};
 
 const INITIAL_STATE = {
   keywords: 'restaurant',

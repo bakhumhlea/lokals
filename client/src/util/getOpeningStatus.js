@@ -26,7 +26,7 @@ export const getOpeningStatus = (hours) => {
         } else {
           if (currenttime < opentime && (opentime - currenttime) < 100 && (opentime - currenttime) > 60) {
             text = `Open in ${opentime - currenttime - 40}m`;
-          } else if ((opentime - currenttime) < 60) {
+          } else if (currenttime < opentime && (opentime - currenttime) < 60 && (opentime - currenttime) > 60) {
             text = `Open in ${opentime - currenttime}m`;
           }
         }

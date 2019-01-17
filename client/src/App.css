@@ -27,7 +27,7 @@ a:hover {
 .container {
   position: relative;
   padding: 0;
-  min-height: calc(100vh - 50px);
+  min-height: calc(100vh);
   max-width: 100vw;
 }
 .icon {

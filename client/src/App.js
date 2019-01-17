@@ -20,7 +20,9 @@ import Register from './components/Register';
 import './App.css';
 import Login from './components/Login';
 import Explore from './components/Explore';
+import Feed from './components/Feed';
 import ClaimBusiness from './components/ClaimBusiness';
+import Dashboard from './components/Dashboard';
 
 library.add(faSpinner, faFireAlt, faGrinHearts, faGrinStars, faCloudRain, faBolt, faFireAlt, fab);
 
@@ -46,14 +48,17 @@ class App extends Component {
       <Provider store={ store }>
         <Router>
           <div className="App">
-            <Navbar/>  
             <div className="container">
               <Route exact path="/" component={Explore}/>
+              <Route exact path="/explore" component={Feed}/>
               <Route exact path="/signup" component={Register}/>
               <Route exact path="/login" component={Login}/>
               <Route exact path="/lokalsforbusiness" component={BusinessSearch} />
               <Switch>
                 <PrivateRoute exact path="/claimyourbusiness/edit-profile" component={ClaimBusiness}/>
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/lokalsbiz/dashboard" component={Dashboard}/>
               </Switch>
             </div>
           </div>

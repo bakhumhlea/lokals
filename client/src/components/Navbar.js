@@ -117,7 +117,8 @@ class Navbar extends Component {
         </header>
         <div className="development-bar">
           <p>for development only</p>
-          <a href="/lokalsbiz/dashboard" >Dashboard</a>
+          <Link to="/lokalsbiz/dashboard">Dashboard</Link>
+          <Link to="/explore" >New Explore</Link>
           <a href="/lokalsbiz/event" >Event</a>
           <a href="/lokalsbiz/story" >Story</a>
         </div>

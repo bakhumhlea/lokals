@@ -4,6 +4,7 @@ import isEmpty from '../util/is-empty'
 import InputFieldGroup from './reusable/InputFieldGroup';
 import './ClaimBusiness.css'
 import Axios from 'axios';
+import Navbar from './Navbar';
 var UsaStates = require('usa-states').UsaStates;
 
 const usStates = new UsaStates();
@@ -127,108 +128,111 @@ class ClaimBusiness extends Component {
     };
     return (
       <div className="claim-business-page">
-        <h1 className="page-title">Please provide your business details</h1>
-        <p className="page-text common">We need your infomation to create an account.</p>
-        <div className="input-form business">
-          <form onSubmit={(e) => this.onSubmit(e)}>
-            <div className="inline-input-control w-100">
-              <InputFieldGroup 
-                name="businessName"
-                label="Business Name"
-                classname="input-field w-100"
-                placeholder="Business Name"
-                value={businessName}
-                error={errors.business_name}
-                type="text"
-                onChange={(e) => this.onChange(e)}
-                info="Business name you want to show on Lokals"
-              />
-            </div>
-            <div className="inline-input-control w-100">
-              <InputFieldGroup 
-                name="businessType"
-                label="Business Type"
-                classname="input-field"
-                placeholder="Business Type"
-                value={businessType}
-                error={errors.business_type}
-                type="text"
-                onChange={(e) => this.onChange(e)}
-              />
-            </div>
-            <div className="inline-input-control flex w-100">
-              <InputFieldGroup 
-                name="street"
-                label="Street"
-                divclassname="w-60"
-                classname="input-field w-100"
-                placeholder="Street"
-                value={addressFields.street}
-                error={errors.street}
-                type="text"
-                onChange={(e) => this.onChange(e, 'addressFields')}
-              />
-              <InputFieldGroup 
-                name="city"
-                label="City"
-                classname="input-field"
-                placeholder="City"
-                value={addressFields.city}
-                error={errors.city}
-                type="text"
-                onChange={(e) => this.onChange(e, 'addressFields')}
-              />
-            </div>
-            <div className="inline-input-control flex w-100">
-              <div className="input-control">
-                <label className="input-label">State</label>
-                <div className="input-options">
-                  <select 
-                    name="state"
-                    value={addressFields.state || "CA"} 
-                    onChange={(e) => this.onChange(e, 'addressFields')}
-                  >
-                    {stateAbbreviations && stateAbbreviations.map((abbr, i) => (
-                      <option value={abbr} key={i}>{abbr}</option>
-                    ))}
-                  </select>
-                </div>
+        <Navbar/>
+        <div className="form-fields">
+          <h1 className="page-title">Please provide your business details</h1>
+          <p className="page-text common">We need your infomation to create an account.</p>
+          <div className="input-form business">
+            <form onSubmit={(e) => this.onSubmit(e)}>
+              <div className="inline-input-control w-100">
+                <InputFieldGroup 
+                  name="businessName"
+                  label="Business Name"
+                  classname="input-field w-100"
+                  placeholder="Business Name"
+                  value={businessName}
+                  error={errors.business_name}
+                  type="text"
+                  onChange={(e) => this.onChange(e)}
+                  info="Business name you want to show on Lokals"
+                />
               </div>
-              <InputFieldGroup 
-                name="country"
-                label="Country"
-                classname="input-field"
-                placeholder="Country"
-                value={addressFields.country}
-                error={errors.country}
-                type="text"
-                onChange={(e) => this.onChange(e, 'addressFields')}
-              />
-              <InputFieldGroup 
-                name="zipcode"
-                label="Zipcode"
-                classname="input-field"
-                placeholder="Zipcode"
-                value={addressFields.zipcode}
-                error={errors.zipcode}
-                type="text"
-                onChange={(e) => this.onChange(e, 'addressFields')}
-              />
-            </div>
-            {/* <button onClick={(e) => this.splitAddress(e, profile.formatted_address)}>Split</button>
-            <button onClick={(e) => {e.preventDefault()
-            return console.log(addressFields)}}>Address</button> */}
-            <div className="submit-btn-control">
-              <input 
-                type="submit" 
-                className="input-submit"
-                value="Submit"
-                disabled={isDisable()}
-              />
-              { info && <small className="form-text text-muted">{info}</small>}
-              { errors.submit && <small>{ errors.submit }</small>}
-            </div>
-          </form>
+              <div className="inline-input-control w-100">
+                <InputFieldGroup 
+                  name="businessType"
+                  label="Business Type"
+                  classname="input-field"
+                  placeholder="Business Type"
+                  value={businessType}
+                  error={errors.business_type}
+                  type="text"
+                  onChange={(e) => this.onChange(e)}
+                />
+              </div>
+              <div className="inline-input-control flex w-100">
+                <InputFieldGroup 
+                  name="street"
+                  label="Street"
+                  divclassname="w-60"
+                  classname="input-field w-100"
+                  placeholder="Street"
+                  value={addressFields.street}
+                  error={errors.street}
+                  type="text"
+                  onChange={(e) => this.onChange(e, 'addressFields')}
+                />
+                <InputFieldGroup 
+                  name="city"
+                  label="City"
+                  classname="input-field"
+                  placeholder="City"
+                  value={addressFields.city}
+                  error={errors.city}
+                  type="text"
+                  onChange={(e) => this.onChange(e, 'addressFields')}
+                />
+              </div>
+              <div className="inline-input-control flex w-100">
+                <div className="input-control">
+                  <label className="input-label">State</label>
+                  <div className="input-options">
+                    <select 
+                      name="state"
+                      value={addressFields.state || "CA"} 
+                      onChange={(e) => this.onChange(e, 'addressFields')}
+                    >
+                      {stateAbbreviations && stateAbbreviations.map((abbr, i) => (
+                        <option value={abbr} key={i}>{abbr}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <InputFieldGroup 
+                  name="country"
+                  label="Country"
+                  classname="input-field"
+                  placeholder="Country"
+                  value={addressFields.country}
+                  error={errors.country}
+                  type="text"
+                  onChange={(e) => this.onChange(e, 'addressFields')}
+                />
+                <InputFieldGroup 
+                  name="zipcode"
+                  label="Zipcode"
+                  classname="input-field"
+                  placeholder="Zipcode"
+                  value={addressFields.zipcode}
+                  error={errors.zipcode}
+                  type="text"
+                  onChange={(e) => this.onChange(e, 'addressFields')}
+                />
+              </div>
+              {/* <button onClick={(e) => this.splitAddress(e, profile.formatted_address)}>Split</button>
+              <button onClick={(e) => {e.preventDefault()
+              return console.log(addressFields)}}>Address</button> */}
+              <div className="submit-btn-control">
+                <input 
+                  type="submit" 
+                  className="input-submit"
+                  value="Submit"
+                  disabled={isDisable()}
+                />
+                { info && <small className="form-text text-muted">{info}</small>}
+                { errors.submit && <small>{ errors.submit }</small>}
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     )

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { getOpeningStatus, getOpeninghoursString } from '../util/getOpeningStatus';
+import { getOpeningStatus } from '../util/getOpeningStatus';
 
 library.add( faTimes );
 
@@ -27,6 +27,9 @@ class OpenTime extends Component {
       const { text, status } = getOpeningStatus(this.props.hours);
       this.setState({ text: text, status: status });
     }, 10000)
+  }
+  componentWillUnmount() {
+    clearInterval(this.timer);
   }
   stoptimer(e) {
     e.preventDefault();

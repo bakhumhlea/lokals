@@ -7,7 +7,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4vw;
+  padding: 0;
   /* font-size: calc(10px + 2vmin); */
   font-size: 1.4em;
   background-color: rgb(40, 44, 52);
@@ -17,15 +17,17 @@
 }
 h1.app-name {
   display: inline-block;
+  color: white;
   /* font-family: 'Roboto', sans-serif; */
   /* font-family: 'PT Sans', sans-serif; */
   font-family: 'Nato Sans', sans-serif;
   font-size: 0.8em;
   font-weight: 700;
   letter-spacing: 1px;
-  /* width: 20vw; */
-  margin: 0 20px 0 8px;
+  /* width: 160px; */
+  margin: 0 40px 0 5vw;
   text-align: center;
+  text-shadow: 0 0 3px rgba(38, 44, 53, 0.2);
 }
 h1.app-name svg {
   margin: 0 2px 1px 1px;
@@ -45,7 +47,7 @@ ul.nav-link {
   transform: translateY(-2px);
 }
 ul.auth-link {
-  text-align: right;
+  text-align: center;
   transform: translateY(-3px);
 }
 ul.auth-link.logged {
@@ -81,14 +83,17 @@ a.signup-btn, .login-btn, button.logout-btn {
   font-size: 0.55em;
   padding: 4px 12px;
   border: 1px solid rgb(158, 158, 158);
-  border-radius: 100px;
+  border-radius: 4px;
 }
 button.logout-btn {
+  font-weight: 700;
   color: rgba(255, 255, 255, 0.8);
+  margin-right: 20px;
   border: 1px solid rgb(236, 114, 42);
   background-color: rgb(236, 114, 42);
   /* for web */
   transition: 0.1s 0s all ease-in;
+  box-shadow: 0 0 6px 0 rgba(38, 44, 53, 0.2);
 }
 a.signup-btn {
   color: rgba(255, 255, 255, 0.9);

@@ -6,7 +6,6 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faLocationArrow, faInfoCircle, faMapMarkerAlt , faClock,faTimes, faSearch, faGrinHearts, faGrinStars, faWineGlass, faBookmark, faHeart } from '@fortawesome/free-solid-svg-icons'
 
 import { switchIcon } from '../util/switchIcon';
-import { getOpeningStatus } from '../util/getOpeningStatus';
 import OpenTime from './OpenTime';
 
 
@@ -22,7 +21,7 @@ export default class ResultCard extends Component {
   render() {
     const categories = this.props.result.categories.map(cat => cat.keyword).join(', ');
     const businessIcon = switchIcon(this.props.result.business_type);
-    const toggleSelected = this.props.selected === this.props.result._id ? "search-result highlight":"search-result";
+    const toggleSelected = this.props.selected === this.props.result._id ? `${this.props.classname} highlight`:`${this.props.classname}`;
     const isSaved = () => this.props.collections && this.props.collections.map(col => col.business).includes(this.props.result._id) ? "save-icon saved":"save-icon";
     return (
       <div 
