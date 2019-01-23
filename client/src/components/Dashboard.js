@@ -4,14 +4,16 @@ import { connect } from 'react-redux'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faPencilAlt, faEdit, faCog, faEnvelope, faComments, faEye, faCommentAlt, faHeart, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faPencilAlt, faEdit, faCog, faEnvelope, faComments, faEye, faCommentAlt, faHeart, faCheck, faChevronCircleLeft, faChevronCircleRight, faTrash, faTrashAlt, faPlus, faTimesCircle, faArrowsAltH, faArrowsAltV, faAlignLeft, faAlignCenter, faAlignRight } from '@fortawesome/free-solid-svg-icons'
 
 import Navbar from './Navbar';
 
 import './Dashboard.css'
 import AdsCard from './AdsCard';
+import StoryThumbnail from './StoryThumbnail';
+import CreateStory from './CreateStory';
 
-library.add(faPencilAlt, faEdit, faCog, faEnvelope, faComments, faEye, faCommentAlt, faHeart, faCheck, faTrash, fab);
+library.add(faPencilAlt, faEdit, faCog, faEnvelope, faComments, faEye, faCommentAlt, faHeart, faCheck, faChevronCircleLeft, faChevronCircleRight, faTrash, faTrashAlt, faPlus, faTimesCircle, faArrowsAltH, faArrowsAltV, faAlignLeft, faAlignCenter, faAlignRight, fab);
 
 class Dashboard extends Component {
   constructor(props) {
@@ -19,7 +21,8 @@ class Dashboard extends Component {
     this.state = {
       businessName: "Tatuu Fusion Bar and Tapas",
       address: "23 Market St. San Francisco, CA, 94101",
-      editmode: ''
+      editmode: '',
+      selectedStory: 0
     }
   }
   onClickEdit(e) {
@@ -63,7 +66,7 @@ class Dashboard extends Component {
                     <span className="info-label">Business name</span>
                     {this.state.editmode === "businessName" ? 
                       (<input type="text" className="info-input" onChange={(e)=>this.onChange(e)} name="businessName" value={this.state.businessName}></input>) : 
-                      (<span>{this.state.businessName}</span>)
+                      (<span className="info-input">{this.state.businessName}</span>)
                     }
                     {this.state.editmode === "businessName" ?
                     (<span type="button" className="btn btn-primary info-save" onClick={()=>this.setState({editmode: ''})}><FontAwesomeIcon icon="check"/>Save</span>) :
@@ -121,8 +124,8 @@ class Dashboard extends Component {
           </div>
         </div>
         <div className="board-container">
-          <div className="row grid-3 for-title mt-3">
-            <div className="title-card c-4 r-1">
+          <div className="row grid-3 for-title text-wh">
+            <div className="title-card c-2 r-1">
               <h2>Your Stories</h2>
               <span style={{fontWeight: 100, fontSize: `1rem`, color: `rgb(22, 214, 102`}}>
               <FontAwesomeIcon icon="fire-alt" style={{marginRight: `8px`}}/>
@@ -130,21 +133,72 @@ class Dashboard extends Component {
             </div>
           </div>
           <div className="row grid-3">
-            <div className="board c-2 r-2">
-              {/* <img src="/images/img-06.jpg" alt="Kool wine and sushi" className="fit-h"/> */}
+            <div className="board c-2 r-1 bg-wh ads-overview">
               <AdsCard
                 classname="square"
                 imgclass="fit-width"
                 src="/images/img-06.jpg"
                 alt="sample"
-                title="30% Discount"
-                titleposition={{x: 0, y:30, align: 'center'}}
-                sub={"Bar Member Only!"}
-                subposition={{x: 0, y:40, align: 'center'}}
-                link={"At Tatuu Bar and Tapas"}
-                linkposition={{x: 0, y:50, align: 'center'}}
+                title={{content: "30% Discount",x: 0, y:30, align: 'center'}}
+                subtitle={{content: "Bar Member Only!",x: 0, y:40, align: 'center'}}
+                texts={[{content:"At Tatuu Bar and Tapas",x: 0, y:50, align: 'center', font: 'font-4 wh'}]}
                 font={`font-7 wh bold upper`}
               />
+            </div>
+            <div className="board c-4 r-1 bg-dk">
+              <h4 className="board-head c-wh pl-3 pt-3 pb-0"><FontAwesomeIcon icon="fire-alt" style={{color: 'rgb(22, 214, 102)'}} className="mr-2"/>Online Stories</h4>
+              <div className="online-stories">
+                <StoryThumbnail
+                  url="/images/img-08.jpg"
+                  title="Meet Chef Ander"
+                  createdate="2 days"
+                  creator="Tatuu"
+                />
+                <StoryThumbnail
+                  url="/images/img-06.jpg"
+                  title="Restaurant Discount 30%"
+                  createdate="1 days"
+                  creator="Dom"
+                  isSelect={true}
+                />
+                <StoryThumbnail
+                  url="/images/img-03.jpg"
+                  title="Dim Sum All You Can Eat"
+                  createdate="2h"
+                  creator="Saito"
+                />
+                <StoryThumbnail
+                  url="/images/img-09.jpg"
+                  title="English Afternoon in SF"
+                  createdate="23m"
+                  creator="Tatuu"
+                />
+                <StoryThumbnail
+                  url="/images/img-05.jpg"
+                  title="Party 10+ Get Discount"
+                  createdate="1m"
+                  creator="Fisher"
+                />
+                <StoryThumbnail
+                  url="/images/img-01.jpg"
+                  title="Party 10+ Get Discount"
+                  createdate="1m"
+                  creator="Fisher"
+                />
+                <StoryThumbnail
+                  url="/images/img-05.jpg"
+                  title="Party 10+ Get Discount"
+                  createdate="1m"
+                  creator="Fisher"
+                />
+              </div>
+              <div className="nav-btns">
+                <FontAwesomeIcon icon="chevron-circle-left" className="arrow-icon"/>
+                <span>5 stories</span>
+                <FontAwesomeIcon icon="chevron-circle-right" className="arrow-icon"/>
+              </div>
+            </div>
+            <div className="board c-2 r-2 bg-wh">
               <div className="story-overview">
                 <h4>
                   Story Details
@@ -177,97 +231,52 @@ class Dashboard extends Component {
                 </p>
               </div>
             </div>
-            <div className="board c-4 r-1">
-              <h4 className="board-head pl-3 pt-3"><FontAwesomeIcon icon="fire-alt" style={{color: 'rgb(22, 214, 102)'}}/> Online Stories</h4>
-              <div className="online-stories">
-                <div className="story-object">
-                  <div className="story-thumbnail">
-                    <img src="/images/img-08.jpg" alt="story-id" className="fit-h"/>
-                  </div>
-                  <div className="story-brief font-2">
-                    <h6>Meet Chef Ander</h6>
-                    <p>2 days ago by Tatuu</p>
-                  </div>
-                </div>
-                <div className="story-object selected">
-                  <div className="story-thumbnail">
-                    <img src="/images/img-06.jpg" alt="story-id" className="fit-h"/>
-                  </div>
-                  <div className="story-brief font-2">
-                    <h6>Restaurant Discount 30%</h6>
-                    <p>1 days ago by Dom</p>
-                  </div>
-                </div>
-                <div className="story-object">
-                  <div className="story-thumbnail">
-                    <img src="/images/img-03.jpg" alt="story-id" className="fit-h"/>
-                  </div>
-                  <div className="story-brief font-2">
-                    <h6>Dim Sum All You Can Eat</h6>
-                    <p>6h ago</p>
-                  </div>
-                </div>
-                <div className="story-object">
-                  <div className="story-thumbnail">
-                    <img src="/images/img-09.jpg" alt="story-id" className="fit-h"/>
-                  </div>
-                  <div className="story-brief font-2">
-                    <h6>English Afternoon in SF</h6>
-                    <p>23m ago</p>
-                  </div>
-                </div>
-                <div className="story-object">
-                  <div className="story-thumbnail">
-                    <img src="/images/img-05.jpg" alt="story-id" className="fit-h"/>
-                  </div>
-                  <div className="story-brief font-2">
-                    <h6>Party 10+ Get Discount</h6>
-                    <p>1m ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="board c-4 r-1">
-              <h4 className="board-head pl-3 pt-3"><FontAwesomeIcon icon="edit" style={{color: 'rgb(22, 214, 102)'}}/> Create Story</h4>
-            </div>
-            <div className="board c-2 r-2 p-3">
-              <h4 className="board-head">Admins</h4>
-              <ul className="admin-list">
-                <li>
-                  <div className="admin-thumbnail">
-                    <div className="col-left">
-                    </div>
-                    <div className="col-right">
-                      <p className="admin-name">Thanaphon Chaysawat</p>
-                      <p className="admin-title">Owner and Manager</p>
-                      <div className="edit-btn">
-                        <FontAwesomeIcon icon="pencil-alt" className="edit-icon pencil"/>
-                        <FontAwesomeIcon icon="times" className="edit-icon delete"/>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div className="admin-thumbnail">
-                    <div className="col-left">
-                    </div>
-                    <div className="col-right">
-                      <p className="admin-name">Dom Cobb</p>
-                      <p className="admin-title">Head Chef</p>
-                      <div className="edit-btn">
-                        <FontAwesomeIcon icon="pencil-alt" className="edit-icon pencil"/>
-                        <FontAwesomeIcon icon="times" className="edit-icon delete"/>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
+            <CreateStory
+              mainclass="board c-4 r-2 bg-wh"
+            />
+          </div>
+          <div className="row grid-3 for-title mt-3 bg-wh">
+            <div className="title-card c-2 r-1">
+              <h2>Your Events</h2>
+              <span style={{fontWeight: 100, fontSize: `1rem`, color: `rgb(22, 214, 102`}}>
+              <FontAwesomeIcon icon="fire-alt" style={{marginRight: `8px`}}/>
+              1 upcoming event!</span>
             </div>
           </div>
-          <div className="row grid-3">
-            <div className="board g-6">Yes</div>
-            <div className="board g-3">Ok</div>
-            <div className="board g-3">Ok</div>
+          <div className="row grid-3 bg-wh">
+            <div className="board c-2 r-2 p-3 sha-1">
+                <h4 className="board-head">Admins</h4>
+                <ul className="admin-list">
+                  <li>
+                    <div className="admin-thumbnail">
+                      <div className="col-left">
+                      </div>
+                      <div className="col-right">
+                        <p className="admin-name">Thanaphon Chaysawat</p>
+                        <p className="admin-title">Owner and Manager</p>
+                        <div className="edit-btn">
+                          <FontAwesomeIcon icon="pencil-alt" className="edit-icon pencil"/>
+                          <FontAwesomeIcon icon="times" className="edit-icon delete"/>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="admin-thumbnail">
+                      <div className="col-left">
+                      </div>
+                      <div className="col-right">
+                        <p className="admin-name">Dom Cobb</p>
+                        <p className="admin-title">Head Chef</p>
+                        <div className="edit-btn">
+                          <FontAwesomeIcon icon="pencil-alt" className="edit-icon pencil"/>
+                          <FontAwesomeIcon icon="times" className="edit-icon delete"/>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+            </div>
           </div>
         </div>
       </div>

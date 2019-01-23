@@ -5,19 +5,19 @@
 }
 .ads-card.verti {
   position: relative;
-  width: 16vw;
-  height: 24vw;
+  width: 16vmax;
+  height: 24vmax;
   overflow: hidden;
 }
 .ads-card.square {
   position: relative;
-  width: 24vw;
-  height: 24vw;
+  width: 24vmax;
+  height: 24vmax;
 }
 .ads-card.horiz {
   position: relative;
-  width: 32vw;
-  height: 24vw;
+  width: 32vmax;
+  height: 24vmax;
 }
 img.ads-img {
   position: relative;
@@ -26,33 +26,36 @@ img.ads-img {
 img.ads-img.fit-height {
   height: 100%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) scale(1.01);
 }
 img.ads-img.fit-width {
   width: 100%;
   top: 50%;
   transform: translateY(-50%) scale(1.01);
 }
-.ads-card:hover img.ads-img.fit-height {
+/* .ads-card:hover img.ads-img.fit-height {
   transform: translateX(-50%) scale(1.1);
 }
 .ads-card:hover img.ads-img.fit-width {
   transform: translateY(-50%) scale(1.1);
-}
-.ads-title, .ads-sub, .ads-link {
+} */
+.ads-title, .ads-sub, .ads-text {
   position: absolute;
   top: 0;
-  padding: 5%;
+  padding: 0 5%;
   width: 100%;
 }
 .ads-title {
-  font-size: 1.2rem;
+  font-size: 1.2em;
+  transform: translate(0,-50%);
 }
 .ads-sub {
-  font-size: 1rem;
+  font-size: 1em;
+  transform: translate(0,-50%);
 }
-.ads-link {
-  font-size: 0.8rem;
+.ads-text {
+  font-size: 0.8em;
+  transform: translate(0,-50%);
 }
 .light {
   font-weight: 300;

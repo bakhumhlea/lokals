@@ -1,0 +1,221 @@
+.story-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: scroll;
+}
+.story-form::-webkit-scrollbar {
+  display: none;
+}
+.poster-display {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24vw;
+  height: 100%;
+  background: rgb(10, 60, 70);
+  overflow: hidden;
+  transition: 1s 0.1s all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.poster-display.viewed .ads-card {
+  z-index: 200;
+  transform: translate(-50%,0) scale(2);
+  position: fixed;
+  top: 0;
+  left: 50%;
+  height: 60vh;
+  width: 60vh;
+}
+.poster-display .ads-card.square {
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0);
+}
+.text-fields {
+  width: 60%;
+  height: 100%;
+  padding: 0 15px;
+  /* border-right: 3px solid rgb(9, 179, 94); */
+}
+.text-editor {
+  height: 2.8em;
+  overflow: hidden;
+  transition: 0.3s 0s all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.text-editor.extended {
+  height: 6.6em;
+  margin-bottom: 4px;
+}
+.text-fields-ctrl {
+  margin: 10px 0 20px 0;
+}
+.text-fields-ctrl input {
+  width: 90%;
+}
+.text-fields-ctrl .remove-text-icon {
+  cursor: pointer;
+  width: 1.2em;
+  height: 1.2em;
+  color: white;
+  font-size: 0.9em;
+  padding: 3px;
+  border-radius: 2px;
+  margin-left: 12px;
+  background: rgb(192, 192, 192);
+  transform: translate(0,2px);
+  transition: 0.2s 0s all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.text-fields-ctrl .remove-text-icon:hover {
+  background: red;
+}
+.text-fields-label {
+  font-weight: 700;
+  font-size: 0.8em;
+}
+.font-ctrl {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  text-align: left;
+  margin: 10px 10px 5px 0;
+}
+.font-ctrl .size-range {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 1.4em;
+  margin: 0 8px;
+}
+.font-ctrl .size-range span {
+  font-weight: 700;
+  font-size: 0.8em;
+}
+.font-ctrl .size-range input {
+  width: 80%;
+}
+.font-ctrl .style-selection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 1.4em;
+  margin-left: 4px;
+}
+.font-ctrl .font-style {
+  cursor: pointer;
+  display: inline-block;
+  color: white;
+  font-size: 0.8em;
+  width: 1.4em;
+  height: 1.4em;
+  text-align: center;
+  border-radius: 3px;
+  margin-right: 4px;
+  box-sizing: border-box;
+  background: rgb(196, 214, 216);
+}
+.font-ctrl .font-style:hover {
+  background: rgb(142, 187, 192);
+}
+.font-ctrl .font-style.selected {
+  background: rgb(36, 107, 165);
+}
+.font-ctrl .type-selection {
+  display: inline-flex;
+  height: 1.2em;
+  width: max-content;
+  border-radius: 3px;
+  padding: 0 4px;
+  margin-right: 4px;
+  background: rgb(184, 23, 98);
+}
+.font-ctrl select {
+  display: block;
+  position: relative;
+  color: white;
+  padding: 0;
+  height: 100%;
+  width: max-content;
+  text-align: center;
+  font-size: 0.8em;
+  border: none;
+  background: transparent;
+}
+.font-ctrl select:focus {
+  outline: none;
+}
+.position-ctrl {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  text-align: left;
+  padding-bottom: 8px;
+  border-bottom: 1px dotted rgb(216, 216, 216);
+  margin: 5px 10px 5px 0;
+}
+.position-ctrl span.arrows {
+  display: block;
+  color: rgb(36, 36, 36);
+  width: 20px;
+  height: 17px;
+  text-align: center;
+  font-size: 0.6em;
+  padding: 2px;
+  border-radius: 2px;
+  margin-right: 3px;
+  box-sizing: border-box;
+  background: rgb(231, 237, 241);
+}
+.position-ctrl .font-style {
+  cursor: pointer;
+  display: inline-block;
+  color: white;
+  font-size: 0.7em;
+  width: 1.2em;
+  height: 1.2em;
+  text-align: center;
+  padding: 0.2em;
+  border-radius: 3px;
+  margin-right: 4px;
+  box-sizing: content-box;
+  background: rgb(196, 214, 216);
+}
+.position-ctrl .font-style:hover {
+  background: rgb(192, 176, 142);
+}
+.position-ctrl .font-style.selected {
+  background: rgb(165, 109, 36);
+}
+.position-ctrl input {
+  width: calc(40%);
+  margin-right: 6px;
+}
+.position-ctrl .text-alignment {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.small-info {
+  cursor: pointer;
+  display: inline-block;
+  color: white;
+  font-size: 0.7em;
+  padding: 1px 6px;
+  border-radius: 2px;
+  margin-top: 10px;
+  background: rgb(71, 170, 236);
+}
+.small-info:hover {
+  background: rgb(113, 189, 240);
+}
+.small-info .add-icon {
+  font-size: 0.9em;
+  margin-left: 6px;
+}

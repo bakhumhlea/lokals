@@ -198,7 +198,7 @@ class Feed extends Component {
             <span className="results-location">{this.state.currentResults.location}</span>
           </h4>
           <div className="feature-results">
-          {adsImg.map((img, index) => (
+          {/* {adsImg.map((img, index) => (
             <AdsCard
               key={index}
               classname={img.orientation}
@@ -206,14 +206,13 @@ class Feed extends Component {
               src={img.url}
               alt={img.url}
               title={"Some Ads Title"}
-              titleposition={{x: 0, y:15, align: img.textalign}}
               sub={"Now or Never"}
               subposition={{x: 0, y:25, align: img.textalign}}
               link={"at Kool Cusine"}
               linkposition={{x: 0, y:80, align: img.textalign}}
               font={`font-${index > 5?index-4:index} wh bold upper`}
             />
-          ))}
+          ))} */}
           </div>
           <div className="location-section">
             <h4 className="results-title wh-bg">

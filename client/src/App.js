@@ -12,7 +12,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faSpinner, faCloudRain, faBolt, faFireAlt, faGrinHearts, faGrinStars } from '@fortawesome/free-solid-svg-icons'
 
 import PrivateRoute from './components/reusable/PrivateRoute';
-import Navbar from './components/Navbar';
+// import Navbar from './components/Navbar';
 // import Landing from './components/Landing';
 import BusinessSearch from './components/BusinessSearch';
 import Register from './components/Register';
