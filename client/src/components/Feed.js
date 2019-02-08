@@ -234,7 +234,8 @@ class Feed extends Component {
                   mapElement={<div style={{ height: `100%` }} />}
                   markers={this.props.search.businessResults}
                   center={this.state.center}
-                  isOpen={this.state.selected}
+                  
+                  openInfobox={this.state.selected}
                   zoom={this.props.search.zoom}
                   onclickmarker={(e,location,id) => this.centerMap(e, location, id)}
                   isStyled={this.state.isStyled}

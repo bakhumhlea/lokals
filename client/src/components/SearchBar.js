@@ -42,10 +42,8 @@ class SearchBar extends Component {
   render() {
     return (
       <div className={this.props.classname}>
-        <h2 className="happening-title">What is going on near <span className="current-location">San Francisco</span><FontAwesomeIcon icon="location-arrow"></FontAwesomeIcon></h2>
         <form onSubmit={(e) => this.onSubmit(e)}>
         <div className="form-group-inline search-group">
-          <FontAwesomeIcon icon="search" className="search-icon"></FontAwesomeIcon>
           <TextFieldGroup
             type="text"
             divclass="mb-0"
@@ -54,12 +52,14 @@ class SearchBar extends Component {
             name="keywords"
             onChange={(e) => this.onChange(e)}
           />
-          <input
+          <button
             type="submit"
             className="submit-search"
             name="search"
             value="Search"
-          />
+          >
+            <FontAwesomeIcon icon="search" className="search-icon"></FontAwesomeIcon>
+          </button>
           </div>
         </form>
       </div>

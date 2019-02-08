@@ -12,7 +12,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faSpinner, faCloudRain, faBolt, faFireAlt, faGrinHearts, faGrinStars } from '@fortawesome/free-solid-svg-icons'
 
 import PrivateRoute from './components/reusable/PrivateRoute';
-// import Navbar from './components/Navbar';
+import Navbar from './components/Navbar';
 // import Landing from './components/Landing';
 import BusinessSearch from './components/BusinessSearch';
 import Register from './components/Register';
@@ -23,6 +23,7 @@ import Explore from './components/Explore';
 import Feed from './components/Feed';
 import ClaimBusiness from './components/ClaimBusiness';
 import Dashboard from './components/Dashboard';
+import BusinessProfilePage from './components/BusinessProfilePage/BusinessProfilePage';
 
 library.add(faSpinner, faFireAlt, faGrinHearts, faGrinStars, faCloudRain, faBolt, faFireAlt, fab);
 
@@ -48,11 +49,13 @@ class App extends Component {
       <Provider store={ store }>
         <Router>
           <div className="App">
+            <Navbar/>
             <div className="container">
               <Route exact path="/" component={Explore}/>
               <Route exact path="/explore" component={Feed}/>
               <Route exact path="/signup" component={Register}/>
               <Route exact path="/login" component={Login}/>
+              <Route exact path="/biz/sample-business" component={BusinessProfilePage}/>
               <Route exact path="/lokalsforbusiness" component={BusinessSearch} />
               <Switch>
                 <PrivateRoute exact path="/claimyourbusiness/edit-profile" component={ClaimBusiness}/>

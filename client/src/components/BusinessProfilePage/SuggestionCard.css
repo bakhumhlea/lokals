@@ -1,0 +1,90 @@
+.suggestion-card {
+  cursor: pointer;
+  position: relative;
+  min-width: 280px;
+  width: 32%;
+  height: 200px;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background: rgb(46, 46, 46);
+}
+.suggestion-card:hover .cover-img {
+  opacity: 0.7;
+  transform: scale(1.03);
+}
+.preference-info {
+  z-index: 100;
+  color: white;
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  font-size: 0.8em;
+  padding: 7px 10px;
+  background-image: linear-gradient( rgba(4, 22, 19, 0.8),rgba(0,0,0,0));
+}
+.preference-info .keyword {
+  cursor: pointer;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.185);
+  padding: 0 6px;
+  border-radius: 10px;
+}
+.preference-info .keyword:hover {
+  background: rgba(255, 255, 255, 0.473);
+}
+.btns-rack {
+  color: white;
+  z-index: 100;
+}
+.btns-rack .option-btn {
+  font-size: 1em !important;
+  width: 1.7em;
+  height: 1.7em;
+  background: rgba(255, 255, 255, 0.185);
+  padding: 5px;
+  border-radius: 50px;
+  margin-left: 6px;
+}
+.btns-rack .option-btn:hover {
+  background: rgba(255, 255, 255, 0.473);
+  /* color: rgba(19, 219, 119, 0.959); */
+}
+.cover-img {
+  position: absolute;
+  width: 100%;
+  opacity: 0.6;
+  transition: 0.8s 0s all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.brief-info {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: rgb(223, 223, 223);
+  font-size: 0.85em;
+  padding: 0 10px 10px 10px;
+  background-image: linear-gradient(rgba(0,0,0,0), rgba(4, 22, 19, 0.8));
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.726);
+}
+.brief-info h1.name {
+  font-size: 1.6em;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 5px 0;
+}
+.brief-info .middle-text {
+  margin-bottom: 2px;
+}
+.brief-info-icon {
+  color: rgb(56, 255, 146);
+  width: 1.2em !important;
+  margin-right: 4px;
+}
+.ul-hover:hover {
+  text-decoration: underline;
+}

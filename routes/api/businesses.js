@@ -365,4 +365,26 @@ router.post('/id/:business_id/save', passport.authenticate('jwt', { session: fal
     .catch(err => res.status(400).json(err));
 });
 
+/**
+ * @route GET api/business/profile/id/:business_id
+ * @desc Get Business Profile by ID
+ * @access Public, Get Buisness Data
+ * @TODO_NEXT Add validation input
+ */
+router.get('/profile/id/:business_id', (req, res) => {
+  const errors = {};
+
+  const businessID = req.params.business_id;
+  /** @TODO Others fields */
+  Business.findById({ _id: businessID })
+    .then(business => {
+      if (!business) {
+        errors.notfound = "Business not found";
+        return res.status(400).json(errors);
+      }
+      return res.json(business);
+    })
+    .catch(err => res.status(400).json(err));
+});
+
 module.exports = router;

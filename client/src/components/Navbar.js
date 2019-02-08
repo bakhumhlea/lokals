@@ -14,16 +14,18 @@ import { logoutUser } from '../actions/authActions';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faFireAlt } from '@fortawesome/free-solid-svg-icons'
+import { faFireAlt, faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
 import './Navbar.css'
+import SearchBar from './SearchBar';
 
-library.add(faFireAlt);
+library.add(faFireAlt, faAngleDown);
 
 const INITIAL_STATE = {
   email: '',
   password: '',
-  loginBarActive: false
+  loginBarActive: false,
+  devBar: false
 };
 
 class Navbar extends Component {
@@ -88,34 +90,40 @@ class Navbar extends Component {
     const { isAuth, user } = this.props.auth;
     // const errors = {};
     const guestLinks = (
-      <ul className="auth-link">
+      <div className="auth-link">
         {/* <li><button type="button" onClick={this.showLoginBar} className="login-btn">Log In</button></li> */}
-        <li><Link to="/login" className="login-btn">Log in</Link></li>
-        <li><Link to="/signup" className="signup-btn">Sign up</Link></li>
-      </ul>
+        <Link to="/login" className="login-btn">Log in</Link>
+        <Link to="/signup" className="signup-btn">Sign up</Link>
+      </div>
     );
     const loggedLinks = (
-      <ul className="auth-link logged">
-        <li className="welcome-user">Welcome, <Link to="/preference" className="preference-link"><strong>{!isEmpty(user.name) && user.name.first}</strong></Link></li>
-        <li><button type="button" onClick={this.onLogout} className="logout-btn">Log out</button></li>
-      </ul>
+      <div className="auth-link logged">
+        <div className="welcome-user">
+          <span>Welcome, </span>
+          <Link to="/preference" className="preference-link"><strong>{ isAuth && user.name.first}</strong></Link>
+        </div>
+        <button type="button" onClick={this.onLogout} className="logout-btn">Log out</button>
+      </div>
     );
     return (
       <div>
-        <header className="App-header">
-          <div>
-          <h1 className="app-name">L<span><FontAwesomeIcon icon="fire-alt" className="icon"/></span>KALS</h1>
-
-            <ul className="nav-link">
-              <li><a href="/">Explore</a></li>
-              <li><a href="/">Activities</a></li>
-              <li><Link to="/lokalsforbusiness">For Business</Link></li>
-            </ul>
+        <header className="app-header">
+          <div className="left">
+            <h1 className="app-name">L<span><FontAwesomeIcon icon="fire-alt" className="icon"/></span>KALS</h1>
+              {/* <ul className="nav-link">
+                <li><a href="/">Explore</a></li>
+                <li><a href="/">Activities</a></li>
+                <li><Link to="/lokalsforbusiness">For Business</Link></li>
+              </ul> */}
+              <SearchBar
+              classname="top-search-bar"
+            />
           </div>
           {isAuth? loggedLinks : guestLinks}
           {/* {guestLinks} */}
         </header>
-        <div className="development-bar">
+        <div className={this.state.devBar?"development-bar opened":"development-bar"}>
+          <FontAwesomeIcon icon="angle-down" className="open-devbar" onClick={(()=>this.setState({devBar: !this.state.devBar}))}/>
           <p>for development only</p>
           <Link to="/lokalsbiz/dashboard">Dashboard</Link>
           <Link to="/explore" >New Explore</Link>
