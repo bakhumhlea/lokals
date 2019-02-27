@@ -41,7 +41,6 @@ export const emailLogin = (credential) => dispatch => {
 export const googleAuth = (tokenId) => dispatch => {
   Axios.post(`api/users/auth/google/${tokenId}`)
     .then(res => {
-      
       const { token } = res.data;
       console.log(token);
       const decoded = jwt_decode(token);

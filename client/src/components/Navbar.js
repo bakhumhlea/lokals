@@ -32,7 +32,28 @@ class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ...INITIAL_STATE
+      ...INITIAL_STATE,
+      hasScroll: false,
+      bgOpacity: 0,
+    }
+  }
+  componentDidMount() {
+    window.onscroll = this.handlePageScroll;
+  }
+  handlePageScroll = () => {
+    var offsetTop = window.pageYOffset;
+    // if (offsetTop > 60) {
+    //   console.log(">60");
+    //   this.setState({hasScroll: true});
+    // } else {
+    //   this.setState({hasScroll: false});
+    // }
+    if (offsetTop > 60) {
+      this.setState({bgOpacity: 0.8})
+    } else if (offsetTop <= 10) {
+      this.setState({bgOpacity: 0})
+    } else {
+      this.setState({bgOpacity: (offsetTop-10)/50 - 0.2})
     }
   }
   onChange(e) {
@@ -88,6 +109,7 @@ class Navbar extends Component {
   }
   render() {
     const { isAuth, user } = this.props.auth;
+    const { bgOpacity } = this.state;
     // const errors = {};
     const guestLinks = (
       <div className="auth-link">
@@ -105,11 +127,18 @@ class Navbar extends Component {
         <button type="button" onClick={this.onLogout} className="logout-btn">Log out</button>
       </div>
     );
+    // const bgColor = {backgroundColor: `rgba(16, 101, 155, ${bgOpacity})`};
+    // const bgGradient = {background: `linear-gradient(rgba(4, 155, 183,${bgOpacity}), rgba(15, 94, 167,0))`}
+    const bgGradientMono = {background: `linear-gradient(rgba(0, 0, 0,${bgOpacity}), rgba(19, 22, 26,${bgOpacity*0.8}), rgba(19, 22, 26, 0)`};
     return (
       <div>
-        <header className="app-header">
+        <header className={this.state.hasScroll?"app-header offset":"app-header"} id="app-header"
+          style={bgGradientMono}
+        >
           <div className="left">
-            <h1 className="app-name">L<span><FontAwesomeIcon icon="fire-alt" className="icon"/></span>KALS</h1>
+            <Link to="/">
+              <h1 className="app-name">L<span><FontAwesomeIcon icon="fire-alt" className="icon"/></span>KALS</h1>
+            </Link>
               {/* <ul className="nav-link">
                 <li><a href="/">Explore</a></li>
                 <li><a href="/">Activities</a></li>

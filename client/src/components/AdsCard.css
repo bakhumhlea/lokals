@@ -42,7 +42,7 @@ img.ads-img.fit-width {
 .ads-title, .ads-sub, .ads-text {
   position: absolute;
   top: 0;
-  padding: 0 5%;
+  padding: 0;
   width: 100%;
 }
 .ads-title {
@@ -56,6 +56,7 @@ img.ads-img.fit-width {
 .ads-text {
   font-size: 0.8em;
   transform: translate(0,-50%);
+  text-shadow: 0 0 4px rgba(0,0,0,0.4);
 }
 .light {
   font-weight: 300;
@@ -98,4 +99,7 @@ img.ads-img.fit-width {
 }
 .font-7 {
   font-family: 'Futura', sans-serif;
+}
+.font-8 {
+  font-family: 'Rubik', sans-serif;
 }

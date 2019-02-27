@@ -24,6 +24,7 @@ import Feed from './components/Feed';
 import ClaimBusiness from './components/ClaimBusiness';
 import Dashboard from './components/Dashboard';
 import BusinessProfilePage from './components/BusinessProfilePage/BusinessProfilePage';
+import LokalsMain from './components/LokalsMain/LokalsMain';
 
 library.add(faSpinner, faFireAlt, faGrinHearts, faGrinStars, faCloudRain, faBolt, faFireAlt, fab);
 
@@ -51,7 +52,7 @@ class App extends Component {
           <div className="App">
             <Navbar/>
             <div className="container">
-              <Route exact path="/" component={Explore}/>
+              <Route exact path="/" component={LokalsMain}/>
               <Route exact path="/explore" component={Feed}/>
               <Route exact path="/signup" component={Register}/>
               <Route exact path="/login" component={Login}/>

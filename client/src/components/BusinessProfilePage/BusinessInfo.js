@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Map from '../Map';
-import Mapbox from './Mapbox';
+import Mapbox from '../Mapbox/Mapbox';
 import { getOpeningStatus } from '../../util/getOpeningStatus';
 import { GOOGLE_MAP_API } from '../../config/keys';
 import { toAmPm, toDayStr, getStreetAddress } from '../../util/stringFormat';
@@ -49,7 +49,7 @@ export default class BusinessInfo extends Component {
       <div className="content col-right bg-wh" id="mapbox-container">
         <Mapbox
           viewportWidth={this.state.width}
-          markerdata={marker[0]}
+          markerdata={marker}
           showPopup={false}
         />
         {/* <Map
