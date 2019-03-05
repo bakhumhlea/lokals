@@ -17,23 +17,33 @@ export default class Mapbox extends Component {
       bearing: 0,
       pitch: 0,
     },
+    searchCenter: {
+      latitude: 37.7577,
+      longitude: -122.4376,
+    },
     selected: 'streets-v8',
     markerdata: null,
     activePopup: 9,
     nightModeOn: false,
   }
   componentDidMount() {
-    const { markerdata, mapHeight, viewport, activePopup } = this.props;
+    const { markerdata, mapHeight, viewport, activePopup, searchCenter } = this.props;
+    console.log(searchCenter);
     if (viewport) {
       this.setState({
         viewport: {
           ...viewport
         },
+        searchCenter: searchCenter,
         activePopup: activePopup,
         markerdata: markerdata
       });
     } else {
       this.setState({
+        searchCenter: {
+          latitude: viewport.latitude,
+          longitude: viewport.longitude,
+        },
         activePopup: activePopup,
         markerdata: markerdata,
       });
@@ -61,12 +71,12 @@ export default class Mapbox extends Component {
   decrement(e, index) {
     e.preventDefault();
     this.props.onDec(e);
-    if (this.props.activePopup>0) this.recenterMap(this.state.markerdata[index-1].geometry.location);
+    if (this.props.activePopup>0) this.recenterMap(this.props.markerdata[index-1].geometry.location);
   }
   increment(e, index) {
     e.preventDefault();
     this.props.onInc(e);
-    if (this.props.activePopup<this.state.markerdata.length -1) this.recenterMap(this.state.markerdata[index+1].geometry.location);
+    if (this.props.activePopup<this.props.markerdata.length -1) this.recenterMap(this.props.markerdata[index+1].geometry.location);
   }
   render() {
     const mapstyles = [
@@ -100,13 +110,18 @@ export default class Mapbox extends Component {
           minZoom={6}
           maxZoom={20}
           dragPan={true}
-          transitionDuration={300}
+          transitionDuration={0}
           transitionInterpolator={new LinearInterpolator()}
         >
           <div style={navStyle}>
             <NavigationControl 
               onViewportChange={(viewport) => this.handleViewportChange(viewport)}
             />
+          </div>
+          <div className="select-business-controler">
+            <span className="inc-dec-btn" onClick={(e) => this.decrement(e, activePopup)}>-</span>
+            <span className="inc-dec-btn" onClick={(e) => this.increment(e, activePopup)}>+</span>
+            <button className="btn btn-light" onClick={()=>this.props.getCurrentCenter({lat: viewport.latitude, lng: viewport.longitude})}>Redo Search</button>
           </div>
           {showPopup && markerdata.length > 0 && activePopup+1 && markerdata.map((marker,i)=>(
             <CustomPopup
@@ -133,11 +148,6 @@ export default class Mapbox extends Component {
         <div className={nightModeOn?"toggle-nightmode-btn active":"toggle-nightmode-btn"}
           onClick={(e)=>this.toggleNightMode(e)}>
           <FontAwesomeIcon icon={nightModeOn?"sun":"moon"} className="nightmode-icon"/>
-        </div>
-        <div className="select-business-controler">
-            <span className="inc-dec-btn" onClick={(e) => this.decrement(e, activePopup)}>-</span>
-            <span className="inc-dec-btn" onClick={(e) => this.increment(e, activePopup)}>+</span>
-            <span className="btn btn-light" onClick={()=>this.props.getCurrentCenter({lat: viewport.latitude, lng: viewport.longitude})}>Get New Center</span>
         </div>
       </div>
     )

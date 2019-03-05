@@ -25,6 +25,8 @@ import ClaimBusiness from './components/ClaimBusiness';
 import Dashboard from './components/Dashboard';
 import BusinessProfilePage from './components/BusinessProfilePage/BusinessProfilePage';
 import LokalsMain from './components/LokalsMain/LokalsMain';
+import LokalsMapbox from './components/LokalsMapbox/LokalsMapbox';
+import LokalsSearchMap from './components/LokalsSearchMap/LokalsSearchMap';
 
 library.add(faSpinner, faFireAlt, faGrinHearts, faGrinStars, faCloudRain, faBolt, faFireAlt, fab);
 
@@ -53,7 +55,7 @@ class App extends Component {
             <Navbar/>
             <div className="container">
               <Route exact path="/" component={LokalsMain}/>
-              <Route exact path="/explore" component={Feed}/>
+              <Route exact path="/explore" component={LokalsSearchMap}/>
               <Route exact path="/signup" component={Register}/>
               <Route exact path="/login" component={Login}/>
               <Route exact path="/biz/sample-business" component={BusinessProfilePage}/>

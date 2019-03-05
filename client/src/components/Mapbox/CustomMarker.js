@@ -20,8 +20,8 @@ class CustomMarker extends BaseControl {
 
     const markerStyle = {
       position: 'absolute',
-      left: x,
-      top: y
+      left: x - 15,
+      top: y - 30
     };
     return (
       <div 

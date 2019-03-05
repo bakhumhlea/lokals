@@ -387,13 +387,13 @@ router.get('/profile/id/:business_id', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-router.get('/searchnearby/:keyword/:type/:lat/:lng/:radius', (req,res) => {
-  const { keyword, type, lat, lng, radius } = req.params;
+router.get('/searchnearby/:keyword/:type/:lat/:lng/:radius/:opennow', (req,res) => {
+  const { keyword, type, lat, lng, radius, opennow } = req.params;
   const request = { 
     location: {lat: parseFloat(lat,10), lng: parseFloat(lng, 10)},
     radius: parseInt(radius, 10),
     keyword: keyword,
-    opennow: false,
+    opennow: opennow === 'true',
     type: type,
   };
   console.log(request);

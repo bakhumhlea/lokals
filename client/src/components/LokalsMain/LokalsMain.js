@@ -46,10 +46,10 @@ class LokalsMain extends Component {
   }
   setCurrentLocation = (location) => {
     // console.log(location);
-    this.setState({currentCenter:location})
+    this.getNearbyPlaces('bar','bar',location,1000);
   }
   getNearbyPlaces(keyword, type, location, radius) {
-    console.log(location);
+    // console.log(location);
     const sf = {lat: 37.7749, lng: -122.4194};
     const kw = keyword || 'japanese';
     const ty = type || 'restaurant';
@@ -58,7 +58,7 @@ class LokalsMain extends Component {
     Axios.get(`/api/business/searchnearby/${kw}/${ty}/${loc.lat}/${loc.lng}/${rad}`)
       .then(res => {
         console.log(res.data);
-        return this.setState({markers: res.data});
+        return this.setState({markers: res.data, currentCenter:location});
       })
       .catch(err => console.log(err.response.data));
   }
@@ -429,14 +429,13 @@ class LokalsMain extends Component {
               onInc={this.increment}
               onDec={this.decrement}
               viewport={
-                {
-                  zoom: 13,
+                { zoom: 13,
                   latitude: this.state.markers[activePopup].geometry.location.lat,
                   longitude: this.state.markers[activePopup].geometry.location.lng,
                   bearing: 0,
-                  pitch: 0,
-                }
+                  pitch: 0, }
               }
+              searchCenter={this.state.currentCenter}
             />}
           </div>
           <button className="btn btn-warning" onClick={(e)=>this.getNearbyPlaces('bar','bar',this.state.currentCenter,1000)}>Search this area</button>

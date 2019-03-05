@@ -1,6 +1,6 @@
 import React from 'react'
 import { BaseControl } from 'react-map-gl'
-import './Mapbox.css'
+import './LokalsMapbox.css'
 import { GOOGLE_MAP_API } from '../../config/keys';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -24,18 +24,20 @@ class CustomPopup extends BaseControl {
     }
   }
   _render() {
-    const {longitude, latitude, data, activePopup, index} = this.props;
+    const {longitude, latitude, data, selectedPopup, offset} = this.props;
     const [x, y] = this._context.viewport.project([longitude, latitude]);
-
     const popupStyle = {
       position: 'absolute',
-      display: activePopup === index ? 'flex':'none',
-      left: x,
-      top: y - 36,
+      display: selectedPopup? 'flex':'none',
+      left: x + offset.x,
+      top: y + offset.y,
     };
     return (
-      <div ref={this._containerRef}
-        style={popupStyle} className="custom-popup-container">
+      <div 
+        ref={this._containerRef}
+        style={popupStyle} 
+        className="custom-popup-container"
+      >
         <div className="image-thumbnail">
           {data.photos && data.photos[0] && 
           <img 
@@ -55,8 +57,12 @@ class CustomPopup extends BaseControl {
             </span>
             <span className="user-count"> ({data.user_ratings_total})</span>
           </p>
-          <p className="address">{data.vicinity}</p>
+          <p className="address">
+            {data.vicinity.split(',')[0]}, {data.plus_code.compound_code.split(',')[0].split(' ').slice(1).join(' ')}
+          </p>
+          <p className="category">{}</p>
         </div>
+        <div className="anchor"></div>
       </div>
     );
   }

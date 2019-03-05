@@ -133,7 +133,7 @@ class Navbar extends Component {
     return (
       <div>
         <header className={this.state.hasScroll?"app-header offset":"app-header"} id="app-header"
-          style={bgGradientMono}
+          // style={bgGradientMono}
         >
           <div className="left">
             <Link to="/">

@@ -21,7 +21,7 @@
   color: black;
   padding: 10px;
   background: white;
-  transform: translate(-50%, calc(-100% - 36px));
+  transform: translate(-50%, calc(-100%));
   font-size: 0.8em;
   font-family: 'Noto sans', sans-serif;
   opacity: 1;
@@ -108,11 +108,11 @@
 .custom-marker-container {
   cursor: pointer;
   z-index: 20;
-  transform: translate(-15px,-30px);
+  /* transform: translate(-15px,-30px); */
 }
 .custom-marker-container.selected {
   z-index: 80;
-  transform: translate(-15px,-30px);
+  /* transform: translate(-15px,-30px); */
 }
 .custom-marker-container .custom-marker-icon {
   font-size: 30px;
@@ -120,7 +120,7 @@
   stroke: white;
   stroke-width: 40;
   transform: scale(1);
-  transition: 0.2s 0s all cubic-bezier(0.075, 0.82, 0.165, 1);
+  /* transition: 0.2s 0s all cubic-bezier(0.075, 0.82, 0.165, 1); */
 }
 .custom-marker-container.selected .custom-marker-icon {
   color: rgb(9, 179, 37);
