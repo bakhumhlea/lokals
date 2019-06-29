@@ -9,6 +9,7 @@ import TextFieldGroup from './reusable/TextFieldGroup';
 import { setSearchResults, setMapCenter, setZoom } from '../actions/searchActions';
 
 import './SearchBar.css';
+import './SystemDesign.css';
 
 library.add(faLocationArrow, faInfoCircle, faMapMarkerAlt, faTimes, faSearch, faGrinHearts, faGrinStars, faWineGlass, faBookmark, faHeart, fab);
 

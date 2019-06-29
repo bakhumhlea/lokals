@@ -15,8 +15,7 @@ import Map from './Map';
 import ResultCard from './ResultCard';
 
 import './Feed.css';
-import AdsCard from './AdsCard';
-import Navbar from './Navbar';
+// import AdsCard from './AdsCard';
 library.add(faLocationArrow, faInfoCircle, faMapMarkerAlt, faClock, faTimes, faSearch, faGrinHearts, faGrinStars, faWineGlass, faBookmark, faHeart, faMap, fab);
 
 const adsImg = [];
@@ -137,7 +136,6 @@ class Feed extends Component {
     const { collections } = this.props.user.profile;
     return (
       <div className="feed-page">
-      <Navbar/>
         <div className="top-bar">
           <form onSubmit={(e) => this.onSubmit(e)}>
           <div className="search-bar">
@@ -227,7 +225,7 @@ class Feed extends Component {
                   <FontAwesomeIcon icon="map" className="theme-icon"/>
                   <span>{this.state.isStyled ?"Light":"Dark"}</span>
                 </div>
-                <Map
+                {/* <Map
                   googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_API}&v=3.exp&libraries=geometry,drawing,places`}
                   loadingElement={<div style={{ height: `100%` }} />}
                   containerElement={<div style={{ display:'block', height: `480px`, width: `100%`, margin: '0 0', borderRadius: `0`, boxShadow: `0 0 6px 0 rgba(0,0,0,0.1)`, overflow: `hidden` }} />}
@@ -239,7 +237,7 @@ class Feed extends Component {
                   zoom={this.props.search.zoom}
                   onclickmarker={(e,location,id) => this.centerMap(e, location, id)}
                   isStyled={this.state.isStyled}
-                />
+                /> */}
               </div>
               <div className="list-results">
                 {this.props.search.businessResults && this.props.search.businessResults.map(marker => (

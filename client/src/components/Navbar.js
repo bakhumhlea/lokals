@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { googleAuth, facebookAuth, emailLogin } from '../actions/authActions';
+import { setAppTheme, setLocal } from '../actions/appstateAction';
 
 // import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 // import GoogleLogin from 'react-google-login';
 // import TextFieldGroup from './reusable/TextFieldGroup';
 // import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../config/keys';
 
-import isEmpty from '../util/is-empty';
+// import isEmpty from '../util/is-empty';
 import { logoutUser } from '../actions/authActions';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,28 +18,57 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFireAlt, faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
 import './Navbar.css'
-import SearchBar from './SearchBar';
+import './SystemDesign.css';
 
 library.add(faFireAlt, faAngleDown);
 
 const INITIAL_STATE = {
   email: '',
   password: '',
-  loginBarActive: false,
+  local: {city: 'san francisco'},
+  hidden: false,
   devBar: false
 };
-
+const CITIES = [
+  {name:'san francisco'},
+  {name:'new york'},
+  {name:'london'},
+  {name:'chiang mai'},
+]
 class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       ...INITIAL_STATE,
+      selectingCity: false,
       hasScroll: false,
       bgOpacity: 0,
     }
+    this.selectCityTimer = null;
   }
   componentDidMount() {
     window.onscroll = this.handlePageScroll;
+    const { app } = this.props;
+    const path = app && app.currentPath?app.currentPath:null;
+    if (path==='/explore') {
+      this.setState({hidden: true});
+    }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState !== this.state) {
+      return true;
+    } else if (nextProps.app !== this.props.app) {
+      if (nextProps.app.currentPath==='/explore') {
+        this.setState({hidden: true});
+      } else {
+        this.setState({hidden: false});
+      }
+      return true;
+    } else if (nextProps.auth.isAuth !== this.props.auth.isAuth) {
+      return true;
+    } else {
+      return false;
+    }
   }
   handlePageScroll = () => {
     var offsetTop = window.pageYOffset;
@@ -56,6 +86,11 @@ class Navbar extends Component {
       this.setState({bgOpacity: (offsetTop-10)/50 - 0.2})
     }
   }
+  onSelectCity(e,value) {
+    e.preventDefault();
+    this.setState({ local: { city: value}, selectingCity:false })
+    this.props.setLocal({ city: value});
+  }
   onChange(e) {
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value })
@@ -69,19 +104,6 @@ class Navbar extends Component {
     this.props.emailLogin(cred);
     this.showLoginBar();
     this.setState({email: '', password: ''});
-  }
-  showLoginBar = (e) => {
-    if (e) {
-      e.preventDefault();
-    }
-    const isActive = this.state.loginBarActive;
-    var loginBar = document.getElementById("lokals-login");
-    if (!isActive) {
-      loginBar.style.height = "3rem";
-    } else {
-      loginBar.style.height = 0;
-    }
-    this.setState({ loginBarActive: !isActive });
   }
   googleResponse = (res) => {
     this.props.googleAuth(res.tokenId);
@@ -109,48 +131,65 @@ class Navbar extends Component {
   }
   render() {
     const { isAuth, user } = this.props.auth;
-    const { bgOpacity } = this.state;
-    // const errors = {};
+    const { setAppTheme } = this.props;
+    // const path = app && app.currentPath?app.currentPath:null;
+    const { hidden, local, selectingCity } = this.state;
     const guestLinks = (
       <div className="auth-link">
-        {/* <li><button type="button" onClick={this.showLoginBar} className="login-btn">Log In</button></li> */}
-        <Link to="/login" className="login-btn">Log in</Link>
-        <Link to="/signup" className="signup-btn">Sign up</Link>
+        <Link to="/login" className="lk-btn-ol md mr-2">Log in</Link>
+        <Link to="/signup" className="lk-btn btn-pri md">Sign up</Link>
       </div>
     );
     const loggedLinks = (
       <div className="auth-link logged">
         <div className="welcome-user">
           <span>Welcome, </span>
-          <Link to="/preference" className="preference-link"><strong>{ isAuth && user.name.first}</strong></Link>
+          <span className="lk-link" onClick={(e)=>setAppTheme('dark-th')}><strong>{ isAuth && user.name.first}</strong></span>
         </div>
-        <button type="button" onClick={this.onLogout} className="logout-btn">Log out</button>
+        <button type="button" onClick={this.onLogout} className="lk-btn btn-dan md">Log out</button>
       </div>
     );
-    // const bgColor = {backgroundColor: `rgba(16, 101, 155, ${bgOpacity})`};
-    // const bgGradient = {background: `linear-gradient(rgba(4, 155, 183,${bgOpacity}), rgba(15, 94, 167,0))`}
-    const bgGradientMono = {background: `linear-gradient(rgba(0, 0, 0,${bgOpacity}), rgba(19, 22, 26,${bgOpacity*0.8}), rgba(19, 22, 26, 0)`};
     return (
-      <div>
-        <header className={this.state.hasScroll?"app-header offset":"app-header"} id="app-header"
-          // style={bgGradientMono}
-        >
+      <div className="nav-bar">
+        <header className="app-header" id="app-header" style={{transform: hidden?'translateY(-100%)':'none'}}>
           <div className="left">
-            <Link to="/">
+            <Link to="/" className="home-link">
               <h1 className="app-name">L<span><FontAwesomeIcon icon="fire-alt" className="icon"/></span>KALS</h1>
             </Link>
-              {/* <ul className="nav-link">
-                <li><a href="/">Explore</a></li>
-                <li><a href="/">Activities</a></li>
-                <li><Link to="/lokalsforbusiness">For Business</Link></li>
-              </ul> */}
-              <SearchBar
-              classname="top-search-bar"
-            />
+              <ul className="inl-contn mb-0 nav-link">
+                <li><Link to="/explore" className="lk-tab-link">Explore</Link></li>
+                <li><a href="/events" className="lk-tab-link">Events</a></li>
+                <li><Link to="/lokalsforbusiness" className="lk-tab-link">For Business</Link></li>
+              </ul>
+              {/* <SearchBar
+                classname="top-search-bar"
+              /> */}
           </div>
-          {isAuth? loggedLinks : guestLinks}
+          <div className="flx al-c">
+            <div className="lk-dd-select">
+              <div className="disp mr-2" onClick={(e)=> this.setState({selectingCity: !selectingCity})}>
+                <span className="city">{local.city}</span>
+                <FontAwesomeIcon icon="angle-down" className="ic"/>
+              </div>
+             <div className={selectingCity?"backdrop show":"backdrop"} onClick={(e)=> this.setState({selectingCity: false})}>
+              <div className={"dd"}>
+                {CITIES.map((c,i)=>(
+                  <span key={i} className={c.name.toLowerCase() === local.city.toLowerCase()?"lst selected":"lst"} onClick={(e)=>this.onSelectCity(e, c.name)}>{c.name}</span>
+                ))}
+              </div>
+             </div>
+              {/* <select name="city" onChange={(e)=>this.onSelectCity(e)} value={local.city}>
+                <option value="san francisco">San Francisco</option>
+                <option value="new york">New York</option>
+                <option value="london">London</option>
+                <option value="chiang mai">Chiang Mai</option>
+              </select>
+               */}
+            </div>
+          {isAuth? loggedLinks : guestLinks}</div>
           {/* {guestLinks} */}
         </header>
+
         <div className={this.state.devBar?"development-bar opened":"development-bar"}>
           <FontAwesomeIcon icon="angle-down" className="open-devbar" onClick={(()=>this.setState({devBar: !this.state.devBar}))}/>
           <p>for development only</p>
@@ -158,6 +197,8 @@ class Navbar extends Component {
           <Link to="/explore" >New Explore</Link>
           <a href="/lokalsbiz/event" >Event</a>
           <a href="/lokalsbiz/story" >Story</a>
+          <Link to="/lokals-boh" >Lokals BOH</Link>
+          <Link to="/system-design" >System Design Guideline</Link>
         </div>
       </div>
     )
@@ -165,10 +206,15 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  app: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
-})
-export default connect(mapStateToProps, { facebookAuth, googleAuth, emailLogin ,logoutUser })(Navbar);
+  auth: state.auth,
+  app: state.app
+});
+
+export default connect(mapStateToProps, { 
+  facebookAuth, googleAuth, emailLogin ,logoutUser, setAppTheme, setLocal
+})(withRouter(Navbar));

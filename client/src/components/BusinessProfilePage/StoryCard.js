@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './StoryCard.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class StoryCard extends Component {
   onClickExpand(e, storyId) {

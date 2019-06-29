@@ -16,14 +16,14 @@ class CustomMarker extends BaseControl {
   // }
   _render() {
     const { 
-      data,
       longitude, 
       latitude, 
       markerID, 
       selectedMarker, 
       offset, 
       onClickMarker, 
-      onHoverMarker 
+      onHoverMarker,
+      showMarkerNumber,
     } = this.props;
 
     const [x, y] = this._context.viewport.project([longitude, latitude]);
@@ -39,13 +39,13 @@ class CustomMarker extends BaseControl {
         ref={this._containerRef}
         style={markerStyle} 
         className={classname}
-        onMouseOver={() => onHoverMarker(data)}
+        onMouseOver={() => onHoverMarker(markerID)}
         onClick={() => onClickMarker({lat: latitude, lng: longitude}, markerID)}
       >
         <FontAwesomeIcon 
           icon="map-marker" 
           className="custom-marker-icon"/>
-        {<div className="custom-marker-number">{markerID+1}</div>}
+        {showMarkerNumber && <div className="custom-marker-number">{markerID+1}</div>}
       </div>
     )
   }

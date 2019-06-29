@@ -6,12 +6,11 @@ html {
   scroll-behavior: smooth;
 }
 body {
-  /* font-family: 'Source Sans Pro', sans-serif;
-  font-family: 'Merriweather', serif;
-  font-family: 'Roboto', sans-serif; */
+  font-family: 'Raleway', sans-serif;
   font-family: 'PT Sans', sans-serif;
   font-family: 'Montserrat', sans-serif;
   font-family: 'Nato Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 a {
   color: white;
@@ -21,14 +20,18 @@ a:hover {
   text-decoration: none;
 }
 .App {
+  color: black;
+  /* background-color: rgb(40, 44, 52); */
   color: white;
-  background-color: rgb(40, 44, 52);
 }
 .container {
   position: relative;
   padding: 0 0 0 0;
   min-height: calc(100vh);
   max-width: 100vw;
+}
+.container-grid {
+  display: grid;
 }
 .icon {
   width: 20px;
@@ -184,32 +187,5 @@ img.center {
 }
 .cm-inp-rg:focus::-webkit-slider-runnable-track {
   background:  rgb(118, 174, 218);
-}
-@keyframes spinner {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes blinking {
-  from {
-    color: rgb(255, 255, 255);
-  }
-  to {
-    color: rgb(40, 44, 52);
-  }
-}
-@keyframes floating {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-1vmin);
-  }
-  100% {
-    transform: translateY(0);
-  }
 }
 

@@ -9,7 +9,8 @@ const DEFAULT_VALUE = {
   REQUEST: {
     GOOGLEMAPS: {
       PLACE: {
-        FIELDS: ['formatted_address', 'geometry', 'name', 'type', 'opening_hours', 'place_id']
+        FIELDS: ['formatted_address', 'geometry', 'name', 'type', 'url', 'price_level', 'rating', 'website', 'opening_hours', 'place_id', 'formatted_phone_number', 'address_component','photo'],
+        ALL_FIELDS: ["address_component", "adr_address", "alt_id", "formatted_address", "geometry", "icon", "id", "name", "permanently_closed", "photo", "place_id", "scope", "type", "url", "utc_offset", "vicinity", "formatted_phone_number", "international_phone_number", "opening_hours", "website", "price_level", "rating", "review"]
       }
     }
   },

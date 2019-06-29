@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Map from '../Map';
-import Mapbox from '../Mapbox/Mapbox';
 import { getOpeningStatus } from '../../util/getOpeningStatus';
-import { GOOGLE_MAP_API } from '../../config/keys';
 import { toAmPm, toDayStr, getStreetAddress } from '../../util/stringFormat';
 import './BusinessInfo.css';
+import LokalsMapbox from '../LokalsMapbox/LokalsMapbox';
 
 
 export default class BusinessInfo extends Component {
@@ -43,35 +41,35 @@ export default class BusinessInfo extends Component {
   render() {
     const today = new Date(Date.now()).getDay();
     const { marker } = this.props;
-    const { formatted_address, opening_hours, _id, location } = this.props.businessdata;
+    const { formatted_address, opening_hours} = this.props.businessdata;
     const { opening } = this.state;
     return (
       <div className="content col-right bg-wh" id="mapbox-container">
-        <Mapbox
-          viewportWidth={this.state.width}
-          markerdata={marker}
+        <LokalsMapbox
+          markers={new Array(marker[0])}
+          showMarkerNumber={false}
+          staticMap={true}
           showPopup={false}
+          viewport={{
+            width: '100%',
+            height: '100%',
+            zoom: 15,
+            latitude: marker[0].location.lat,
+            longitude: marker[0].location.lng,
+            bearing: 0,
+            pitch: 0,
+          }}
+          singleMarker={{
+            latitude: marker[0].location.lat,
+            longitude: marker[0].location.lng,
+          }}
+          containerClass={'info-map'}
         />
-        {/* <Map
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_API}&v=3.exp&libraries=geometry,drawing,places`}
-          loadingElement={<div style={{ height: `100%` }} />}
-          containerElement={<div style={{ display:'block', height: `200px`, width: `100%`, margin: '0px', borderRadius: `0px`, boxShadow: `0 0 6px 0 rgba(0,0,0,0.1)`, overflow: `hidden` }} />}
-          mapElement={<div style={{ height: `100%` }} />}
-          markers={marker}
-          center={location}
-          zoom={14}
-          openInfobox={_id}
-          // onclickmarker={(e,location,id) => this.centerMap(e, location, id)}
-          isStyled={true}
-          fullScreenCtrl={false}
-          gestureHandling='none'
-          infobox="sm"
-        /> */}
         <div className="business-info">
           <h4 className="location-info">
             <span className="localzone-info">Cow Hollow</span>
             <span className="distance-info">4.8mi</span>
-            </h4>
+          </h4>
           <div className="info-box">
             <p className="text">
               <FontAwesomeIcon icon="map-marker-alt" className="location-info-icon"/>

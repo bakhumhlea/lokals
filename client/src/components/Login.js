@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import GoogleLogin from 'react-google-login';
 // import GoogleLogout from 'react-google-login';
-import TextFieldGroup from './reusable/TextFieldGroup';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../config/keys';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,18 +22,56 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      user: null,
       imageUrl: null,
-      errors: {}
+      errors: {},
+      redirect: '/'
     };
     this.errorResponse = (err) => {
       console.log(err);
     }
   }
+  componentDidMount() {
+    const { auth } = this.props;
+    const { state } = this.props.location;
+    if (state) {
+      console.log(typeof state.from);
+      this.setState({redirect: state.from});
+    }
+    if (auth.isAuth) {
+      if (state && state.business_route) {
+        if (auth.isAdmin) {
+          if (state.from) this.props.history.push(state.from);
+        }
+        this.props.history.push('/'); // show warning popup instead
+      } else if (state && state.from) {
+        this.props.history.push(state.from);
+      } else {
+        this.props.history.push('/');
+      }
+    }
+  }
   shouldComponentUpdate(nextProps, nextState) {
+    const { history } = this.props;
+    const { state } = this.props.location;
     if (nextProps.auth.isAuth) {
-      this.props.history.push('/');
+      if (state && state.business_route) {
+        if (nextProps.auth.isAdmin) {
+          history.push(state.from);
+          return true;
+        }
+        history.push('/'); // show warning popup instead TODO redirect to business page
+        return false;
+      } else if (state && state.from) {
+        history.push(state.from);
+        return true;
+      } else {
+        history.push('/');
+        return true;
+      }
+    } else if (nextState !== this.state) {
       return true
+    } else {
+      return false;
     }
   }
   onChange(e) {
@@ -43,30 +80,38 @@ class Login extends Component {
   }
   onSubmit = (e) => {
     e.preventDefault();
+    const { redirect } = this.state;
     const cred = {
       email: this.state.email,
       password: this.state.password
     };
-    this.props.emailLogin(cred);
-    this.setState({email: '', password: ''});
+    this.props.emailLogin(cred, this.props.history, redirect);
   }
   googleResponse = (res) => {
-    this.props.googleAuth(res.tokenId);
+    const { redirect } = this.state;
+    console.log(typeof redirect);
+    this.props.googleAuth(res.tokenId, this.props.history, redirect);
   }
   facebookResponse = (res) => {
-    const name = res.name.split(' ');
-    const userData = {
-      name: {
-        first: name[0],
-        last: name[1]
-      },
-      email: res.email,
-      facebookAuth:{
-        id: res.userID
-      },
-      imageUrl: res.picture.data.url
+    const { history } = this.props;
+    const { redirect } = this.state;
+    if (res.name) {
+      const name = res.name.split(' ');
+      const userData = {
+        name: {
+          first: name[0],
+          last: name[1]
+        },
+        email: res.email,
+        facebookAuth:{
+          id: res.userID
+        },
+        imageUrl: res.picture.data.url
+      }
+      this.props.facebookAuth(userData, history, redirect);
+    } else {
+      console.log(res);
     }
-    this.props.facebookAuth(userData);
   }
   onLogout = (e) => {
     e.preventDefault();
@@ -74,12 +119,55 @@ class Login extends Component {
   }
   render() {
     // const expDate = (dateinms) => new Date(dateinms);
-    const { errors } = this.state;
+    const { email, password } = this.state;
+    const { error } = this.props;
     return (
-      <div className="login-page">
-        <div className="w-40 m-auto">
-          <h5 className="login-header"><strong>Log in</strong> to continue</h5>
-          <div className="form-group social-btn gg-btn">
+      <div className="page-container login-page">
+        <div className="lk-card p-4 wd-5 mt-3 ml-auto mr-auto">
+          <h4 className="hd-4 mt-2 mb-4"><strong>Log in</strong> to continue</h4>
+          <div>
+            <form onSubmit={this.onSubmit}>
+              <div className="lk-ip-group">
+                <label className="label-1 mb-2">
+                <FontAwesomeIcon className="mr-2" icon="envelope"/>Email</label>
+                <input 
+                  type="email" 
+                  name="email"
+                  className="lk-ip lg sha-1"
+                  value={email}
+                  onChange={(e) => this.onChange(e)}
+                  placeholder="Email"
+                />
+                {error.types.email && (<p className="lk-err-text"><small>{error.types.email}</small></p>)}
+              </div>
+              <div className="lk-ip-group">
+                <label className="label-1 mb-2">
+                <FontAwesomeIcon className="mr-2" icon="lock"/>Password</label>
+                <input 
+                  type="password" 
+                  name="password"
+                  className="lk-ip lg sha-1"
+                  value={password}
+                  onChange={(e) => this.onChange(e)}
+                  placeholder="Password"
+                />
+                {error.types.password && (<p className="lk-err-text"><small>{error.types.password}</small></p>)}
+                <div className="forgot-password">
+                  <Link className="lk-link solo" to="/reset-password">Forgot your password?</Link>
+                </div>
+              </div>
+              <div className="lk-ip-group">
+                <input
+                  type="submit"
+                  className="lk-btn btn-dan spacial sha-1 wd-10"
+                  name="login"
+                  value="Login"
+                />
+              </div>
+            </form>
+          </div>
+          <p className="label-1 or-text">or</p>
+          <div className="flx-contn jt-spbt wd-10">
             <GoogleLogin
               clientId={GOOGLE_CLIENT_ID}
               buttonText="Login with Google"
@@ -87,11 +175,9 @@ class Login extends Component {
               onFailure={this.errorResponse}
               uxMode={'popup'}
               render={renderProps => (
-                <button className="form-control w-100 btn-d mr-3" onClick={renderProps.onClick}><FontAwesomeIcon className="mr-2" icon={['fab','google']}/>Log in with Google</button>
+                <button className="lk-btn-ol mr-1 wd-10 sha-1" onClick={renderProps.onClick}><FontAwesomeIcon className="mr-2" icon={['fab','google']}/>Log in with Google</button>
               )}
             />
-          </div>
-          <div className="form-group social-btn fb-btn">
             <FacebookLogin
               appId={FACEBOOK_APP_ID}
               autoLoad={false}
@@ -99,51 +185,12 @@ class Login extends Component {
               // scope="public_profile"
               callback={this.facebookResponse}
               render={renderProps => (
-                <button className="form-control w-100 btn-d mr-4" onClick={renderProps.onClick}><FontAwesomeIcon className="mr-2" icon={['fab','facebook-f']}/>Log in with Facebook</button>
+                <button className="lk-btn-ol ml-1 wd-10 sha-1" onClick={renderProps.onClick}><FontAwesomeIcon className="mr-2" icon={['fab','facebook-f']}/>Log in with Facebook</button>
               )}
             />
           </div>
-          <p className="or-text">or</p>
-          <hr/>
-          <div className="form-group mt-4">
-            <form onSubmit={this.onSubmit}>
-              <FontAwesomeIcon className="input-icon m-auto" icon="envelope"/>
-              <TextFieldGroup
-                type="email"
-                divclass="mb-0"
-                classname="form-control form-control-md login-input"
-                placeholder="Email" 
-                name="email"
-                error={errors.email}
-                onChange={(e) => this.onChange(e)}
-              />
-              <FontAwesomeIcon className="input-icon m-auto" icon="lock"/>
-              <TextFieldGroup
-                type="password"
-                divclass="mb-1"
-                classname="form-control form-control-md login-input"
-                placeholder="Password" 
-                name="password"
-                error={errors.password}
-                onChange={(e) => this.onChange(e)}
-              />
-              <Link className="forgot-password-link" to="/reset-password">Forgot your password?</Link>
-              <input
-                type="submit"
-                className="form-control form-control-md btn-d login-submit-btn"
-                name="login"
-                value="Login"
-              />
-            </form>
-          </div>
+          <div className="wd-10 mt-4 new-to-text">New to <strong>Lokals</strong>?<span className="lk-link solo ml-2">Create Account</span></div>
         </div>
-        {this.state.user && (
-          <div>
-            <img src={this.state.user.imageUrl} alt={this.state.user.name} width="60px" height="60px" style={{borderRight: '100px'}}/>
-            <p>{this.state.user.first + this.state.user.last}</p>
-            <p>{this.state.user.email}</p>
-          </div>
-        )}
       </div>
     )
   }
@@ -155,7 +202,8 @@ Login.propTypes = {
   auth: PropTypes.object.isRequired
 }
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  error: state.error
 });
 
 export default connect(mapStateToProps, { googleAuth, facebookAuth, emailLogin })(Login);

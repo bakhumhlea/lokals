@@ -60,7 +60,7 @@ class BusinessProfilePage extends Component {
     Axios.get(`/api/business/profile/id/${businessId}`)
       .then(res => {
         console.log(res.data);
-        this.setState({mapMarker: [res.data]});
+        this.setState({mapMarker: this.state.mapMarker.concat(res.data)});
       })
       .catch(err => {
         console.log(err.response.data);

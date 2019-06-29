@@ -6,12 +6,25 @@ export const setProfile = userid => dispatch => {
   Axios
     .get(`/api/profile`)
     .then(res => {
+      // dispatch(setAdminStatus());
       dispatch({
         type: TYPES.SET_USER_PROFILE,
         payload: res.data
-      })
+      });
     })
     .catch(err => console.log(err));
+}
+
+export const setAdminStatus = () => dispatch => {
+  Axios
+    .get('/api/profile/is-admin')
+    .then(res => {
+      dispatch({
+        type: TYPES.SET_ADMIN_STATUS,
+        payload: res.data
+      });
+    })
+    .catch(err => console.log(err.response.data))
 }
 export const clearProfile = () => {
   return {

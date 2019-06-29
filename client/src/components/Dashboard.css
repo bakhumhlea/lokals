@@ -1,8 +1,13 @@
-.dashboard {
+.business-dashboard {
+  min-height: 100vh;
   font-family: 'PT Sans', sans-serif;
   color: rgb(52, 57, 70);
-  background: rgb(23, 29, 46);
-  padding: 0;
+  /* background: rgb(23, 29, 46); */
+  background: rgb(231, 252, 246);
+  padding: 70px 7.5vw;
+}
+.board-container {
+  padding: 20px 0 0 0;
 }
 .module-title {
   font-weight: 700;
@@ -20,9 +25,10 @@
     0 6px 6px 1px rgba(121, 121, 121, 0.1);
 }
 .greeting-text {
-  font-weight: 300;
-  font-size: 1.2rem;
-  margin: 0;
+  font-family: 'rubik';
+  font-weight: 400;
+  font-size: 2.2rem;
+  margin: 15px 0 0 0;
 }
 .greeting-text span {
   font-weight: 700;

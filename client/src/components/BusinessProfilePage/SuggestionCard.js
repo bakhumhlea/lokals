@@ -9,7 +9,7 @@ library.add( faBookmark, faShare, faGlassMartiniAlt, faCoffee );
 
 export default class SuggestionCard extends Component {
   render() {
-    const { imgSrc, baseOnSearch, similarTo, name, icon, type, rating, address, uid } = this.props;
+    const { imgSrc, baseOnSearch, name, icon, type, rating, address} = this.props;
     return (
       <div className="suggestion-card">
         <div className="preference-info">

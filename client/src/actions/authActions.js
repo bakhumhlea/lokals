@@ -3,7 +3,7 @@ import Axios from "axios";
 import setAuthToken from '../util/setAuthToken';
 import jwt_decode from 'jwt-decode';
 import isEmpty from '../util/is-empty';
-import { clearProfile } from "./profileActions";
+import { clearProfile, setProfile } from "./profileActions";
 
 export const emailSignUp = (userdata) => dispatch => {
   Axios.post(`api/users/signup`, userdata)
@@ -22,30 +22,31 @@ export const emailSignUp = (userdata) => dispatch => {
       }
     })
 }
-export const emailLogin = (credential) => dispatch => {
+export const emailLogin = (credential,history,path) => dispatch => {
   Axios.post(`api/users/signin`, credential)
     .then(res => {
       const { token } = res.data;
       console.log(token);
       const decoded = jwt_decode(token);
       setToken(token);
-      return dispatch(setCurrentUser(decoded));
+      return dispatch(setCurrentUser(decoded,history,path));
     })
     .catch(err => {
-      return {
-        type: TYPES.GET_ERRORS,
+      console.log(err.response.data);
+      dispatch({
+        type: TYPES.SET_ERRORS,
         payload: err.response.data
-      }
+      });
     })
 }
-export const googleAuth = (tokenId) => dispatch => {
+export const googleAuth = (tokenId,history,path) => dispatch => {
   Axios.post(`api/users/auth/google/${tokenId}`)
     .then(res => {
       const { token } = res.data;
       console.log(token);
       const decoded = jwt_decode(token);
       setToken(token);
-      return dispatch(setCurrentUser(decoded));
+      return dispatch(setCurrentUser(decoded,history,path));
     })
     .catch(err => {
       return {
@@ -55,13 +56,13 @@ export const googleAuth = (tokenId) => dispatch => {
     });
 };
 
-export const facebookAuth = (userdata) => dispatch => {
+export const facebookAuth = (userdata,history,path) => dispatch => {
   Axios.post(`api/users/auth/facebook/`, userdata)
     .then(res => {
       const { token } = res.data;
       const decoded = jwt_decode(token);
       setToken(token);
-      return dispatch(setCurrentUser(decoded));
+      return dispatch(setCurrentUser(decoded,history,path));
     })
     .catch(err => {
       return {
@@ -71,14 +72,23 @@ export const facebookAuth = (userdata) => dispatch => {
     });
 };
 
-export const setCurrentUser = (userdata) => {
+export const setCurrentUser = (userdata,history,path) => dispatch => {
   if (!isEmpty(userdata)) {
-    return {
-      type: TYPES.SET_CURRENT_USER,
-      payload: { 
-        user: userdata
+    Axios
+    .get(`/api/profile/uid/${userdata.id}/is-admin`)
+    .then(res => {
+      dispatch(setProfile());
+      dispatch({
+        type: TYPES.SET_CURRENT_USER,
+        payload: { 
+          user: userdata,
+          isAdmin: res.data
+        }
+      });
+      if (history && path) {
+        history.push(path);
       }
-    };
+    });
   } else {
     return {
       type: TYPES.SET_CURRENT_USER,
@@ -91,7 +101,7 @@ export const logoutUser = () => dispatch => {
   dispatch(clearProfile())
   dispatch({
     type: TYPES.LOG_OUT,
-    payload: {}
+    payload: null
   });
 }
 const setToken = (token) => {

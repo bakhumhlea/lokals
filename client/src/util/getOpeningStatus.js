@@ -60,7 +60,7 @@ export const getOpeningStatus = (hours) => {
 
 export const getOpeninghoursString = (hour) => {
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const daysShort = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  // const daysShort = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const formatTime = (time) => {
     if (time.length === 3) {
       return `${time.charAt(0)}:${time.substr(1)}`;

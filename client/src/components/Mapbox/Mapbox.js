@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ReactMapGL, { NavigationControl, Marker, Popup, LinearInterpolator, FlyToInterpolator } from 'react-map-gl'
+import ReactMapGL, { NavigationControl, LinearInterpolator } from 'react-map-gl'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Mapbox.css';
 import { MAPBOX_TOKEN } from '../../config/keys';
@@ -27,7 +27,7 @@ export default class Mapbox extends Component {
     nightModeOn: false,
   }
   componentDidMount() {
-    const { markerdata, mapHeight, viewport, activePopup, searchCenter } = this.props;
+    const { markerdata, viewport, activePopup, searchCenter } = this.props;
     console.log(searchCenter);
     if (viewport) {
       this.setState({

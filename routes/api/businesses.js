@@ -101,7 +101,7 @@ router.post('/findbusiness', (req, res) => {
   const request = {
     input: `${req.body.business_name}, ${req.body.business_address}, ${req.body.business_zipcode}`,
     inputtype: 'textquery',
-    fields: ['name', 'formatted_address', 'place_id', 'photos', 'types'],
+    fields: ['name', 'formatted_address', 'place_id', 'types', 'geometry', 'price_level'],
   };
   googleMapsClient.findPlace(request, (err, response) => {
     if (response.json.status === "OK") {
@@ -168,13 +168,17 @@ router.post('/profile', passport.authenticate('jwt', { session: false }),(req, r
   const address = {};
   businessFields.admin = req.user.id;
   if (req.body.business_name) businessFields.business_name = req.body.business_name.trim();
-  if (req.body.street) address.street = req.body.street;
-  if (req.body.city) address.city = req.body.city;
-  if (req.body.country) address.country = req.body.country;
-  if (req.body.state) address.state = req.body.state;
-  if (req.body.zipcode) address.zipcode = req.body.zipcode;
-  if (req.body.formatted_address) address.formatted_address = req.body.formatted_address;
-  businessFields.address = address
+  if (req.body.about) businessFields.about = req.body.about;
+  if (req.body.formatted_address) businessFields.formatted_address = req.body.formatted_address;
+  
+  businessFields.address = {}
+  if (req.body.street) businessFields.address.street = req.body.street;
+  if (req.body.city) businessFields.address.city = req.body.city;
+  if (req.body.country) businessFields.address.country = req.body.country;
+  if (req.body.state) businessFields.address.state = req.body.state;
+  if (req.body.zipcode) businessFields.address.zipcode = req.body.zipcode;
+  if (req.body.neighborhood) businessFields.address.neighborhood = req.body.neighborhood;
+
   if (req.body.categories) businessFields.categories = strToOfObj(req.body.categories, ",", "keyword");
   if (req.body.opening_hours) businessFields.opening_hours = req.body.opening_hours.split(',').map(el => getOpeningHours(el.trim()));
   businessFields.business_type = req.body.business_type? req.body.business_type : "restaurant";
@@ -264,10 +268,35 @@ router.post('/profile/id/:business_id', passport.authenticate('jwt', { session: 
   const businessID = req.params.business_id;
   const updateFields = {};
   if (req.body.business_name) updateFields.business_name = req.body.business_name;
-  if (req.body.address) updateFields.formatted_address = req.body.address;
-  if (req.body.categories) updateFields.categories = strToOfObj(req.body.categories, ",", "keyword");
-  if (req.body.opening_hours) updateFields.opening_hours = req.body.opening_hours.split(',').map(el => getOpeningHours(el.trim()));
   if (req.body.business_type) updateFields.business_type = req.body.business_type;
+  if (req.body.address) updateFields.formatted_address = req.body.address;
+  if (req.body.about) updateFields.about = req.body.about;
+  if (req.body.categories) updateFields.categories = strToOfObj(req.body.categories, ",", "keyword");
+  if (req.body.opening_hours) updateFields.opening_hours = req.body.opening_hours;
+  if (req.body.cuisines) updateFields.cuisines = strToOfObj(req.body.cuisines, ",", "tag");
+  if (req.body.dining_style) updateFields.dining_style = req.body.dining_style;
+  if (req.body.payment_options) updateFields.payment_options = req.body.payment_options;
+  if (req.body.formatted_address) updateFields.formatted_address = req.body.formatted_address;
+
+  updateFields.address = {}
+  if (req.body.street) updateFields.address.street = req.body.street;
+  if (req.body.city) updateFields.address.city = req.body.city;
+  if (req.body.country) updateFields.address.country = req.body.country;
+  if (req.body.state) updateFields.address.state = req.body.state;
+  if (req.body.zipcode) updateFields.address.zipcode = req.body.zipcode;
+  if (req.body.neighborhood) updateFields.address.neighborhood = req.body.neighborhood;
+
+  updateFields.contacts = {};
+  if (req.body.contact_number) updateFields.contacts.number = req.body.contact_number;
+  if (req.body.contact_email) updateFields.contacts.email = req.body.contact_email;
+
+  updateFields.price = {};
+  if (req.body.price_level) updateFields.price.level = req.body.price_level;
+  if (req.body.price_range) updateFields.price.range = req.body.price_range;
+  console.log(req.body.reservation);
+  if (req.body.reservation) updateFields.reservation = req.body.reservation;
+  updateFields.res
+  
   /** @TODO Others fields */
   Profile.findOne({ user: req.user.id })
     .then(profile => {
@@ -387,22 +416,46 @@ router.get('/profile/id/:business_id', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-router.get('/searchnearby/:keyword/:type/:lat/:lng/:radius/:opennow', (req,res) => {
-  const { keyword, type, lat, lng, radius, opennow } = req.params;
-  const request = { 
-    location: {lat: parseFloat(lat,10), lng: parseFloat(lng, 10)},
-    radius: parseInt(radius, 10),
-    keyword: keyword,
-    opennow: opennow === 'true',
-    type: type,
-  };
-  console.log(request);
-  googleMapsClient.placesNearby(request)
+router.get('/searchnearby/:keyword/:type/:address/:city/:radius/:opennow', (req,res) => {
+  const { keyword, type, address, city, radius, opennow } = req.params;
+  const request_address = address + ', ' + city;
+  googleMapsClient.geocode({address:request_address})
     .asPromise()
     .then(response => {
-      console.log(response.json.results);
-      return res.json(response.json.results)})
-    .catch(err => console.log(err));
+      const request = { 
+        location: response.json.results[0].geometry.location,
+        radius: parseInt(radius, 10),
+        keyword: keyword,
+        opennow: opennow === '',
+        type: type,
+      };
+      console.log(request);
+      googleMapsClient.placesNearby(request)
+        .asPromise()
+        .then(result => {
+          // console.log(res.json.results);
+          return res.json(result.json.results)})
+        .catch(err => console.log(err));;
+    })
+    .catch(err => console.log(err))
+});
+
+router.get('/getcoordinates/:city/:address',(req,res)=>{
+  const { city, address } = req.params;
+  const request = {
+      address: `${address}, ${city}`,
+      // location: LatLng,
+      // placeId: string,
+      // bounds: LatLngBounds,
+      // componentRestrictions: GeocoderComponentRestrictions,
+      // region: string
+  }
+  googleMapsClient.geocode(request)
+    .asPromise()
+    .then(response => {
+      return res.json(response.json.results);
+    })
+    .catch(err => console.log(err))
 });
 
 module.exports = router;

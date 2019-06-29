@@ -2,16 +2,17 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faPencilAlt, faEdit, faCog, faEnvelope, faComments, faEye, faCommentAlt, faHeart, faCheck, faChevronCircleLeft, faChevronCircleRight, faTrash, faTrashAlt, faPlus, faTimesCircle, faArrowsAltH, faArrowsAltV, faAlignLeft, faAlignCenter, faAlignRight } from '@fortawesome/free-solid-svg-icons'
 
-import Navbar from './Navbar';
-
 import './Dashboard.css'
-import AdsCard from './AdsCard';
-import StoryThumbnail from './StoryThumbnail';
-import CreateStory from './CreateStory';
+// import AdsCard from './AdsCard';
+// import StoryThumbnail from './StoryThumbnail';
+// import CreateStory from './CreateStory';
+import Axios from 'axios';
+import BasicInfo from './Dashboard/BasicInfo/BasicInfo';
+import Categories from './Dashboard/BasicInfo/Categories';
 
 library.add(faPencilAlt, faEdit, faCog, faEnvelope, faComments, faEye, faCommentAlt, faHeart, faCheck, faChevronCircleLeft, faChevronCircleRight, faTrash, faTrashAlt, faPlus, faTimesCircle, faArrowsAltH, faArrowsAltV, faAlignLeft, faAlignCenter, faAlignRight, fab);
 
@@ -19,264 +20,201 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      businessName: "Tatuu Fusion Bar and Tapas",
-      address: "23 Market St. San Francisco, CA, 94101",
+      business_data: {
+        additional_info: [],
+        address: {},
+        approved: null,
+        business_name: '',
+        business_type: '',
+        categories: [],
+        create_at: '',
+        cuisines: [],
+        dining_style: '',
+        events: [],
+        formatted_address: '',
+        feature_in: [],
+        google_place_id: '',
+        images: [],
+        location: {},
+        messages: [],
+        opening_hours: [],
+        payment_options: [],
+        recommended: [],
+        reservation: {},
+        stories: [],
+        talk_about: [],
+        _id: ''
+      },
       editmode: '',
-      selectedStory: 0
+      selectedStory: 0,
+    }
+  }
+  componentDidMount() {
+    const { auth } = this.props;
+    const { business_data } = this.state;
+    if (!auth.isAdmin) {
+      return this.props.history.push('/unauthorized-access');
+    } else {
+      Axios.get('/api/business/profile')
+        .then(res => {
+          console.log(res.data);
+          return this.setState(
+            { business_data: {
+              ...business_data,
+              ...res.data,
+              reservation: {
+                available: res.data.reservation.available,
+                note: res.data.reservation.note?res.data.reservation.note:''
+              }
+            } }
+          )
+        })
+        .catch(err => console.log(err.response));
     }
   }
   onClickEdit(e) {
     e.preventDefault();
     this.setState({editmode: e.target.name});
   }
-  onChange(e) {
+  onChange(e, key) {
     e.preventDefault();
-    this.setState({ [e.target.name]: e.target.value });
+    if (key) {
+      this.setState({ 
+        business_data: { 
+          ...this.state.business_data, 
+          [e.target.name]: {
+            ...this.state.business_data[e.target.name],
+            [key]: e.target.value 
+          }
+        } 
+      });
+    } else {
+      this.setState({ 
+        business_data: { 
+          ...this.state.business_data, 
+          [e.target.name]: e.target.value 
+        } 
+      });
+    }
+  }
+  onAddToArray(e,data,objkey) {
+    e.preventDefault();
+    const arrayData = this.state.business_data[e.target.name];
+    if (objkey) {
+      if (!arrayData.map(el=>el[objkey]).includes(data)) {
+        this.setState({ 
+          business_data: { 
+            ...this.state.business_data, 
+            [e.target.name]: arrayData.concat({[objkey]: data})
+          } 
+        });
+      }
+    } else {
+      if (!arrayData.includes(data)) {
+        this.setState({ 
+          business_data: { 
+            ...this.state.business_data, 
+            [e.target.name]: arrayData.concat(data)
+          } 
+        });
+      }
+    }
+  }
+  onRemoveFromArray(name,data,objkey) {
+    if (objkey) {
+      var arrayData = this.state.business_data[name];
+      if (arrayData.map(el=>el[objkey]).includes(data)) {
+        const removeIndex = arrayData.map(el=>el[objkey]).indexOf(data)
+        arrayData.splice(removeIndex,1);
+        this.setState({ 
+          business_data: { 
+            ...this.state.business_data, 
+            [name]: arrayData
+          } 
+        });
+      }
+    } 
+  }
+  onToggleValue(value, name, objkey) {
+    if (objkey) {
+      this.setState({ 
+        business_data: { 
+          ...this.state.business_data, 
+          [name]: {
+            ...this.state.business_data[name],
+            [objkey]: !value
+          }
+        } 
+      });
+    }
   }
   render() {
-    const now = new Date(Date.now()).getHours();
-    const greeting = parseInt(now, 10) < 12 ? "Good Morning" : "Welcome Back";
-    const { user } = this.props.auth;
+    // const now = new Date(Date.now()).getHours();
+    // const greeting = parseInt(now, 10) < 12 ? "Good Morning" : "Welcome";
+    // const { user } = this.props.auth;
+    const { business_data } = this.state;
+    console.log(business_data);
     return (
-      <div className="dashboard">
-        <Navbar/>
-        <div className="control-bar">
-          <h1 className="greeting-text">{greeting}! <span>{user && user.name.first}</span></h1>
-          <div className="control-btns">
-            <button type="type" className="btn btn-light">
-              <FontAwesomeIcon icon="comments"/>
-            </button>
-            <button type="type" className="btn btn-light">
-              <FontAwesomeIcon icon="envelope"/>
-            </button>
-            <button type="type" className="btn btn-light">
-              <FontAwesomeIcon icon="cog"/> 
-            </button>
-          </div>
-        </div>
-        <div className="business-info-bar">
-          <h4 className="module-title">Your Business</h4>
-          <div className="business-profile">
-            <div className="business-info">
-                <div className="sample-img">
-                  <img src="/images/img-05.jpg" alt="Kool wine and sushi"/>
+      <div className="business-dashboard">
+        {/* <h1 className="greeting-text">Dashboard</h1> */}
+        <div className="container-grid c-3-fr c-gap-4 r-gap-4 board-container">
+          <div className="col-l c-2">
+            <div className="dashboard-section">
+              <div className="float-card greeting-board">Good Morning!</div>
+            </div>
+            <div className="dashboard-section">
+              <div className="board-header">
+                <h2 className="board-title">Audience Overview</h2>
+              </div>
+              <div className="overview-board" style={{display: 'flex',justifyContent:'space-between'}}>
+                <div className="float-card" style={{width: '23%',height: '200px'}}>
+                  View
                 </div>
-                <div className="basic-info">
-                  <h1 className="business-name">
-                    <span className="info-label">Business name</span>
-                    {this.state.editmode === "businessName" ? 
-                      (<input type="text" className="info-input" onChange={(e)=>this.onChange(e)} name="businessName" value={this.state.businessName}></input>) : 
-                      (<span className="info-input">{this.state.businessName}</span>)
-                    }
-                    {this.state.editmode === "businessName" ?
-                    (<span type="button" className="btn btn-primary info-save" onClick={()=>this.setState({editmode: ''})}><FontAwesomeIcon icon="check"/>Save</span>) :
-                    (<FontAwesomeIcon icon="pencil-alt" className="info-edit-icon" onClick={()=>this.setState({editmode: "businessName"})}/>)}
-                  </h1>
-                  <h4 className="business-address">
-                    <span className="info-label">Location</span>
-                    {this.state.editmode === "address" ? 
-                      (<input type="text" className="info-input" onChange={(e)=>this.onChange(e)} name="address" value={this.state.address}></input>) : 
-                      (<span>{this.state.address}</span>)
-                    }
-                    {this.state.editmode === "address" ?
-                    (<span type="button" className="btn btn-primary info-save" onClick={()=>this.setState({editmode: ''})}><FontAwesomeIcon icon="check"/>Save</span>) :
-                    (<FontAwesomeIcon icon="pencil-alt" className="info-edit-icon" onClick={()=>this.setState({editmode: "address"})}/>)}
-                  </h4>
-                  <h5 className="type">
-                    <span className="info-label">Establishment</span>
-                    Bar and Restaurant
-                    <FontAwesomeIcon icon="pencil-alt" className="info-edit-icon"/></h5>
-                  <ul className="business-keywords">
-                    <span className="info-label">Search keywords</span>
-                    <li>Fusion Food<FontAwesomeIcon icon="times"/></li>
-                    <li>Thai<FontAwesomeIcon icon="times"/></li>
-                    <li>Japanese<FontAwesomeIcon icon="times"/></li>
-                    <li>Bar<FontAwesomeIcon icon="times"/></li>
-                    <li>Night Life<FontAwesomeIcon icon="times"/></li>
-                  </ul>
-                  <h5 className="create-at">
-                    <span className="info-label">Online at</span>
-                    Jan 01, 2019
-                  </h5>
+                <div className="float-card" style={{width: '23%',height: '200px'}}>
+                  Like
+                </div>
+                <div className="float-card" style={{width: '23%',height: '200px'}}>
+                  Interact
+                </div>
+                <div className="float-card" style={{width: '23%',height: '200px'}}>
+                  Share
                 </div>
               </div>
-            <div className="stat-info">
-            <span className="info-label">Your Business Stats</span>
-            <div className="stat-grid">
-              <div className="stat-module">
-                <h6>239</h6>
-                <span><FontAwesomeIcon icon="eye"/>Views</span>
+            </div>
+            <div className="dashboard-section">
+              <div className="board-header">
+                <h2 className="board-title">Stories</h2>
               </div>
-              <div className="stat-module">
-                <h6>23K</h6>
-                <span><FontAwesomeIcon icon="heart"/>Loved</span>
+              <div className="float-card stories-board">A lot of stories here</div>
+            </div>
+            <div className="dashboard-section">
+              <div className="board-header">
+                <h2 className="board-title">Happy Hours</h2>
               </div>
-              <div className="stat-module">
-                <h6>105</h6>
-                <span><FontAwesomeIcon icon="comment-alt"/>Feedbacks</span>
-              </div>
-              <div className="stat-module">
-                <h6>60</h6>
-                <span><FontAwesomeIcon icon="bookmark"/>Collected</span>
+              <div className="float-card stories-board">
+                <h6>Do you have a happy time for your guest?</h6>
+                <p>This will help improve user viewing rate</p>
               </div>
             </div>
           </div>
-          </div>
-        </div>
-        <div className="board-container">
-          <div className="row grid-3 for-title text-wh">
-            <div className="title-card c-2 r-1">
-              <h2>Your Stories</h2>
-              <span style={{fontWeight: 100, fontSize: `1rem`, color: `rgb(22, 214, 102`}}>
-              <FontAwesomeIcon icon="fire-alt" style={{marginRight: `8px`}}/>
-              5 stories online!</span>
-            </div>
-          </div>
-          <div className="row grid-3">
-            <div className="board c-2 r-1 bg-wh ads-overview">
-              <AdsCard
-                classname="square"
-                imgclass="fit-width"
-                src="/images/img-06.jpg"
-                alt="sample"
-                title={{content: "30% Discount",x: 0, y:30, align: 'center'}}
-                subtitle={{content: "Bar Member Only!",x: 0, y:40, align: 'center'}}
-                texts={[{content:"At Tatuu Bar and Tapas",x: 0, y:50, align: 'center', font: 'font-4 wh'}]}
-                font={`font-7 wh bold upper`}
-              />
-            </div>
-            <div className="board c-4 r-1 bg-dk">
-              <h4 className="board-head c-wh pl-3 pt-3 pb-0"><FontAwesomeIcon icon="fire-alt" style={{color: 'rgb(22, 214, 102)'}} className="mr-2"/>Online Stories</h4>
-              <div className="online-stories">
-                <StoryThumbnail
-                  url="/images/img-08.jpg"
-                  title="Meet Chef Ander"
-                  createdate="2 days"
-                  creator="Tatuu"
-                />
-                <StoryThumbnail
-                  url="/images/img-06.jpg"
-                  title="Restaurant Discount 30%"
-                  createdate="1 days"
-                  creator="Dom"
-                  isSelect={true}
-                />
-                <StoryThumbnail
-                  url="/images/img-03.jpg"
-                  title="Dim Sum All You Can Eat"
-                  createdate="2h"
-                  creator="Saito"
-                />
-                <StoryThumbnail
-                  url="/images/img-09.jpg"
-                  title="English Afternoon in SF"
-                  createdate="23m"
-                  creator="Tatuu"
-                />
-                <StoryThumbnail
-                  url="/images/img-05.jpg"
-                  title="Party 10+ Get Discount"
-                  createdate="1m"
-                  creator="Fisher"
-                />
-                <StoryThumbnail
-                  url="/images/img-01.jpg"
-                  title="Party 10+ Get Discount"
-                  createdate="1m"
-                  creator="Fisher"
-                />
-                <StoryThumbnail
-                  url="/images/img-05.jpg"
-                  title="Party 10+ Get Discount"
-                  createdate="1m"
-                  creator="Fisher"
-                />
-              </div>
-              <div className="nav-btns">
-                <FontAwesomeIcon icon="chevron-circle-left" className="arrow-icon"/>
-                <span>5 stories</span>
-                <FontAwesomeIcon icon="chevron-circle-right" className="arrow-icon"/>
-              </div>
-            </div>
-            <div className="board c-2 r-2 bg-wh">
-              <div className="story-overview">
-                <h4>
-                  Story Details
-                  <span>
-                    <FontAwesomeIcon icon="pencil-alt" className="info-edit-icon"/>
-                    <FontAwesomeIcon icon="trash" className="info-edit-icon"/>
-                  </span>
-                </h4>
-                <p className="story-info font-2">
-                  <span className="info-label">Story Title</span>
-                  Restaurant Discount 30%
-                </p>
-                <p className="story-info font-2">
-                  <span className="info-label">Creator</span>
-                  Dom Cobb
-                </p>
-                <p className="story-info font-2">
-                  <span className="info-label">Template Style</span>
-                  Square
-                </p>
-                <p className="story-info font-2">
-                  <span className="info-label">Expired Date</span>
-                  <span>{(new Date("30 January 2019")).toDateString()} </span>
-                  <span className="sub-info-text">Expires in {(new Date("30 January 2019").getDate()) - (new Date(Date.now()).getDate())} days</span>
-                </p>
-                <p className="story-info font-2">
-                  <span className="info-label">Status</span>
-                  <button type="button" className="btn btn-warning">Published</button>
-                  <span className="sub-info-text">at {new Date(Date.now()).toDateString()}</span>
-                </p>
-              </div>
-            </div>
-            <CreateStory
-              mainclass="board c-4 r-2 bg-wh"
+          <div className="col-r c-1">
+            <BasicInfo
+              data={business_data}
+              onchange={(e,key) => this.onChange(e,key)}
+              onAddToArray={(e,data, objkey) => this.onAddToArray(e,data, objkey)}
+              onRemoveFromArray={(name,data,objkey) => this.onRemoveFromArray(name,data,objkey)}
+              onToggleValue={(value, name, objkey) => this.onToggleValue(value, name, objkey)}
             />
-          </div>
-          <div className="row grid-3 for-title mt-3 bg-wh">
-            <div className="title-card c-2 r-1">
-              <h2>Your Events</h2>
-              <span style={{fontWeight: 100, fontSize: `1rem`, color: `rgb(22, 214, 102`}}>
-              <FontAwesomeIcon icon="fire-alt" style={{marginRight: `8px`}}/>
-              1 upcoming event!</span>
-            </div>
-          </div>
-          <div className="row grid-3 bg-wh">
-            <div className="board c-2 r-2 p-3 sha-1">
-                <h4 className="board-head">Admins</h4>
-                <ul className="admin-list">
-                  <li>
-                    <div className="admin-thumbnail">
-                      <div className="col-left">
-                      </div>
-                      <div className="col-right">
-                        <p className="admin-name">Thanaphon Chaysawat</p>
-                        <p className="admin-title">Owner and Manager</p>
-                        <div className="edit-btn">
-                          <FontAwesomeIcon icon="pencil-alt" className="edit-icon pencil"/>
-                          <FontAwesomeIcon icon="times" className="edit-icon delete"/>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="admin-thumbnail">
-                      <div className="col-left">
-                      </div>
-                      <div className="col-right">
-                        <p className="admin-name">Dom Cobb</p>
-                        <p className="admin-title">Head Chef</p>
-                        <div className="edit-btn">
-                          <FontAwesomeIcon icon="pencil-alt" className="edit-icon pencil"/>
-                          <FontAwesomeIcon icon="times" className="edit-icon delete"/>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-            </div>
+            <Categories
+              name="categories" 
+              data={business_data}
+              objkey={'keyword'}
+              sectionclass="switch-input-field common"
+              tagclass="category-tag"
+              onclickadd={(e,data)=>this.onAddToArray(e,data,'keyword')}
+              onclickremove={(data)=>this.onRemoveFromArray('categories',data,'keyword')}
+              selectoptions={['fine_dining','spacial_occasions','quick_meal','good_for_a_date','unique_experience','romantic','late_night','girl_night_out','cozy_and_chill']}
+            />
           </div>
         </div>
       </div>
@@ -285,7 +223,8 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  user: state.user
 });
 
 export default connect( mapStateToProps , {} )(Dashboard);

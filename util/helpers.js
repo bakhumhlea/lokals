@@ -2,6 +2,9 @@ const capitalize = function(word) {
   return `${word.charAt(0).toUpperCase()}${word.substring(1)}`;
 };
 const strToOfObj = function(string, separator, objkey) {
+  if (typeof string !== 'string') {
+    return string;
+  }
   return string.split(separator).map(word => { return { [objkey]: word.trim().toLowerCase() } });
 };
 /**

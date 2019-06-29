@@ -1,34 +1,85 @@
 .claim-business-page {
+  position: relative;
   color: rgb(24, 24, 24);
   /* background: linear-gradient(rgb(67, 163, 252), rgb(239, 255, 196), rgb(255, 195, 210)); */
   background: rgb(231, 252, 246);
-  font-family: 'PT Sans', sans-serif;
-  padding: 0;
+  font-family: 'Rubik', sans-serif;
+  padding: 70px 0 0 0;
+}
+.error-massage-popup {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 80px;
+  left: 50%;
+  height: 0px;
+  width: 85%;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 1.2em;
+  text-align: center;
+  border-radius: 3px;
+  background: rgb(228, 42, 90);
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 2px 3px 0 rgba(0,0,0,0.2);
+  overflow: hidden;
+  opacity: 0;
+  transition: 0.2s 0s all cubic-bezier(0.075, 0.82, 0.165, 1);
+  transform: translateX(-50%);
+}
+.error-massage-popup .close-icon {
+  cursor: pointer;
+  margin-left: 15px;
+  transform: translateY(1px);
+}
+.error-massage-popup .close-icon:hover {
+  transform: translateY(1px) scale(1.08);
 }
 .form-fields {
-  padding: 20px 20vw;
+  padding: 40px 7.5vw;
 }
 .page-title {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+.page-desc {
+  width: 70%;
+  font-weight: 300;
+}
+.page-title .for-business {
+  font-size: 1.85rem;
+  font-weight: 300;
+  text-transform: uppercase;
 }
 .page-text.common {
   font-weight: 300;
 }
 .input-form.business {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.flex-col {
+  width: 48%;
+}
+.flex-input-control {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
 }
 .inline-input-control {
-  padding: 10px;
+  /* padding: 10px; */
   margin: 20px auto;
-  border: 1px solid rgba(110, 230, 220, 0.979);
-  border-radius: 6px;
-  box-shadow: 0 0 8px 0 rgba(33, 43, 44, 0.116);
+  /* border: 1px solid rgba(110, 230, 220, 0.979);
+  border-radius: 6px; */
+  /* box-shadow: 0 0 8px 0 rgba(33, 43, 44, 0.116); */
 }
 .inline-input-control.flex {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 .input-options {
   position: relative;
@@ -39,16 +90,15 @@
   width: 100%;
   margin-right: 20px;
   border: 2px solid white;
-  border-radius: 100px;
+  border-radius: 3px;
   background: white;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.2);
 }
 .input-options:hover, .input-options:focus {
-  border: 2px solid rgb(247, 27, 75);
+  border: 2px solid rgb(28, 214, 75);
 }
 .input-options select {
   width: 100%;
-  border-radius: 100px;
   background: transparent;
   padding: 0;
   border: none;
@@ -65,13 +115,15 @@
   display: block;
   width: 50%;
   color: rgb(240, 240, 240);
-  font-size: 1rem;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 100px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  border-radius: 10px;
   margin: auto;
-  background: linear-gradient(rgb(247, 8, 108), rgb(247, 8, 108));
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.2);
+  background: rgb(10, 160, 72);
+  box-shadow: 0 2px 8px 0 rgba(56, 56, 56, 0.2);
   transition: 0.2s 0s all cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 .input-submit:hover {
@@ -79,8 +131,7 @@
   box-shadow: 0 7px 12px 0 rgba(0,0,0,0.2);
 }
 .input-submit:disabled {
-  color: rgb(218, 218, 218); 
-  background: white;
+  color: white; 
   opacity: 1;
 }
 .input-submit:disabled:hover {

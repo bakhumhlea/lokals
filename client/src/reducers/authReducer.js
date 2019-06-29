@@ -3,6 +3,7 @@ import isEmpty from '../util/is-empty'
 
 const INITIAL_STATE = {
   isAuth: false,
+  isAdmin: false,
   user: {},
   errors: {}
 };
@@ -28,19 +29,16 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         isAuth: !isEmpty(action.payload),
+        isAdmin: action.payload.isAdmin,
         user: action.payload.user
       };
     case TYPES.LOG_OUT:
       return {
         ...state,
         isAuth: !isEmpty(action.payload),
+        isAdmin: false,
         user: action.payload,
-      }
-    case TYPES.GET_ERRORS:
-      return {
-        ...state,
-        errors: action.payload
-      }
+      };
     default:
       return state;
   }

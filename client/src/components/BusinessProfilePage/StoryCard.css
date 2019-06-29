@@ -31,7 +31,7 @@
 .img-cm {
   width: 100%;
 }
-.story-info {
+.story-card .story-info {
   /* position: absolute;
   bottom: 0px; */
   display: flex;

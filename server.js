@@ -20,6 +20,8 @@ const events = require('./routes/api/events');
 const categories = require('./routes/api/categories');
 const stories = require('./routes/api/stories');
 
+const lokals = require('./routes/api/lokals')
+
 mongoose.set('useFindAndModify', false);
 mongoose
   .connect(dbKey, { useNewUrlParser: true, useCreateIndex: true})
@@ -35,10 +37,11 @@ app.get('/', (req,res) => res.send('Welcome to Lokals'));
 app.use('/api/users', users);
 app.use('/api/profile', profile);
 
-app.use('/api/business/', business);
+app.use('/api/business', business);
 app.use('/api/events', events);
 app.use('/api/stories', stories);
 //Admin API
 app.use('/api/admin/categories', categories);
+app.use('/api/lokals', lokals);
 
 app.listen(port, () => console.log(`Running on PORT:${port}`));

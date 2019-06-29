@@ -14,6 +14,35 @@ const BusinessSchema = new Schema({
     type: String,
     required: true
   },
+  contacts: {
+    number: {
+      type: Number
+    },
+    email: {
+      type: String
+    }
+  },
+  price: {
+    level: {
+      type: Number
+    },
+    range: {
+      type: String
+    }
+  },
+  cuisines: [
+    {
+      tag: {
+        type: String
+      }
+    }
+  ],
+  dining_style: {
+    type: String
+  },
+  about: {
+    type: String
+  },
   images: [
     {
       url: {
@@ -25,6 +54,10 @@ const BusinessSchema = new Schema({
       }
     }
   ],
+  formatted_address: {
+    type: String,
+    required: true
+  },
   address: {
     street: {
       type: String,
@@ -42,18 +75,13 @@ const BusinessSchema = new Schema({
       type: String,
       required: true
     },
-    country: {
-      type: String,
-      required: true
-    },
     zipcode: {
       type: String,
       required: true
     },
-    formatted_address: {
-      type: String,
-      required: true
-    }
+    neighborhood: {
+      type: String
+    },
   },
   location: {
     lat: {
@@ -64,6 +92,9 @@ const BusinessSchema = new Schema({
       type: Number,
       required: true
     }
+  },
+  map_url: {
+    type: String
   },
   opening_hours: [
     {
@@ -88,6 +119,46 @@ const BusinessSchema = new Schema({
   categories: [
     {
       keyword: {
+        type: String
+      }
+    }
+  ],
+  socials: {
+    website: {
+      type: String
+    },
+    facebook: {
+      type: String
+    },
+    twitter: {
+      type: String
+    },
+    instagram: {
+      type: String
+    }
+  },
+  payment_options: [
+    {
+      payment_type: {
+        type: String
+      }
+    }
+  ],
+  reservation: {
+    available: {
+      type: Boolean,
+      default: true
+    },
+    note: {
+      type: String
+    }
+  },
+  additional_info: [
+    {
+      title: {
+        type: String
+      },
+      detail: {
         type: String
       }
     }
@@ -131,11 +202,22 @@ const BusinessSchema = new Schema({
       }
     }
   ],
+  messages: [
+    {
+      conversation: {
+        type: Schema.Types.ObjectId,
+        ref: 'conversations'
+      }
+    }
+  ],
   approved: {
     status: {
       type: Boolean,
       default: false
     }
+  },
+  google_rating: {
+    type: Number
   },
   google_place_id: {
     type: String,

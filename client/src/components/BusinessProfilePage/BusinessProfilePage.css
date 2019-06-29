@@ -1,6 +1,7 @@
 .businesss-profile-page {
   background: rgb(240, 245, 251);
   overflow: hidden;
+  padding: 70px 0 0 0;
 }
 .flex-row {
   display: flex;

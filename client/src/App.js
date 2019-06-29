@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store/store';
-import setAuthToken from './util/setAuthToken';
-import jwt_decode from 'jwt-decode'
-import { setCurrentUser } from './actions/authActions';
-
 import { library } from '@fortawesome/fontawesome-svg-core'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { fab } from '@fortawesome/free-brands-svg-icons'
@@ -19,32 +15,23 @@ import Register from './components/Register';
 
 import './App.css';
 import Login from './components/Login';
-import Explore from './components/Explore';
-import Feed from './components/Feed';
+// import Explore from './components/Explore';
+// import Feed from './components/Feed';
 import ClaimBusiness from './components/ClaimBusiness';
 import Dashboard from './components/Dashboard';
 import BusinessProfilePage from './components/BusinessProfilePage/BusinessProfilePage';
 import LokalsMain from './components/LokalsMain/LokalsMain';
-import LokalsMapbox from './components/LokalsMapbox/LokalsMapbox';
-import LokalsSearchMap from './components/LokalsSearchMap/LokalsSearchMap';
+// import LokalsSearchMap from './components/LokalsSearchMap/LokalsSearchMap';
+import BusinessRoute from './components/reusable/BusinessRoute';
+import { fetchToken } from './util/fetchToken';
+import SystemDesign from './components/SystemDesign';
+import ExploreMap from './components/ExploreMap/ExploreMap';
+import BOHLogin from './components/LokalsBOH/BOHLogin';
+import BOHBusinesses from './components/LokalsBOH/BOHBusinesses';
 
 library.add(faSpinner, faFireAlt, faGrinHearts, faGrinStars, faCloudRain, faBolt, faFireAlt, fab);
 
-const token = localStorage.getItem('jwtToken');
-
-if (token) {
-  const decoded = jwt_decode(token);
-  const currentTime = Date.now() / 1000;
-  setAuthToken(token);
-  localStorage.setItem('jwtToken', token);
-  store.dispatch(setCurrentUser(decoded));
-
-  if(decoded.exp < currentTime) {
-    store.dispatch(setCurrentUser({}));
-    localStorage.removeItem('jwtToken');
-    setAuthToken();
-  }
-}
+fetchToken();
 
 class App extends Component {
   render() {
@@ -55,16 +42,20 @@ class App extends Component {
             <Navbar/>
             <div className="container">
               <Route exact path="/" component={LokalsMain}/>
-              <Route exact path="/explore" component={LokalsSearchMap}/>
+              <Route exact path="/explore" component={ExploreMap}/>
               <Route exact path="/signup" component={Register}/>
               <Route exact path="/login" component={Login}/>
               <Route exact path="/biz/sample-business" component={BusinessProfilePage}/>
               <Route exact path="/lokalsforbusiness" component={BusinessSearch} />
+              <Route exact path="/lokalsbiz/login" component={Login}/>
+              <Route exact path="/system-design" component={SystemDesign}/>
+              <Route exact path="/lokals-boh" component={BOHLogin}/>
+              <Route exact path="/lokals-boh/add-businesses" component={BOHBusinesses}/>
               <Switch>
                 <PrivateRoute exact path="/claimyourbusiness/edit-profile" component={ClaimBusiness}/>
               </Switch>
               <Switch>
-                <PrivateRoute exact path="/lokalsbiz/dashboard" component={Dashboard}/>
+                <BusinessRoute exact path="/lokalsbiz/dashboard" component={Dashboard}/>
               </Switch>
             </div>
           </div>

@@ -25,7 +25,21 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
   const profileFields = {};
   
 });
+// @route GET api/profile/is-admin
+// @desc Get Profile administration status
+// @access Private
+router.get('/uid/:id/is-admin', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
 
+  Profile.findOne({ user: req.params.id })
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = APP.ERRORS.PROFILE.NOT_FOUND;
+        return res.status(400).json(errors);
+      }
+      return res.json(profile.administration.is_admin);
+    });
+});
 // @route GET api/profile/
 // @desc Get Profile by UserID
 // @access Private

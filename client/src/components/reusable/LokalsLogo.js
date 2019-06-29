@@ -6,9 +6,9 @@ import './LokalsLogo.css';
 
 library.add(faFireAlt);
 
-const LokalsLogo = () => {
+const LokalsLogo = (props) => {
   return (
-      <span className="lokals-logo">
+      <span className="lokals-logo" style={props.styles && {...props.styles}}>
         L<span><FontAwesomeIcon icon="fire-alt"/></span>KALS
       </span>
   )

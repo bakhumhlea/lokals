@@ -40,18 +40,6 @@
   background-color: rgb(239, 237, 255);
   border: 1px solid rgb(239, 237, 255);
 } */
-.or-text {
-  font-family: 'PT Sans', sans-serif;
-  position: relative;
-  display: block;
-  padding: 4px;
-  margin: auto;
-  color: rgb(158, 158, 158);
-  text-align: center;
-  width: max-content;
-  transform: translate(0, 1em);
-  background-color: rgb(38, 44, 53);
-}
 .input-icon {
   position: relative;
   color: rgb(185, 185, 185);
@@ -87,16 +75,6 @@
   font-family: 'Nato Sans', sans-serif;
   color: rgba(182, 255, 191, 1);
   background-color: transparent;
-}
-.forgot-password-link {
-  float: right;
-  margin: 5px 0 20px 0;
-  color: rgb(158, 158, 158);
-  text-align: right;
-  font-size: 0.7em;
-}
-.forgot-password-link:hover {
-  color: white;
 }
 .login-submit-btn {
   margin: 20px 0;

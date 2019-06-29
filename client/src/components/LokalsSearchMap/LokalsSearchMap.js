@@ -4,6 +4,7 @@ import Axios from 'axios';
 import { GOOGLE_MAP_API } from '../../config/keys';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Spinner from '../reusable/Spinner';
+import './LokalsSearchMap.css';
 
 const SF = {lat: 37.7749, lng: -122.4194};
 
@@ -31,8 +32,8 @@ class LokalsSearchMap extends Component {
   componentDidMount() {
     const backToTopBtn = document.getElementById("back_to_top");
     window.onscroll = function() {
-      console.log(window.pageYOffset);
-      if (window.pageYOffset > 250) {
+      // console.log(window.pageYOffset);
+      if (window.pageYOffset > 300) {
         backToTopBtn.style.opacity = 1;
         backToTopBtn.style.transform = 'translate(-50%, 0%)';
       } else {
@@ -168,35 +169,26 @@ class LokalsSearchMap extends Component {
           }}/>
       </div>
       : 
-      <LokalsMapbox
-          markers={markers}
-          showPopup={showPopup}
-          selectedMarker={selectedMarker}
-          onClickMarker={(id)=>this.setState({selectedMarker: id})}
-          currentMapCenter={currentMapCenter}
-          currentSearchCenter={currentSearchCenter}
-          getViewportProps={
-            (mapviewport) => this.getCurrentMapCenter({
-              lat: mapviewport.latitude, 
-              lng: mapviewport.longitude
-            }, mapviewport.zoom )
-          }
-          viewport={mapviewport}
-          containerStyle={{
-            top: '70px',
-            right: '7.5vw',
-            width: `calc(85vw * 60 / 100)`,
-            height: `calc(100vh - 70px)`,
-            position: 'fixed',
-            overflow: 'hidden',
-            // border: '1px solid white',
-            // borderRadius: '4px',
-            // padding: '4px',
-            background: 'white',
-            // boxShadow: '0 0 10px 0 rgba(0,0,0,0.3)'
-          }}
-      />;
-    console.log(markers);
+      <div className="display">
+        <LokalsMapbox
+            markers={markers}
+            showPopup={showPopup}
+            selectedMarker={selectedMarker}
+            staticMap={false}
+            dragPan={true}
+            onClickMarker={(id)=>this.setState({selectedMarker: id})}
+            currentMapCenter={currentMapCenter}
+            currentSearchCenter={currentSearchCenter}
+            getViewportProps={
+              (mapviewport) => this.getCurrentMapCenter({
+                lat: mapviewport.latitude, 
+                lng: mapviewport.longitude
+              }, mapviewport.zoom )
+            }
+            viewport={mapviewport}
+            containerClass={'display-map-container'}
+        />
+      </div>;
     const displayList = !markers ? 
       <div className="loading-results">
         <Spinner

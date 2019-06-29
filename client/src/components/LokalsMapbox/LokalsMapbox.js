@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import ReactMapGL, { NavigationControl, Marker, Popup, LinearInterpolator, FlyToInterpolator } from 'react-map-gl'
-import Axios from 'axios'
+import ReactMapGL, { NavigationControl, Marker, LinearInterpolator } from 'react-map-gl'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MAPBOX_TOKEN } from '../../config/keys';
 import CustomPopup from './CustomPopup';
@@ -14,7 +13,7 @@ const mapstyles = [
   'dark-v9',
 ];
 const LOKALS_STYLE = 'mapbox://styles/bakhumhlea/cjsp4km8x072o1fmevtwowt5x';
-const SF = {lat: 37.7749, lng: -122.4194};
+// const SF = {lat: 37.7749, lng: -122.4194};
 
 const DEFAULT_MABBOX_PROPS = {
   mapstyle: mapstyles[1],
@@ -29,21 +28,21 @@ const DEFAULT_MABBOX_PROPS = {
     padding: '20px'
   }
 };
-const searchBtnStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  zIndex: 100,
-  color: 'white',
-  fontFamily: 'Rubik, sans-serif',
-  fontWeight: 400,
-  fontSize: 0.8+'em',
-  textTransform: 'uppercase',
-  position: 'absolute',
-  bottom: `10px`,
-  left: '50%',
-  padding: '10px 20px',
-  transform: 'translateX(-50%)'
-}
+// const searchBtnStyle = {
+//   display: 'flex',
+//   alignItems: 'center',
+//   zIndex: 100,
+//   color: 'white',
+//   fontFamily: 'Rubik, sans-serif',
+//   fontWeight: 400,
+//   fontSize: 0.8+'em',
+//   textTransform: 'uppercase',
+//   position: 'absolute',
+//   bottom: `10px`,
+//   left: '50%',
+//   padding: '10px 20px',
+//   transform: 'translateX(-50%)'
+// };
 class LokalsMapbox extends Component {
   state = {
     viewport: {
@@ -106,15 +105,22 @@ class LokalsMapbox extends Component {
     this.setState({[e.target.name]: e.target.value})
   }
   handleViewportChange(viewport, callback) {
-    if (callback) {
-      callback(viewport);
+    const { staticMap } = this.props;
+    if (staticMap) {
+      return
+    } else {
+      if (callback) {
+        callback(viewport);
+      }
+      this.setState({
+        viewport
+      });
     }
-    this.setState({
-      viewport
-    });
   }
-  handleClickMarker(location, id) {
-    this.props.onClickMarker(id);
+  handleClickMarker(location, id, callback) {
+    if (callback) {
+      callback(id);
+    }
     this.setState({
       viewport: {
         ...this.state.viewport,
@@ -124,11 +130,17 @@ class LokalsMapbox extends Component {
       selectedMarker: id
     });
   }
+  handleHoverMarker(callback, arg) {
+    if (callback) {
+      callback(arg);
+    }
+  }
   render() {
     const { viewport } = this.state;
-    const { containerStyle, markers, selectedMarker, getViewportProps, onClickMarker, currentMapCenter, currentSearchCenter  } = this.props;
+    const { containerStyle, containerClass, markers, selectedMarker, getViewportProps, onClickMarker, currentMapCenter, currentSearchCenter, showPopup, showMarkerNumber, staticMap} = this.props;
+    // console.log(markers);
     return (
-      <div className="mapbox-container" style={{
+      <div className={containerClass ?`mapbox-container ${containerClass}`:"mapbox-container"} style={containerStyle && {
         ...containerStyle}}>
         <ReactMapGL
           { ...viewport }
@@ -137,29 +149,39 @@ class LokalsMapbox extends Component {
           mapboxApiAccessToken={ MAPBOX_TOKEN }
           minZoom={6}
           maxZoom={20}
-          dragPan={true}
+          dragPan={!!!staticMap}
           transitionDuration={0}
           transitionInterpolator={new LinearInterpolator()}
         >
-          <div style={DEFAULT_MABBOX_PROPS.navstyle}>
+          { !!!staticMap && <div style={DEFAULT_MABBOX_PROPS.navstyle}>
             <NavigationControl 
               onViewportChange={(viewport) => this.handleViewportChange(viewport, getViewportProps)}
             />
-          </div>
-          { markers && markers.length > 0 && markers.map((marker,i) => (
-            <CustomMarker
-              key={i}
-              markerID={i}
-              data={marker}
-              offset={{x:-15,y:-30}}
-              onClickMarker={(location, id) => this.handleClickMarker(location, i)}
-              onHoverMarker={() => onClickMarker(i)}
-              longitude={marker.geometry.location.lng}
-              latitude={marker.geometry.location.lat}
-              selectedMarker={selectedMarker === i}
-            />
-          ))}
-          { markers && markers.length > 0 && markers.map((marker,i) => (
+          </div>}
+          { markers && markers.length > 0 && markers.map((marker,i) => {
+            let location = {};
+            if (marker.location) {
+              location = marker.location;
+            } else {
+              location.lat = marker.geometry.location.lat;
+              location.lng = marker.geometry.location.lng;
+            }
+            return (
+              <CustomMarker
+                key={i}
+                markerID={i}
+                data={marker}
+                offset={{x:-15,y:-30}}
+                onClickMarker={(location, id) => this.handleClickMarker(location, id, onClickMarker)}
+                onHoverMarker={(id) => this.handleHoverMarker(onClickMarker, id)}
+                latitude={location.lat}
+                longitude={location.lng}
+                selectedMarker={selectedMarker === i}
+                showMarkerNumber={showMarkerNumber}
+              />
+            )
+          })}
+          { showPopup && markers && markers.length > 0 && markers.map((marker,i) => (
             <CustomPopup
               key={i}
               popupID={i}

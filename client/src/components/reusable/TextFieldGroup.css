@@ -13,9 +13,15 @@
 .bd-tl-50 {
   border-top-left-radius: 100px;
 }
+.ft-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
 .ft-s {
   font-size: 0.75em;
-  font-family: 'Nato Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 .w-75 {
   width: 75%;
@@ -34,7 +40,7 @@
   padding: 6px 12px;
   border: 1px solid rgb(158, 158, 158);
   border-radius: 100px;
-  font-family: 'Nato Sans', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 500;
   font-size: 0.75em;
   letter-spacing: 1px;
@@ -46,15 +52,28 @@
   padding: 6px 12px;
   border: 2px solid rgb(158, 158, 158);
   border-radius: 4px;
-  font-family: 'Nato Sans', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   color: rgb(185, 185, 185);
   background-color: transparent;
+}
+.inp-flat {
+  padding: 20px 12px;
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  color: rgb(32, 32, 32);
+  background-color: white;
+}
+.inp-flat:hover,
+.inp-flat:focus {
+  border: 2px solid rgb(57, 241, 155);
+  outline: none !important;
 }
 .inp-d:focus {
   padding: 6px 12px;
   border: 2px solid rgba(182, 255, 191, 1);
   border-radius: 4px;
-  font-family: 'Nato Sans', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   color: rgba(182, 255, 191, 1);
   background-color: transparent;
 }
@@ -63,18 +82,32 @@
   padding: 6px 12px;
   border: 2px solid rgb(158, 158, 158);
   border-radius: 4px;
-  font-family: 'Nato Sans', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 700;
   letter-spacing: 1px;
   /* text-transform: uppercase; */
   color: rgb(185, 185, 185);
   background-color: transparent;
 }
+.inp-btn.flat {
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  height: auto;
+  padding: 12px 0px;
+  /* box-sizing: content-box; */
+  border: 2px solid rgb(207, 13, 62);
+  background-color:rgb(207, 13, 62);
+}
 .inp-btn:hover {
   border: 2px solid rgba(182, 255, 191, 1);
   border-radius: 4px;
   color: rgba(182, 255, 191, 1);
   /* color: rgb(40, 44, 52); */
+}
+.inp-btn.flat:hover {
+  border: 2px solid rgb(255, 255, 255);
 }
 .btn-d:hover {
   border: 1px solid white;
