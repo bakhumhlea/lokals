@@ -3,20 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components'
 
 export default function Spinner(props) {
-  const Spinner = props.spinnerStyle ? styled.div`
+  const Spinner = props.cssStyle ? styled.div`
     display: block;
-    top: ${props.spinnerStyle.top || 'initial'};
-    right: ${props.spinnerStyle.right || 'initial'};
-    bottom: ${props.spinnerStyle.bottom || 'initial'};
-    left: ${props.spinnerStyle.left || 'initial'};
-    position: ${props.spinnerStyle.position || 'absolute'};
-    width: ${props.spinnerStyle.width || '100%'};
-    height: ${props.spinnerStyle.height || '100%'};
+    top: ${props.cssStyle.top || 'initial'};
+    right: ${props.cssStyle.right || 'initial'};
+    bottom: ${props.cssStyle.bottom || 'initial'};
+    left: ${props.cssStyle.left || 'initial'};
+    position: ${props.cssStyle.position || 'absolute'};
+    width: ${props.cssStyle.width || '100%'};
+    height: ${props.cssStyle.height || '100%'};
     text-align: center;
     font-size: 1.4em;
     background: transparent;
-    color: ${props.spinnerStyle.color};
-    ${ props.spinnerStyle.transform && 'transform:'+props.spinnerStyle.transform+';' }
+    color: ${props.cssStyle.color};
+    ${ props.cssStyle.transform && 'transform:'+props.cssStyle.transform+';' }
   `:
   styled.div`
     display: block;

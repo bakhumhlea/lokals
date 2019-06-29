@@ -43,7 +43,7 @@ class CustomMarker extends BaseControl {
         onClick={() => onClickMarker({lat: latitude, lng: longitude}, markerID)}
       >
         <FontAwesomeIcon 
-          icon="map-marker" 
+          icon={showMarkerNumber?"map-marker":"map-marker-alt"}
           className="custom-marker-icon"/>
         {showMarkerNumber && <div className="custom-marker-number">{markerID+1}</div>}
       </div>

@@ -116,28 +116,32 @@ router.post('/business/add',(req, res) => {
   //   return res.status(400).json(errors);
   // }
   // console.log(req.body.google_place_id);
-  
+  if (req.body.password !== apiKey.adminKey) {
+    console.log(req.body.password !== apiKey.adminKey);
+    console.log('password required');
+    return res.status(400).json({password: isEmpty(req.body.password)? 'Password Required':'Incorrect Password'});
+  }
   const businessFields = {};
   
-  if (req.body.business_name) businessFields.business_name = req.body.business_name.trim();
-  businessFields.business_type = req.body.business_type? req.body.business_type : "restaurant";
-  if (req.body.categories) businessFields.categories = req.body.categories;
-  if (req.body.formatted_address) businessFields.formatted_address = req.body.formatted_address;
-  if (req.body.google_place_id) businessFields.google_place_id = req.body.google_place_id;
-  if (req.body.contacts) businessFields.contacts = req.body.contacts;
-  if (req.body.google_rating) businessFields.google_rating = req.body.google_rating;
-  if (req.body.price) businessFields.price = req.body.price;
-  if (req.body.socials) businessFields.socials = req.body.socials;
-  if (req.body.map_url) businessFields.map_url = req.body.map_url;
-  if (req.body.location) businessFields.location = req.body.location;
-  if (req.body.opening_hours) businessFields.opening_hours = req.body.opening_hours.split(',').map(el => getOpeningHours(el.trim()));
-  if (req.body.address) businessFields.address = req.body.address;
+  if (req.body.businessdata.business_name) businessFields.business_name = req.body.businessdata.business_name.trim();
+  businessFields.business_type = req.body.businessdata.business_type? req.body.businessdata.business_type : "restaurant";
+  if (req.body.businessdata.categories) businessFields.categories = req.body.businessdata.categories;
+  if (req.body.businessdata.formatted_address) businessFields.formatted_address = req.body.businessdata.formatted_address;
+  if (req.body.businessdata.google_place_id) businessFields.google_place_id = req.body.businessdata.google_place_id;
+  if (req.body.businessdata.contacts) businessFields.contacts = req.body.businessdata.contacts;
+  if (req.body.businessdata.google_rating) businessFields.google_rating = req.body.businessdata.google_rating;
+  if (req.body.businessdata.price) businessFields.price = req.body.businessdata.price;
+  if (req.body.businessdata.socials) businessFields.socials = req.body.businessdata.socials;
+  if (req.body.businessdata.map_url) businessFields.map_url = req.body.businessdata.map_url;
+  if (req.body.businessdata.location) businessFields.location = req.body.businessdata.location;
+  if (req.body.businessdata.opening_hours) businessFields.opening_hours = req.body.businessdata.opening_hours.split(',').map(el => getOpeningHours(el.trim()));
+  if (req.body.businessdata.address) businessFields.address = req.body.businessdata.address;
 
-  Business.findOne({ google_place_id: req.body.google_place_id })
+  Business.findOne({ google_place_id: req.body.businessdata.google_place_id })
     .then(business => {
       if (business) {
-        errors.business_name = req.body.business_name;
-        errors.message = `${req.body.business_name}'s profile is already existed`;
+        errors.business_name = req.body.businessdata.business_name;
+        errors.message = `${req.body.businessdata.business_name}'s profile is already existed`;
         return res.status(400).json(errors);
       }
       new Business(businessFields)

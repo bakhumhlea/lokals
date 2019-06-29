@@ -441,10 +441,19 @@ span.label-1 {
 }
 .lk-tag-btn.on-img {
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.815);
+  border-color: white;
+  background: white;
+  box-shadow: 0 0px 8px 1px rgba(0, 0, 0, 0.123),
+    0 0px 3px 0px rgba(0, 0, 0, 0.123);
+}
+.lk-tag-btn.on-img:hover {
+  border-color: #18be70;
+  box-shadow: 0 0 0 1px #18be70 inset;
+  background: white;
 }
 .lk-tag-btn.on-img.selected {
   font-weight: 500;
+  color: white;
   background-color: #18be70;
   border-color: white;
 }
@@ -506,13 +515,14 @@ span.label-1 {
 .lk-link {
   cursor: pointer;
   font-family: inherit;
-  font-weight: bold;
   font-size: 1em;
-  color: #334747;
+  color: #1b2525;
+  text-decoration: underline;
 }
 .lk-link:hover,
 .lk-link.active {
   color: #36cf7b;
+  text-decoration: underline;
 }
 .lk-tab-link {
   cursor: pointer;

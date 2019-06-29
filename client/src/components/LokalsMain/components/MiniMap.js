@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import Axios from 'axios';
+import { Link } from 'react-router-dom'
 import ReactMapGL, { Marker, LinearInterpolator } from 'react-map-gl'
 import { MAPBOX_TOKEN } from '../../../config/keys';
+import Spinner from '../../reusable/Spinner';
 import { makeTitle } from '../../../util/stringFormat';
 import isEmpty from '../../../util/is-empty'
 
 import CustomMarker from '../../LokalsMapbox/CustomMarker';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const LOKALS_STYLE = 'mapbox://styles/bakhumhlea/cjsp4km8x072o1fmevtwowt5x';
 const SF = {lat: 37.7749, lng: -122.4194};
@@ -20,9 +23,9 @@ export default class MiniMap extends Component {
     markers: null,
     showPopup: true,
     selectedMarker: null,
-    cKw: 'thai',
-    currentMapCenter: null,
-    currentSearchCenter: null,
+    cUserLc: null,
+    cMapCen: null,
+    cSearchCen: null,
     searchRadius: 1000,
     mapviewport: {
       width: '100%',
@@ -35,8 +38,8 @@ export default class MiniMap extends Component {
     }
   }
   componentDidMount() {
-    console.log(this.props.ct);
-    const { kw, ct } = this.props;
+    const { kw, ct, lc } = this.props;
+    const clc = isEmpty(lc)?'downtown':lc;
     const { ty } = this.state;
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -44,27 +47,43 @@ export default class MiniMap extends Component {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        this.getNearUser({kw: kw}, location, ty, 1000 , false);
+        this.getNearUser({kw: kw, lc: 'your location'}, location, ty, 1000 , false);
       });
     } else {
-      this.getNearbyPlaces({kw: kw}, ty, ct, 1000 , false);
+      this.getNearbyPlaces({kw: kw, lc: clc}, ty, ct, 1000 , false);
     }
     this.setState({kw: kw,ct:this.props.ct})
   }
   componentDidUpdate(prevProps, prevState) {
-    const { ct, kw } = this.props;
+    const { ct, kw, lc } = this.props;
     const { ty } = this.state;
-    if (prevProps.ct !== this.props.ct) {
-      this.setState({kw: kw, ct:this.props.ct})
-      this.getNearbyPlaces({kw:kw}, ty, ct, 1000, false)
-    } else if (prevProps.kw !== this.props.kw) {
-      this.setState({kw: kw, ct:this.props.ct})
-      this.getNearbyPlaces({kw:kw}, ty, ct, 1000, false)
+    const propsChange = prevProps.ct !==  ct ||
+      prevProps.kw !==  kw ||
+      prevProps.lc !==  lc;
+    if (propsChange) {
+      this.setState({kw: kw, ct: ct, lc: lc})
+      this.getNearbyPlaces({kw: kw, lc: lc}, ty, ct, 1000, false)
+    }
+  }
+  locateUserLocation(e) {
+    e.preventDefault();
+    const { mapviewport } = this.state;
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.setState({
+          mapviewport: {
+            ...mapviewport,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }
+        })
+      });
     }
   }
   getNearUser(input,location,type,radius,opennow) {
     const params = {};
     params.kw = input.kw;
+    params.lc = input.lc;
     params.ty = type;
     params.rad = radius || 1000;
     params.opn = opennow;
@@ -72,12 +91,17 @@ export default class MiniMap extends Component {
       .then(res => {
         console.log(res.data);
         return this.setState({
+          lc: params.lc,
           markers: res.data,
-          currentMapCenter: {
+          cUserLc: {
             lat: location.lat, 
             lng: location.lng
           },
-          currentSearchCenter: {
+          cMapCen: {
+            lat: location.lat, 
+            lng: location.lng
+          },
+          cSearchCen: {
             lat: location.lat, 
             lng: location.lng
           },
@@ -103,12 +127,13 @@ export default class MiniMap extends Component {
       .then(res => {
         if (res.data.length>0) {
           return this.setState({
+            lc: params.lc,
             markers: res.data,
-            currentMapCenter: {
+            cMapCen: {
               lat: res.data[0].geometry.location.lat, 
               lng: res.data[0].geometry.location.lng
             },
-            currentSearchCenter: {
+            cSearchCen: {
               lat: res.data[0].geometry.location.lat, 
               lng: res.data[0].geometry.location.lng
             },
@@ -128,7 +153,7 @@ export default class MiniMap extends Component {
     //   lng: viewport.longitude
     // }, viewport.zoom)
     this.setState({
-      currentMapCenter: {
+      cMapCen: {
         lat: viewport.latitude, 
         lng: viewport.longitude
       },
@@ -138,41 +163,61 @@ export default class MiniMap extends Component {
   getCurrentMapCenter(center, zoom) {
     var searchRadius = Math.ceil(1000 + (((13 - zoom)) * 300));
     this.setState({
-      currentMapCenter: center,
+      cMapCen: center,
       searchRadius: searchRadius
     });
   }
   render() {
-    const { mapviewport, kw, type, ct, opennow, 
-      markers, cKw, currentMapCenter, currentSearchCenter, searchRadius } = this.state;
+    const { mapviewport, kw, lc, ct, type, opennow, 
+      markers, cMapCen, cSearchCen, searchRadius } = this.state;
     return (
       <div className="mdl-bound mini-map">
         <h5 className="mdl-tt flx al-c">
-          <span className="mr-3">On Map</span>
+          <Link to="/explore" className="lk-link"><span className="mr-3">Explorer</span></Link>
           <span className="lk-btn btn-war sm tx-cap mr-2">{makeTitle(ct)}</span>
           <span className="lk-btn-ol sm tx-cap mr-2">{makeTitle(kw)}</span>
+          { cMapCen && cMapCen.lat === cSearchCen.lat && (<span className="lk-btn-ol sm tx-cap mr-2">{makeTitle(lc)}</span>)}
         </h5>
         <div className="mdl">
-          { currentMapCenter && currentMapCenter.lat !== currentSearchCenter.lat && (
+          { cMapCen && cMapCen.lat !== cSearchCen.lat && (
             <div className="lk-btn sm redo-minimap"
               onClick={(e)=>this.getNearUser({kw: kw, lc: 'financial district'}, {lat:mapviewport.latitude,lng:mapviewport.longitude}, type, searchRadius , opennow)}>
               Redo Search
             </div>
           )}
-          { mapviewport.latitude && mapviewport.longitude && (
-            <ReactMapGL
+          <div className="lk-btn sm center-map"
+            onClick={(e)=>this.locateUserLocation(e)}>
+              <svg width="20" height="20" fill="transparent">
+                <circle cx="10" cy="10" r="3" fill="#494949"/>
+                <circle cx="10" cy="10" r="7"/>
+                <path d="M0 10 L3 10" />
+                <path d="M17 10 L20 10" />
+                <path d="M10 0 L10 3" />
+                <path d="M10 17 L10 20" />
+              </svg>
+            {/* <FontAwesomeIcon icon="center" className="ic center"/> */}
+          </div>
+          { !(mapviewport.latitude && mapviewport.longitude) ? 
+            (<Spinner cssStyle={{
+              top: `50%`,
+              transform: `translateY(-50%)`,
+              color: `#5b8890`,
+              height: `max-content`
+            }}/>)
+            :
+            (<ReactMapGL
               {...mapviewport}
               mapStyle={LOKALS_STYLE}
               onViewportChange={(viewport) => this.handleViewportChange(viewport)}
               mapboxApiAccessToken={ MAPBOX_TOKEN }
-              minZoom={6}
-              maxZoom={20}
+              minZoom={11}
+              maxZoom={13.5}
               dragPan={true}
               trackResize={true}
-              transitionDuration={0}
+              transitionDuration={50}
               transitionInterpolator={new LinearInterpolator()}
             >
-            { currentMapCenter && currentMapCenter.lat !== currentSearchCenter.lat && (<Marker 
+            { cMapCen && cMapCen.lat !== cSearchCen.lat && (<Marker 
               className="current-pos-marker"
               latitude={mapviewport.latitude}
               longitude={mapviewport.longitude}>
@@ -194,8 +239,8 @@ export default class MiniMap extends Component {
                 onClickMarker={() => console.log("Click")}
               />
             ))}
-            </ReactMapGL>
-          )}
+            </ReactMapGL>)
+          }
         </div>
       </div>
     )

@@ -73,7 +73,7 @@ export default class ResultsTab extends Component {
                         </p>
                       </div>
                       <div className="contn right">
-                        <div className="btn-list">
+                        <div className="btn-list flx">
                           <div className="lk-btn-ol toggle sm mr-2">
                             <FontAwesomeIcon icon="heart"/>
                           </div>

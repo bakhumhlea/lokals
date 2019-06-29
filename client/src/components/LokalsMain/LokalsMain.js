@@ -24,9 +24,9 @@ const DUMMY_USER = {
   }
 }
 const DUMMY_FEEDING = [
-  { title: "You Lose Some, You Dim Sum", kw: ['Dimsum', 'Chinese'], lc: 'Chinatown' },
-  { title: "Wine Bars are All Around", kw: ['Wine Bar'], lc: 'SOMA' },
-  { title: "Your date will love it!", kw: ['Fine Dining', 'French'], lc: 'Financial District' },
+  { title: "Bon Appetit!", kw: ['French', 'Fine Ding'], lc: 'Chinatown' },
+  { title: "Wine Bars are all Around", kw: ['Wine Bar'], lc: 'SOMA' },
+  { title: "We can Sushi all day", kw: ['sushi', 'japanese'], lc: 'Financial District' },
   { title: "Drink don't Drive", kw: ['Bar'], lc: 'Valencia Street' }
 ]
 class LokalsMain extends Component {
@@ -159,17 +159,18 @@ class LokalsMain extends Component {
                 <LimitedMod />
                 <MiniMap 
                   kw={currentKw}
+                  lc={currentLc}
                   ct={app.local.city}
                 />
               </div>
               <div className="comm-feature">
                 <div className="mdl-bound sugg-list">
                   <h5 className="mdl-tt flx al-c">
-                    <span className="mr-3">{DUMMY_FEEDING[0].title}</span>
-                    <span className="lk-btn btn-war sm tx-cap mr-2">{DUMMY_FEEDING[0].lc}</span>
+                    <span className="mr-3">{makeTitle(DUMMY_FEEDING[0].title)}</span>
+                    <span className="lk-btn btn-war sm tx-cap mr-2">{makeTitle(DUMMY_FEEDING[0].lc)}</span>
                     {DUMMY_FEEDING[0].kw.map((k,i)=>(
                       <div style={{display: 'inline-block'}} key={i}>
-                        <span className="lk-btn-ol sm tx-cap mr-2">{k}</span>
+                        <span className="lk-btn-ol sm tx-cap mr-2">{makeTitle(k)}</span>
                       </div>
                     ))}
                   </h5>
@@ -185,11 +186,11 @@ class LokalsMain extends Component {
                 </div>
                 <div className="mdl-bound sugg-list">
                   <h5 className="mdl-tt flx al-c">
-                    <span className="mr-3">{DUMMY_FEEDING[1].title}</span>
-                    <span className="lk-btn btn-war sm tx-cap mr-2">{DUMMY_FEEDING[1].lc}</span>
+                    <span className="mr-3">{makeTitle(DUMMY_FEEDING[1].title)}</span>
+                    <span className="lk-btn btn-war sm tx-cap mr-2">{makeTitle(DUMMY_FEEDING[1].lc)}</span>
                     {DUMMY_FEEDING[1].kw.map((k,i)=>(
                       <div style={{display: 'inline-block'}} key={i}>
-                        <span className="lk-btn-ol sm tx-cap mr-2">{k}</span>
+                        <span className="lk-btn-ol sm tx-cap mr-2">{makeTitle(k)}</span>
                       </div>
                     ))}
                   </h5>
@@ -209,9 +210,17 @@ class LokalsMain extends Component {
               <div className="hlite-feature pd-common">
                 <div className="mdl-bound sugg-list">
                   <h5 className="mdl-tt flx al-c">
-                    <span className="mr-4">Events coming up you might love</span>
-                    <span className="lk-btn-ol md mr-2">Your Preference</span>
-                    <span className="lk-btn-ol md">Suggestion</span>
+                    <span className="mr-4">{makeTitle(DUMMY_FEEDING[2].title)}</span>
+                    <span className="lk-btn btn-dan md mr-2">
+                      <FontAwesomeIcon icon="star" className="ic on-l"/>
+                      Highly Recommend
+                    </span>
+                    <span className="lk-btn btn-war md mr-2">{makeTitle(DUMMY_FEEDING[2].lc)}</span>
+                    {DUMMY_FEEDING[2].kw.map((k,i)=>(
+                      <div style={{display: 'inline-block'}} key={i}>
+                        <span className="lk-btn-ol md tx-cap mr-2">{makeTitle(k)}</span>
+                      </div>
+                    ))}
                   </h5>
                   <div className="mdl">
                     <RowContent
@@ -230,11 +239,11 @@ class LokalsMain extends Component {
               <div className="comm-feature">
                 <div className="mdl-bound sugg-list">
                   <h5 className="mdl-tt flx al-c">
-                    <span className="mr-3">{DUMMY_FEEDING[3].title}</span>
-                      <span className="lk-btn btn-war sm tx-cap mr-2">{DUMMY_FEEDING[3].lc}</span>
+                    <span className="mr-3">{makeTitle(DUMMY_FEEDING[3].title)}</span>
+                      <span className="lk-btn btn-war sm tx-cap mr-2">{makeTitle(DUMMY_FEEDING[3].lc)}</span>
                     {DUMMY_FEEDING[3].kw.map((k,i)=>(
                       <div style={{display: 'inline-block'}} key={i}>
-                        <span className="lk-btn-ol sm tx-cap mr-2">{k}</span>
+                        <span className="lk-btn-ol sm tx-cap mr-2">{makeTitle(k)}</span>
                       </div>
                     ))}
                   </h5>

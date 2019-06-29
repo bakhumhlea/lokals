@@ -231,7 +231,7 @@ class ExploreMap extends Component {
                 <path d="M25 15 L15 25"/>
               </svg>
             </button>
-            <div className="btn-rack flx-contn">
+            <div className="btn-rack flx">
               <button
                 type="button" 
                 className={activeTab==='exp_tool'?"lk-btn active":"lk-btn"} 
@@ -281,7 +281,7 @@ class ExploreMap extends Component {
                     <FontAwesomeIcon icon="bolt" className="ml-2"/>
                   </h4>
                   <h5 className="label-1 mb-2">Recent</h5>
-                  <div className="flx-contn mb-2 wrp">
+                  <div className="flx mb-2 wrp">
                     {recents && recents.map((recent,i)=>(
                       <span key={i} className={currentKeyword===recent?"lk-btn-ol toggle sm selected":"lk-btn-ol toggle sm"}
                         onClick={(e)=>this.getNearbyPlaces(recent, type, currentMapCenter, searchRadius, e)}
@@ -291,7 +291,7 @@ class ExploreMap extends Component {
                     ))}
                   </div>
                   <h5 className="label-1 mb-2">Preferences</h5>
-                  <div className="flx-contn wrp">
+                  <div className="flx wrp">
                     {preferences && preferences.map((pref,i)=>(
                       <span key={i} className={currentKeyword===pref?"lk-btn-ol toggle sm selected":"lk-btn-ol toggle sm" }
                         onClick={(e)=>this.getNearbyPlaces(pref, type, currentMapCenter, searchRadius, e)}
@@ -343,7 +343,7 @@ class ExploreMap extends Component {
                     </div>
                   </div>
                   <h5 className="label-1 mb-2">Which</h5>
-                  <div className="flx-contn wrp">
+                  <div className="flx wrp">
                     <span className={opennow?"lk-tag-btn sm selected":"lk-tag-btn sm" }
                       onClick={()=>this.setState({opennow: !opennow})}
                     >

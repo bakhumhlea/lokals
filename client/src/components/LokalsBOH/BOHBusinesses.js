@@ -26,6 +26,7 @@ class BOHBusinesses extends Component {
     marker: null,
     markers: null,
     success: null,
+    password: '',
     errors: null
   }
   componentDidMount() {
@@ -64,8 +65,11 @@ class BOHBusinesses extends Component {
   }
   postNewBusiness(businessdata, e) {
     if (e) e.preventDefault();
-    console.log(businessdata);
-    Axios.post(`/api/lokals/business/add`, businessdata)
+    // console.log(businessdata);
+    const data = {};
+    data.businessdata = businessdata;
+    data.password = this.state.password;
+    Axios.post(`/api/lokals/business/add`, data)
       .then(res => {
         console.log(res.data);
         if (res.data.status === 'OK') {
@@ -73,10 +77,12 @@ class BOHBusinesses extends Component {
             business_name: res.data.data.business_name,
             business_id: res.data.data._id,
             timestamp: new Date(res.data.data.create_at).toLocaleDateString()
-          }})
+          }, password: ''})
         }
       })
-      .catch(err => this.setState({ errors: err.response.data}));
+      .catch(err => {
+        return this.setState({ errors: err.response.data, password: ''})
+      });
   }
   deleteObject(parentkey,objkey,e) {
     if (e) e.preventDefault();
@@ -124,6 +130,10 @@ class BOHBusinesses extends Component {
         [parentkey]: array
       }
     })
+  }
+  onChange(e) {
+    e.preventDefault();
+    this.setState({[e.target.name]:e.target.value});
   }
   render() {
     const {mapviewport, marker, markers, keyword, type, radius, selected, searched, success, errors} = this.state;
@@ -238,14 +248,14 @@ class BOHBusinesses extends Component {
       <div className="page-container add-businesses">
         <div className="lk-card alert-modal" style={{opacity: success?`1`:`0`, zIndex: success?`200`:`0`, transform: success?`translate(-50%,-50%)`:`translate(-50%,-40%)`}}>
           <h5><FontAwesomeIcon icon="check-circle" className="success-post" style={{transform: success?`scale(1)`:`scale(0)`}}/></h5>
-          <p className="body-1"><span><strong>{success && success.business_name}</strong></span> is on Lokals database.</p>
+          <p className="body-1"><span><strong>{marker && marker.business_name}</strong></span> is on Lokals database.</p>
           <p className="body-1"><small>Business ID: {success && success.business_id}</small></p>
           <p className="body-1"><small>Timestamp: {success && success.timestamp}</small></p>
           <button className="lk-btn btn-pri sm" onClick={()=>this.setState({success:null})}>Got it!</button>
         </div>
         <div className="lk-card alert-modal" style={{opacity: errors?`1`:`0`, zIndex: errors?`200`:`0`, transform: errors?`translate(-50%,-50%)`:`translate(-50%,-40%)`}}>
           <h5><FontAwesomeIcon icon="exclamation-circle" className="error-post"/></h5>
-          <p className="body-1"><span><strong>{errors && errors.business_name}</strong></span> is already on Lokals!</p>
+          <p className="body-1"><span><strong>{marker && `${marker.business_name} is already on Lokals!`}{errors && errors.password && `Password Incorrect`}</strong></span> </p>
           <button className="lk-btn-ol sm" onClick={()=>this.setState({errors:null})}>Dismiss</button>
         </div>
         <div className="contn">
@@ -377,7 +387,16 @@ class BOHBusinesses extends Component {
                   )} */}
                 </div>
               ))}
-              {Object.keys(marker).length > 0 && <button className="lk-btn btn-suc wd-10 submit" onClick={(e)=>this.postNewBusiness(marker, e)}>Save to Lokals DB</button>}
+              <div className="lk-wrap-inl ip-x2 mt-4">
+                <div className="lk-ip-group">
+                  <input type="password" className="lk-ip" placeholder="Enter Password" name="password" onChange={(e)=>this.onChange(e)}/>
+                </div>
+                {Object.keys(marker).length > 0 && 
+                  (<div className="lk-ip-group with-btn">
+                    <button className="lk-btn btn-suc" onClick={(e)=>this.postNewBusiness(marker, e)}>Save to Lokals DB</button>
+                  </div>)
+                }
+              </div>
             </div>
           )}
         </div>

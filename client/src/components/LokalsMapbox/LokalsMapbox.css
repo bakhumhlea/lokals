@@ -349,11 +349,12 @@
 /* custom marker */
 .custom-marker-container {
   cursor: pointer;
-  z-index: 20;
+  z-index: 1;
   /* transform: translate(-15px,-30px); */
 }
-.custom-marker-container.selected {
-  z-index: 80;
+.custom-marker-container.selected,
+.custom-marker-container.selected:hover {
+  z-index: 8;
   /* transform: translate(-15px,-30px); */
 }
 .custom-marker-container .custom-marker-icon {
