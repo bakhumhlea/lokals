@@ -12,6 +12,7 @@ import LimitedMod from './components/LimitedMod';
 import RowContent from './components/RowContent';
 import Clock from './components/Clock';
 import './LokalsMain.css'
+import MiniMap from './components/MiniMap';
 
 library.add( faArrowLeft, faArrowRight, faThList, faCalendarAlt, faWineGlassAlt, faGlassMartini, faMapMarkerAlt, faThumbsUp );
 
@@ -42,7 +43,7 @@ class LokalsMain extends Component {
     ct: 'san francisco',
     opn: false,
     searchResults: [],
-    currentKw: '',
+    currentKw: 'all',
     currentLc: '',
     userprefLc: null,
     
@@ -59,9 +60,6 @@ class LokalsMain extends Component {
         ct: this.props.app.local.city
       })
     }
-  }
-  setCurrentLocation = (location) => {
-    this.getNearbyPlaces('bar','bar',location,1000);
   }
   getNearbyPlaces(keyword, type, location, radius, opennow) {
     // const sf = {lat: 37.7749, lng: -122.4194};
@@ -159,12 +157,10 @@ class LokalsMain extends Component {
             <div className="feed-content pd-common">
               <div className="top-feature flx jt-spbt">
                 <LimitedMod />
-                <div className="mdl-bound mini-map">
-                  <h5 className="mdl-tt flx al-c"><span>On Map</span></h5>
-                  <div className="mdl">
-                    this is map module
-                  </div>
-                </div>
+                <MiniMap 
+                  kw={currentKw}
+                  ct={app.local.city}
+                />
               </div>
               <div className="comm-feature">
                 <div className="mdl-bound sugg-list">
@@ -181,6 +177,7 @@ class LokalsMain extends Component {
                     <RowContent
                       col="4"
                       ct={app.local.city}
+                      ckw={DUMMY_FEEDING[0].kw}
                       autoMount={true}
                       searchInput={DUMMY_FEEDING[0]}
                     />
@@ -200,6 +197,7 @@ class LokalsMain extends Component {
                     <RowContent
                       col="4"
                       ct={app.local.city}
+                      ckw={DUMMY_FEEDING[1].kw}
                       autoMount={true}
                       searchInput={DUMMY_FEEDING[1]}
                     />
@@ -220,6 +218,7 @@ class LokalsMain extends Component {
                       col="3"
                       onDark={true}
                       ct={app.local.city}
+                      ckw={DUMMY_FEEDING[2].kw}
                       autoMount={true}
                       searchInput={DUMMY_FEEDING[2]}
                     />
@@ -243,6 +242,7 @@ class LokalsMain extends Component {
                     <RowContent
                       col="4"
                       ct={app.local.city}
+                      ckw={DUMMY_FEEDING[3].kw}
                       autoMount={true}
                       searchInput={DUMMY_FEEDING[3]}
                     />

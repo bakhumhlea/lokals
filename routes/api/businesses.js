@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const passport = require('passport');
-const apiKey = require('../../config/google/keys');
+const apiKey = require('../../config/keys');
 
 /** @desc Mongoose Model */
 const Profile = require('../../models/Profile');
@@ -438,6 +438,27 @@ router.get('/searchnearby/:keyword/:type/:address/:city/:radius/:opennow', (req,
         .catch(err => console.log(err));;
     })
     .catch(err => console.log(err))
+});
+router.get('/searchnearuser/:keyword/:type/:lat/:lng/:radius/:opennow', (req,res) => {
+  const { keyword, type, lat, lng, radius, opennow } = req.params;
+  const location = {
+    lat: parseFloat(lat),
+    lng: parseFloat(lng)
+  }
+  const request = { 
+    location: location,
+    radius: parseInt(radius, 10),
+    keyword: keyword,
+    opennow: opennow === 'true',
+    type: type,
+  };
+  console.log(request);
+  googleMapsClient.placesNearby(request)
+    .asPromise()
+    .then(result => {
+      // console.log(res.json.results);
+      return res.json(result.json.results)})
+    .catch(err => console.log(err));;
 });
 
 router.get('/getcoordinates/:city/:address',(req,res)=>{

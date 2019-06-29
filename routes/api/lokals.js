@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const passport = require('passport');
-const apiKey = require('../../config/google/keys');
+const apiKey = require('../../config/keys');
 
 /** @desc Mongoose Model */
 const Profile = require('../../models/Profile');

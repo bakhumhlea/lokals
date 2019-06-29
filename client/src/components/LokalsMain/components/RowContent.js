@@ -31,6 +31,7 @@ class RowContent extends Component {
     if (prevProps.ct !== this.props.ct) {
       const { ct, ckw } = this.props;
       // const searchInput = { kw:ckw, lc:clc }
+      console.log(ckw)
       this.getNearbyPlaces({ kw:ckw, lc: '' }, ct, 1000, false)
     } else if (prevProps.data !== this.props.data) {
       this.setState({
